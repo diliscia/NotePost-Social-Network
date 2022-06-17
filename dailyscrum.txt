@@ -9,8 +9,8 @@
 - created database design (initial tables, attributes, data types and relationships) - done
 - created Trello workspace - done
 - created github repository -done
-- fisnish the proposal
 2. To do until next Scrum:
+- fisnish and send proposal
 - setup the initial project (gitHub repo, Trello) with teammates
 - write the 10 stories in Trello
 - watch tutorials
@@ -22,8 +22,8 @@
 - brainstorm project proposal specifications (general idea how the site works) - done
 - created wireframe mockup - done
 - created database design (initial tables, attributes, data types and relationships) - done
-- finish the proposal
 2. To do until next Scrum:
+- finish the proposal
 - assist writing the 10 stories in Trello
 - watch tutorials \
 3. Need assistance / figure things out
@@ -32,8 +32,8 @@
 1. Done / not done since last scrum:
 - brainstorm project proposal specifications (general idea how the site works) - done
 - watched tutorial
-- fisnish the proposal
 2. To do until next Scrum:
+- finish the proposal
 - write some of the 10 stories in Trello
 - watch tutorials 
 3. Need assistance / figure things out
