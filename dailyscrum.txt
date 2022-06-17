@@ -1,0 +1,40 @@
+<<2022-06-17>>
+1. What I have done / not done since last Scrum?
+2. What I plan to do from this scrum to next? (next 24 hours)
+3. Where do I need assistance? What do I need to figure out?
+
+2022/06/17 Marcelo
+1. Done / not done since last scrum:
+- wrote/brainstorm project proposal specifications (general idea how the site works) - done
+- created database design (initial tables, attributes, data types and relationships) - done
+- created Trello workspace - done
+- created github repository -done
+- fisnish the proposal
+2. To do until next Scrum:
+- setup the initial project (gitHub repo, Trello) with teammates
+- write the 10 stories in Trello
+- watch tutorials
+3. Need assistance / figure things out
+-  
+
+2022/06/17 Ly
+1. Done / not done since last scrum:
+- brainstorm project proposal specifications (general idea how the site works) - done
+- created wireframe mockup - done
+- created database design (initial tables, attributes, data types and relationships) - done
+- finish the proposal
+2. To do until next Scrum:
+- assist writing the 10 stories in Trello
+- watch tutorials \
+3. Need assistance / figure things out
+- 
+2022/06/17 Alireza
+1. Done / not done since last scrum:
+- brainstorm project proposal specifications (general idea how the site works) - done
+- watched tutorial
+- fisnish the proposal
+2. To do until next Scrum:
+- write some of the 10 stories in Trello
+- watch tutorials 
+3. Need assistance / figure things out
+- 
