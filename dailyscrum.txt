@@ -38,3 +38,40 @@
 - watch tutorials 
 3. Need assistance / figure things out
 - sequelize 
+
+<<2022-06-178>>
+2022/06/18 Marcelo
+1. Done / not done since last scrum:
+- setup the initial project (gitHub repo, Trello) with teammates - done
+- write the 10 stories in Trello - done
+- fisnish the proposal - done
+2. To do until next Scrum:
+- Setup S3
+- Implement login/logout functions
+- watch tutorials
+3. Need assistance / figure things out
+-  
+
+2022/06/18 Ly
+1. Done / not done since last scrum:
+- assist writing the 10 stories in Trello - done
+- watch tutorials about how to do the comments - done
+- finish the proposal - done
+2. To do until next Scrum:
+- Set up project with React and Node JS
+- Secure website and create main component in App.js
+- Implement register function
+3. Need assistance / figure things out
+- 
+
+2022/06/18 Alireza
+1. Done / not done since last scrum:
+- write some of the 10 stories in Trello - done
+- finish the proposal - done
+- watch tutorials 
+2. To do until next Scrum:
+- Create tables and relationship between them in MySQL
+- Configure RDS
+- watch tutorials
+3. Need assistance / figure things out
+- sequelize 
