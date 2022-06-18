@@ -31,10 +31,10 @@
 2022/06/17 Alireza
 1. Done / not done since last scrum:
 - brainstorm project proposal specifications (general idea how the site works) - done
-- watched tutorial
+- watched tutorial -done 
 - fisnish the proposal
 2. To do until next Scrum:
 - write some of the 10 stories in Trello
 - watch tutorials 
 3. Need assistance / figure things out
-- 
+- sequelize 
