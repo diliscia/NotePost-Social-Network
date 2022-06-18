@@ -39,7 +39,7 @@
 3. Need assistance / figure things out
 - sequelize 
 
-<<2022-06-178>>
+<<2022-06-18>>
 2022/06/18 Marcelo
 1. Done / not done since last scrum:
 - setup the initial project (gitHub repo, Trello) with teammates - done
