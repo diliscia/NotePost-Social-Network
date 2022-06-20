@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "y6mw6Gkf",
+    "database": "postnote",
+    "host": "carrental.cnammikteevs.us-east-1.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "admin",
+    "password": "y6mw6Gkf",
+    "database": "postnote",
+    "host": "carrental.cnammikteevs.us-east-1.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "admin",
+    "password": "y6mw6Gkf",
+    "database": "postnote",
+    "host": "carrental.cnammikteevs.us-east-1.rds.amazonaws.com",
+    "dialect": "mysql"
+  }
+}
