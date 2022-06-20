@@ -7,7 +7,7 @@ function Login() {
   let navigate = useNavigate();
   const {user, setUser} = useContext(UserContext);
   const [formValues, setFormValues] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -22,14 +22,15 @@ function Login() {
 
   const validate = (values) => {
     const errors = {};
-    const regexUsername = /^[a-z0-9]{4,20}$/g;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,50}$/i;
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,100}$/i;
 
-    if (!values.username.trim()) {
-      errors.username = "Username is required!";
-    } else if (!regexUsername.test(values.username)) {
-      errors.username =
-        "Username can only contains lowercase letters and numbers. And must be between 4-20 characters.";
+    if (!values.email) {
+      errors.email = "Email is required!";
+    } else if (!regexEmail.test(values.email)) {
+      errors.email = "Email address is invalid";
+    } else if (values.email.length > 50) {
+      errors.email = "Email cannot be more than 50 characters";
     }
 
     if (!values.password) {
@@ -66,11 +67,11 @@ function Login() {
         })
         .catch((error) => {
           var failMessage = document.getElementById("fail-added");
-          if (error.response.status == 204) {
+          if (error.response.status === 204) {
             failMessage.innerHTML = "Unable to find the user";
-          } else if (error.response.status == 500) {
+          } else if (error.response.status === 500) {
             failMessage.innerHTML = "Server error! Login failed";
-          } else if (error.response.status == 404) {
+          } else if (error.response.status === 404) {
             failMessage.innerHTML = "Server error! Could not find the user";
           } else {
             failMessage.innerHTML = "Server error!"
@@ -84,20 +85,21 @@ function Login() {
       <div id="fail-added" className="text-danger"></div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            Username
+      <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            Your email
           </label>
           <input
-            type="text"
+            type="email"
             className="form-control"
-            id="username"
-            name="username"
-            placeholder="user.name"
-            value={formValues.username}
+            id="email"
+            name="email"
+            max-length="50"
+            placeholder="d@gmail.com"
+            value={formValues.email}
             onChange={handleChange}
           />
-          <p className="text-danger">{formErrors.username}</p>
+          <p className="text-danger">{formErrors.email}</p>
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">

@@ -6,6 +6,8 @@ function Register() {
   let navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -22,23 +24,39 @@ function Register() {
 
   const validate = (values) => {
     const errors = {};
-    const regexUsername = /^[a-z0-9]{4,20}$/g;
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const regexFirstName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+    const regexLastName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+    const regexUsername = /^[A-Za-z0-9]{4,50}$/g;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,50}$/i;
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,100}$/i;
+
+    if (!values.firstname) {
+      errors.firstname = "First name is required";
+    } else if (!regexFirstName.test(values.firstname)) {
+      errors.firstname =
+        "First name can only contains letters and must be between 1-50 characters.";
+    }
+
+    if (!values.lastname) {
+      errors.lastname = "Last name is required";
+    } else if (!regexLastName.test(values.lastname)) {
+      errors.lastname =
+        "Last name can only contains letters and must be between 1-50 characters.";
+    }
 
     if (!values.username.trim()) {
       errors.username = "Username is required!";
     } else if (!regexUsername.test(values.username)) {
       errors.username =
-        "Username can only contains lowercase letters and numbers. And must be between 4-20 characters.";
+        "Username can contains lowercase and uppercase letters and numbers. And must be between 4-50 characters.";
     }
 
     if (!values.email) {
       errors.email = "Email is required!";
     } else if (!regexEmail.test(values.email)) {
       errors.email = "Email address is invalid";
-    } else if (values.email.length > 320) {
-      errors.email = "Email cannot be more than 320 characters";
+    } else if (values.email.length > 50) {
+      errors.email = "Email cannot be more than 50 characters";
     }
 
     if (!values.password) {
@@ -66,21 +84,25 @@ function Register() {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      Axios.post("http://localhost:3001/register",formValues)
+      Axios.post("http://localhost:3001/register", formValues)
         .then(() => {
           alert("Successfully register!");
           navigate("/login");
         })
         .catch((error) => {
           var failMessage = document.getElementById("fail-added");
-          if (error.response.status === 400 ) { 
-            failMessage.innerHTML = "Username " + formValues.username + " is already exist in the system. Please choose another username";
-          } else if (error.response.status === 500){
+          if (error.response.status === 400) {
+            failMessage.innerHTML =
+              "Email " +
+              formValues.email +
+              " is already exist in the system. Please choose sign in";
+              navigate("/login")
+          } else if (error.response.status === 500) {
             failMessage.innerHTML = "Server error! Register failed";
           } else if (error.response.status === 404) {
-            failMessage.innerHTML = "Server error! Not found"
+            failMessage.innerHTML = "Server error! Not found";
           } else {
-            failMessage.innerHTML = "Server error!"
+            failMessage.innerHTML = "Server error!";
           }
         });
     }
@@ -92,6 +114,38 @@ function Register() {
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
+          <label htmlFor="firstname" className="form-label">
+            First name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="firstname"
+            name="firstname"
+            placeholder="First name"
+            max-length="20"
+            value={formValues.firstname}
+            onChange={handleChange}
+          />
+          <p className="text-danger"> {formErrors.firstname} </p>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="lastname" className="form-label">
+            Last name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="lastname"
+            name="lastname"
+            placeholder="Last name"
+            max-length="50"
+            value={formValues.lastname}
+            onChange={handleChange}
+          />
+          <p className="text-danger"> {formErrors.lastname} </p>
+        </div>
+        <div className="mb-3">
           <label htmlFor="username" className="form-label">
             Desired username
           </label>
@@ -101,6 +155,7 @@ function Register() {
             id="username"
             name="username"
             placeholder="user.name"
+            max-length="50"
             value={formValues.username}
             onChange={handleChange}
           />
@@ -115,6 +170,7 @@ function Register() {
             className="form-control"
             id="email"
             name="email"
+            max-length="50"
             placeholder="d@gmail.com"
             value={formValues.email}
             onChange={handleChange}
@@ -123,13 +179,14 @@ function Register() {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-            Password
+           New Password
           </label>
           <input
             type="password"
             className="form-control "
             id="password"
             name="password"
+            max-length="100"
             placeholder="uppercase,lowercase,number,6-100chars"
             value={formValues.password}
             onChange={handleChange}
@@ -146,6 +203,7 @@ function Register() {
             id="password2"
             name="password2"
             placeholder="confirm_your_password"
+            max-length="100"
             value={formValues.password2}
             onChange={handleChange}
           />

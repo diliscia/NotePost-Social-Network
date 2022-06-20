@@ -23,12 +23,15 @@ function App() {
       <div className="containter">
         <Navbar bg="light" expand="lg">
           <Container>
-            <Navbar.Brand href="#home">NotePost</Navbar.Brand>
+            <Navbar.Brand href="#home">PostNote</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Nav className="mr-auto">
                 <LinkContainer to="/">
                   <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/add-article">
+                  <Nav.Link>Post</Nav.Link>
                 </LinkContainer>
                 {localStorage.getItem("token") ? (
                   <div className="border-start border-4 border-success">
@@ -36,7 +39,7 @@ function App() {
                       Signed in as: {localStorage.getItem('username')}
                     </Navbar.Text>
                     <LinkContainer to="" className="ps-2 mt-1">
-                      <Nav.Link>My profile</Nav.Link>
+                      <Nav.Link>My Profile</Nav.Link>
                     </LinkContainer>
                     <LinkContainer to="/logout" className="ps-2">
                       <Nav.Link>Logout</Nav.Link>
@@ -62,6 +65,7 @@ function App() {
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
+              <Route exact path="/"/>
               <Route exact path="/logout" element={<Logout />} />
             </Route>
          

@@ -38,7 +38,7 @@ const db = mysql.createConnection({
   port: "3360",
   user: "root",
   password: "password",
-  database: "blogdb",
+  database: "postnote",
 });
 
 //******************** TEST ***************
@@ -56,6 +56,8 @@ const db = mysql.createConnection({
 // });
 
 app.post("/register", (req, res) => {
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
@@ -65,8 +67,8 @@ app.post("/register", (req, res) => {
   }
 
   db.query(
-    "SELECT * FROM users WHERE username = ?",
-    username,
+    "SELECT * FROM users WHERE email = ?",
+    email,
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -75,8 +77,8 @@ app.post("/register", (req, res) => {
       } else {
         bcrypt.hash(password, saltRounds, (err, hash) => {
           db.query(
-            "INSERT INTO users (username, email, password, password_repeat) VALUES (?,?,?,?)",
-            [username, email, hash, hash],
+            "INSERT INTO users (firstname, lastname, username, email, password, password_repeat) VALUES (?,?,?,?,?,?)",
+            [firstname, lastname, username, email, hash, hash],
             (err, result) => {
               if (err) {
                 res.sendStatus(500);
@@ -92,11 +94,11 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
   db.query(
-    "SELECT * FROM users WHERE username = ?",
-    username,
+    "SELECT * FROM users WHERE email = ?",
+    email,
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -111,7 +113,7 @@ app.post("/login", (req, res) => {
           } else {
             res.json({
               auth: false,
-              message: "Wrong username/password combination!",
+              message: "Wrong email/password combination!",
             });
           }
         });
