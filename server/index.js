@@ -61,10 +61,6 @@ app.post("/register", (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
-  const password2 = req.body.password2;
-  if (password !== password2) {
-    res.sendStatus(400);
-  }
 
   db.query(
     "SELECT * FROM users WHERE email = ?",
@@ -77,8 +73,8 @@ app.post("/register", (req, res) => {
       } else {
         bcrypt.hash(password, saltRounds, (err, hash) => {
           db.query(
-            "INSERT INTO users (firstname, lastname, username, email, password, password_repeat) VALUES (?,?,?,?,?,?)",
-            [firstname, lastname, username, email, hash, hash],
+            "INSERT INTO users (firstname, lastname, username, email, password) VALUES (?,?,?,?,?)",
+            [firstname, lastname, username, email, hash],
             (err, result) => {
               if (err) {
                 res.sendStatus(500);
