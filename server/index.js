@@ -6,7 +6,12 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
-// const database = require('./models');
+const multer = require ('multer')
+const upload = multer({dest: 'upload/'})
+const {uploadFile,getFileStream } = require ('./s3')
+const fs = require('fs')
+const util = require ('util')
+const unlinkFile = util.promisify(fs.unlink)
 
 app.use(
   cors({
@@ -141,6 +146,7 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
+<<<<<<< Updated upstream
 //================== Friends ==============
 
 // list if available users that are not friends of current user
@@ -188,5 +194,30 @@ app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
 //================== Friends ==============
 
 app.listen(3001, () => {
+=======
+
+app.post('/images', upload.single('image'), async (req, res) => {
+  const file = req.file
+
+  //apply filter
+  // resize 
+  const result = await uploadFile(file)
+  const description = req.body.description
+  await unlinkFile(file.path)
+  console.log (file)
+  console.log(result)
+  res.send({imagePath: `/images/${result.Key}`})
+})
+
+app.get('/images/:key', (req,res) => {
+  console.log(req.params)
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+})
+
+app.listen(3001, ()=> {
+>>>>>>> Stashed changes
   console.log("Your server is running on port 3001")
 })

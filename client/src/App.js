@@ -2,6 +2,7 @@ import "./App.css";
 import Login from "./components/user/login";
 import Logout from "./components/user/logout";
 import Register from "./components/user/register";
+import AddArticle from "./components/post/add";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
@@ -41,6 +42,9 @@ function App() {
                     <LinkContainer to="" className="ps-2 mt-1">
                       <Nav.Link>My Profile</Nav.Link>
                     </LinkContainer>
+                    <LinkContainer to="/add-friend" className="ps-2">
+                      <Nav.Link>Add Friend</Nav.Link>
+                    </LinkContainer>
                     <LinkContainer to="/logout" className="ps-2">
                       <Nav.Link>Logout</Nav.Link>
                     </LinkContainer>
@@ -66,7 +70,9 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
               <Route exact path="/"/>
+              <Route exact path="/add-article" element={<AddArticle />} />
               <Route exact path="/logout" element={<Logout />} />
+              <Route exact path="/add-friend" />
             </Route>
          
         </Routes>
