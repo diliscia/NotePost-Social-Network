@@ -9,6 +9,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
+import AvailableFriends from "./components/friend/AvailableFriends";
 
 function App() {
 
@@ -63,19 +64,19 @@ function App() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <UserContext.Provider value={{user, setUser}}>
-        <Routes>
-          
+        <UserContext.Provider value={{ user, setUser }}>
+          <Routes>
+
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
-              <Route exact path="/"/>
+              <Route exact path="/" />
               <Route exact path="/add-article" element={<AddArticle />} />
               <Route exact path="/logout" element={<Logout />} />
-              <Route exact path="/add-friend" />
+              <Route exact path="/add-friend" element={<AvailableFriends />} />
             </Route>
-         
-        </Routes>
+
+          </Routes>
         </UserContext.Provider>
       </div>
     </Router>

@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import Axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 function Login() {
   let navigate = useNavigate();
-  const {user, setUser} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -58,9 +58,10 @@ function Login() {
             var failMessage = document.getElementById("fail-added");
             failMessage.innerHTML = response.data.message
           } else {
-           
+
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", response.data.result[0].username)
+            localStorage.setItem("id", response.data.result[0].id)
             setUser(response.data.result[0].username)
             navigate("/");
           }
@@ -85,7 +86,7 @@ function Login() {
       <div id="fail-added" className="text-danger"></div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+        <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Your email
           </label>
