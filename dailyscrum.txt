@@ -75,3 +75,39 @@
 - watch tutorials
 3. Need assistance / figure things out
 - sequelize 
+
+<<2022-06-20>>
+2022/06/20 Marcelo
+1. Done / not done since last scrum:
+- Setup S3 - done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement upload/download image from react-to-S3
+- Implement profile page
+- watch tutorials
+3. Need assistance / figure things out
+- Implement upload/download image from react-to-S3
+
+2022/06/20 Ly
+1. Done / not done since last scrum:
+- Set up project with React and Node JS - done
+- Secure website and create main component in App.js - done
+- Implement register function - done 
+- Implement login/logout function - done 
+2. To do until next Scrum:
+- Implement Post
+- watch tutorials
+3. Need assistance / figure things out
+- 
+
+2022/06/20 Alireza
+1. Done / not done since last scrum:
+- Create tables and relationship between them in MySQL - done
+- Configure RDS -done
+- watch tutorials - done
+2. To do until next Scrum:
+- Connect Sequelize to project
+- Implent friends 
+- watch tutorial about routes
+3. Need assistance / figure things out
+- Axios
