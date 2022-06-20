@@ -1,5 +1,5 @@
-const express = require("express"); 
-const app = express(); 
+const express = require("express");
+const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -48,7 +48,7 @@ const db = mysql.createConnection({
 //   db.query(
 //     "INSERT INTO Users (firstname, lastname, username, email, password) VALUES"+ 
 //     "('lyly','lyly','lyly01','quynhly.do@gmail.com','Linh2612')",
-  
+
 //     (err, result) => {
 //       if (err) {
 //         console.log("hello world before error");
@@ -141,6 +141,52 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
-app.listen(3001, ()=> {
+//================== Friends ==============
+
+// list if available users that are not friends of current user
+app.get('/api/availableFriends:id', verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u left join Friends f on u.id=f.user1Id "
+    + " Where f.id is null and u.id=? ";
+  db.query(sqlSelect, id, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while retrieving the list");
+    }
+    else {
+      if (result.length > 0) {
+        res.send(result);
+      }
+      else {
+        res.status(404).send("List has a problem");
+      }
+    }
+  })
+});
+
+app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
+  const user1Id = req.params.user1Id;
+  const user2Id = req.params.user2Id;
+  const sqlInsert = "Insert Into Friends (user1Id,user2Id) Values (?,?) , (?,?) ";
+  db.query(sqlInsert, [user1Id, user2Id, user2Id, user1Id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while Insert");
+    }
+    else {
+      if (result.length > 0) {
+        res.send(result);
+      }
+      else {
+        res.status(404).send("Insert has a problem");
+      }
+    }
+  })
+});
+
+//================== Friends ==============
+
+app.listen(3001, () => {
   console.log("Your server is running on port 3001")
 })
