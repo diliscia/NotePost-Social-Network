@@ -35,19 +35,23 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const db = mysql.createConnection({
-  host: "localhost",
-  port: "3360",
-  user: "root",
-  password: "password",
+  host: "carrental.cnammikteevs.us-east-1.rds.amazonaws.com",
+  port: "3306",
+  user: "admin",
+  password: "y6mw6Gkf",
   database: "postnote",
 });
 
-//******************** TEST ***************
+// //******************** TEST ***************
 // app.get("/", (req, res) => {
+//   console.log("hello world");
 //   db.query(
-//     "INSERT INTO users (username, email, password, password_repeat) VALUES ('lyly01','quynhly.do@gmail.com','Linh2612','Linh2612')",
+//     "INSERT INTO Users (firstname, lastname, username, email, password) VALUES"+ 
+//     "('lyly','lyly','lyly01','quynhly.do@gmail.com','Linh2612')",
+  
 //     (err, result) => {
 //       if (err) {
+//         console.log("hello world before error");
 //         res.sendStatus(500);
 //       } else {
 //         res.send("Success!")
@@ -64,7 +68,7 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
 
   db.query(
-    "SELECT * FROM users WHERE email = ?",
+    "SELECT * FROM Users WHERE email = ?",
     email,
     (err, result) => {
       if (err) {
@@ -74,7 +78,7 @@ app.post("/register", (req, res) => {
       } else {
         bcrypt.hash(password, saltRounds, (err, hash) => {
           db.query(
-            "INSERT INTO users (firstname, lastname, username, email, password) VALUES (?,?,?,?,?)",
+            "INSERT INTO Users (firstname, lastname, username, email, password) VALUES (?,?,?,?,?)",
             [firstname, lastname, username, email, hash],
             (err, result) => {
               if (err) {
@@ -94,7 +98,7 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   db.query(
-    "SELECT * FROM users WHERE email = ?",
+    "SELECT * FROM Users WHERE email = ?",
     email,
     (err, result) => {
       if (err) {
