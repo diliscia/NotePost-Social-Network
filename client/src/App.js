@@ -9,7 +9,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
-import AvailableFriends from "./components/friend/AvailableFriends";
+import AvailableFriends from "./components/friend/availableFriends";
 
 function App() {
 
