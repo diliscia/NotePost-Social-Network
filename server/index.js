@@ -222,12 +222,12 @@ app.get('/:username', verifyJWT, (req, res) => {
   const sqlQuery = "SELECT * FROM Users WHERE  username = ?";
   db.query(sqlQuery, username, (err, profile) => {
     if (err) {
-      console.log(err);
+      console.log( err);
       res.status(500).send("Error while retrieving profile info");
     }
     else {
       if (profile.length > 0) {
-        console.log(profile);
+        console.log( profile);
         res.send(profile);
       }
       else {
@@ -241,7 +241,7 @@ app.get('/:username', verifyJWT, (req, res) => {
 //================== Images ==============
 
 
-app.post('/images', upload.single('image'), async (req, res) => {
+app.post('/images', verifyJWT, upload.single('image'), async (req, res) => {
   const file = req.file
 
   //apply filter
@@ -254,17 +254,14 @@ app.post('/images', upload.single('image'), async (req, res) => {
 
 
 app.get('/images/:key', (req, res) => {
-  console.log(req.params)
   const key = req.params.key
   const readStream = getFileStream(key)
-
   readStream.pipe(res)
 })
 
 //================== Post ==============
 
 app.post("/upload", verifyJWT, (req, res) => {
-  console.log("Hello")
   const userId = req.userId;
   const postText = req.body.description;
   const postImage = "http://localhost:3001" + req.body.image
@@ -273,13 +270,12 @@ app.post("/upload", verifyJWT, (req, res) => {
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
     [userId, postText, postImage],
     (err, results) => {
-      console.log(err)
       res.send(results)
     }
   )
 })
 
-app.get("/post", (req, res) => {
+app.get("/api/posts", verifyJWT, (req, res) => {
   db.query("SELECT * FROM Posts", (err, results) => {
     if (err) {
       console.log(err)

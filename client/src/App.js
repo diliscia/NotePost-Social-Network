@@ -4,14 +4,14 @@ import Logout from "./components/user/logout";
 import Register from "./components/user/register";
 import AddArticle from "./components/post/add";
 import Upload from "./components/post/upload";
-// import Home from "./components/post/home";
+import Home from "./components/post/home";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
-import AvailableFriends from "./components/friend/availableFriends";
+import AvailableFriends from "./components/friend/AvailableFriends";
 import MyProfile from "./components/user/myProfile";
 import FriendsList from './components/friend/friendsList'
 
@@ -79,7 +79,7 @@ function App() {
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
-              <Route exact path="/" />
+              <Route exact path="/" element={<Home />}/>
               <Route exact path="/add-article" element={<AddArticle />} />
               <Route exact path="/upload" element={<Upload />} />
               <Route exact path="/logout" element={<Logout />} />

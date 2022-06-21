@@ -15,12 +15,12 @@ function Upload() {
     formData.append("image", image)
     formData.append("description", description)
   
-   Axios.post("http://localhost:3001/images", formData, { headers: {'Content-Type': 'multipart/form-data'}}).then((response) => {
-    console.log("Here is the response")
-    console.log(response)
+   Axios.post("http://localhost:3001/images", formData, {
+    headers: {
+      "x-access-token": localStorage.getItem("token"),
+    },
+  }).then((response) => {
     const key = response.data.imagePath
-    console.log("Here is the key")
-    console.log(key)
     Axios.post("http://localhost:3001/upload", {title: title, description:description, image: key}, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
