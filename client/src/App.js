@@ -10,6 +10,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
 import AvailableFriends from "./components/friend/availableFriends";
+import MyProfile from "./components/user/myProfile";
 
 function App() {
 
@@ -40,7 +41,7 @@ function App() {
                     <Navbar.Text className="ps-2">
                       Signed in as: {localStorage.getItem('username')}
                     </Navbar.Text>
-                    <LinkContainer to="" className="ps-2 mt-1">
+                    <LinkContainer to="/my-profile" className="ps-2 mt-1">
                       <Nav.Link>My Profile</Nav.Link>
                     </LinkContainer>
                     <LinkContainer to="/add-friend" className="ps-2">
@@ -74,6 +75,7 @@ function App() {
               <Route exact path="/add-article" element={<AddArticle />} />
               <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/add-friend" element={<AvailableFriends />} />
+              <Route exact path="/my-profile" element={<MyProfile />} />
             </Route>
 
           </Routes>

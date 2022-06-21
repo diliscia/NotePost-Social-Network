@@ -190,7 +190,32 @@ app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
   })
 });
 
-//================== Friends ==============
+  //================== Profile ==============
+
+app.get('/:username', verifyJWT, (req, res) => {
+  const username = req.params.username;
+  console.log("username " + username);
+  const sqlQuery = "SELECT * FROM Users WHERE  username = ?";
+  db.query(sqlQuery, username, (err, profile) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while retrieving profile info");
+    }
+    else {
+      if (profile.length > 0) {
+        console.log(profile);
+        res.send(profile);
+      }
+      else {
+        res.status(404).send("User does not exist");
+      }
+    }
+  })
+});
+
+
+//================== Images ==============
+
 
 app.post('/images', upload.single('image'), async (req, res) => {
   const file = req.file
@@ -204,6 +229,7 @@ app.post('/images', upload.single('image'), async (req, res) => {
   console.log(result)
   res.send({ imagePath: `/images/${result.Key}` })
 })
+
 
 app.get('/images/:key', (req, res) => {
   console.log(req.params)
