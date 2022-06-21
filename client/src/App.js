@@ -28,7 +28,7 @@ function App() {
     <Router>
       <div className="containter">
         <Navbar bg="light" expand="lg">
-          <Container>
+          <Container> 
             <Navbar.Brand href="#home">PostNote</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
@@ -86,6 +86,7 @@ function App() {
               <Route exact path="/add-friend" element={<AvailableFriends />} />
               <Route exact path="/friendsList" element={<FriendsList />} />
               <Route exact path="/my-profile" element={<MyProfile />} />
+              
             </Route>
           </Routes>
         </UserContext.Provider>

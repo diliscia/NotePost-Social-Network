@@ -41,6 +41,7 @@ function MyProfile() {
             {profile.image}
           </div>
         </div>
+        {/* <a href={"/user/edit/" + profile.id} className="btn btn-success mx-2">Edit</a> */}
       </div>
     );
 }

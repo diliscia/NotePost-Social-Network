@@ -37,6 +37,7 @@ app.use(
 
 app.use(express.json());
 const bcrypt = require("bcrypt");
+const { getUnpackedSettings } = require("http2");
 const saltRounds = 10;
 
 const db = mysql.createConnection({
@@ -115,6 +116,7 @@ app.post("/login", (req, res) => {
             const id = result[0].id;
             const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 300 });
             req.session.user = result;
+            // delete result[0].password; // never send password to the client
             res.json({ auth: true, token: token, result: result });
           } else {
             res.json({
