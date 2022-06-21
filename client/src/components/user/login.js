@@ -62,7 +62,7 @@ function Login() {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", response.data.result[0].username)
             localStorage.setItem("id", response.data.result[0].id)
-            setUser(response.data.result[0].username)
+            setUser(response.data.result[0].username) 
             navigate("/");
           }
         })

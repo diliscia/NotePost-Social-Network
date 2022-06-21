@@ -117,7 +117,7 @@ app.post("/login", (req, res) => {
             req.session.user = result;
             res.json({ auth: true, token: token, result: result });
           } else {
-            res.json({
+            res.json({ 
               auth: false,
               message: "Wrong email/password combination!",
             });
@@ -147,10 +147,11 @@ const verifyJWT = (req, res, next) => {
 };
 
 //================== Friends ==============
-
+//verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends:id', verifyJWT, (req, res) => {
-  const id = req.params.id;
+app.get('/api/availableFriends/:id',  (req, res) => {
+  const id =req.params.id;
+  console.log('id= '+id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u left join Friends f on u.id=f.user1Id "
     + " Where f.id is null and u.id=? ";
