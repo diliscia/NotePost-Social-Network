@@ -111,3 +111,36 @@
 - watch tutorial about routes
 3. Need assistance / figure things out
 - Axios
+
+<<2022-06-21>>
+2022/06/21 Marcelo
+1. Done / not done since last scrum:
+- Implement upload/download image from react-to-S3 - done
+- Implement profile page - done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement edit profile page
+- Setup UI for project 
+3. Need assistance / figure things out
+- Implement upload/download image from react-to-S3
+
+2022/06/21 Ly
+1. Done / not done since last scrum:
+- Implement Post (Get, Post) - done
+- Implement upload/download image from react-to-S3 -done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement Post (Delete and Update)
+- Implement Comments
+3. Need assistance / figure things out
+- Testing
+
+2022/06/21 Alireza
+1. Done / not done since last scrum:
+- Implent friends - done 
+- watch tutorial about routes - done
+- Connect Sequelize to project - done
+2. To do until next Scrum:
+- implement friends list
+3. Need assistance / figure things out
+- Updating page

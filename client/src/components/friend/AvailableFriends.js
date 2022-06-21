@@ -13,6 +13,7 @@ function AvailableFriends() {
     const [availableFriends, setAvailableFriends] = useState([]);
 
     const makeRequest = (user1Id, user2Id) => {
+        // alert(user1Id + user2Id)
         Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
@@ -24,11 +25,10 @@ function AvailableFriends() {
     }
 
     const getAvailableFriends = () => {
-        alert('Hello')
-        console.log('hello')
+        // alert('Bye')
+        // console.log('hello')
         if (!localStorage.getItem("token")) {
             setUser1Id(localStorage.getItem('id'))
-
             Axios.get(`http://localhost:3001/api/availableFriends/${user1Id}`, {
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
@@ -39,16 +39,33 @@ function AvailableFriends() {
         }
     }
 
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            setUser1Id(localStorage.getItem('id'))
+            // console.log(user1Id)
+            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                },
+            }).then((response) => {
+
+                setAvailableFriends(response.data)
+                // console.log(response.data)
+            })
+
+        }
+    }, []);
     return (
         <div className="container my-5">
             <h1 className="text-center my-5 text-success">Available users that you can request Friendship</h1>
-            {availableFriends.map((user) => (
-                <div key={user.id} className="my-5 card p-3">
-                    <image src={user.userImage} alt='user image'></image>
-                    <h3 className=' text-primary'>{user.firstname}</h3>
-                    <p><i>{user.lastname} </i></p>
+            {availableFriends.map((u) => (
+                <div key={u.id} className="my-5 card p-3">
+                    <p>id={u.id} user1Id={user1Id} </p>
+                    <img src={u.userImage} alt='user image'></img>
+                    <h3 className=' text-primary'>{u.firstName}</h3>
+                    <p><i>{u.lastName} </i></p>
                     <div>
-                        <button className="btn btn-danger mx-2" onClick={() => { makeRequest(user1Id, user.id) }}>Request</button>
+                        <button className="btn btn-danger mx-2" onClick={() => { makeRequest(user1Id, u.id) }}>Request</button>
                     </div>
                 </div>
             ))}

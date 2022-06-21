@@ -137,6 +137,7 @@ const verifyJWT = (req, res, next) => {
   } else {
     jwt.verify(token, "jwtSecret", (err, decoded) => {
       if (err) {
+        console.log(err)
         res.json({ auth: false, message: "You failed to authenticate" });
       } else {
         req.userId = decoded.id;
@@ -147,13 +148,14 @@ const verifyJWT = (req, res, next) => {
 };
 
 //================== Friends ==============
-
+//verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends:id', verifyJWT, (req, res) => {
+app.get('/api/availableFriends/:id', (req, res) => {
   const id = req.params.id;
+  // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u left join Friends f on u.id=f.user1Id "
-    + " Where f.id is null and u.id=? ";
+    + " Where f.id is null and u.id!=? ";
   db.query(sqlSelect, id, (err, result) => {
     if (err) {
       console.log(err);
@@ -169,10 +171,11 @@ app.get('/api/availableFriends:id', verifyJWT, (req, res) => {
     }
   })
 });
-
-app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
+//, verifyJWT
+app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
+  // console.log(user1Id, user2Id)
   const sqlInsert = "Insert Into Friends (user1Id,user2Id) Values (?,?) , (?,?) ";
   db.query(sqlInsert, [user1Id, user2Id, user2Id, user1Id], (err, result) => {
     if (err) {
@@ -180,12 +183,7 @@ app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
       res.status(500).send("Error while Insert");
     }
     else {
-      if (result.length > 0) {
-        res.send(result);
-      }
-      else {
-        res.status(404).send("Insert has a problem");
-      }
+      res.send(result);
     }
   })
 });
@@ -225,8 +223,6 @@ app.post('/images', upload.single('image'), async (req, res) => {
   const result = await uploadFile(file)
   const description = req.body.description
   await unlinkFile(file.path)
-  console.log(file)
-  console.log(result)
   res.send({ imagePath: `/images/${result.Key}` })
 })
 
@@ -237,6 +233,33 @@ app.get('/images/:key', (req, res) => {
   const readStream = getFileStream(key)
 
   readStream.pipe(res)
+})
+
+//================== Post ==============
+
+app.post("/upload", verifyJWT, (req, res) => {
+  console.log("Hello")
+  const userId = req.userId;
+  const postText = req.body.description;
+  const postImage = "http://localhost:3001"+ req.body.image
+
+  db.query(
+    "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
+    [userId, postText, postImage],
+    (err, results) => {
+      console.log(err)
+      res.send(results)
+    }
+  )
+})
+
+app.get("/post", (req, res) => {
+  db.query("SELECT * FROM Posts", (err, results) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(results)
+  })
 })
 
   app.listen(3001, () => {
