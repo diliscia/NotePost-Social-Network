@@ -148,6 +148,32 @@ const verifyJWT = (req, res, next) => {
 };
 
 //================== Friends ==============
+
+//verifyJWT,
+// list friends of current user
+app.get('/api/friendsList/:id', (req, res) => {
+  const id = req.params.id;
+  // console.log('id= ' + id)
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u join Friends f on u.id=f.user1Id "
+    + " Where u.id!=?"
+  db.query(sqlSelect, id, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while retrieving the list");
+    }
+    else {
+      if (result.length > 0) {
+        res.send(result);
+      }
+      else {
+        res.status(404).send("List has a problem");
+      }
+    }
+  })
+});
+
+
 //verifyJWT,
 // list if available users that are not friends of current user
 app.get('/api/availableFriends/:id', (req, res) => {
@@ -188,7 +214,7 @@ app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
   })
 });
 
-  //================== Profile ==============
+//================== Profile ==============
 
 app.get('/:username', verifyJWT, (req, res) => {
   const username = req.params.username;
@@ -241,7 +267,7 @@ app.post("/upload", verifyJWT, (req, res) => {
   console.log("Hello")
   const userId = req.userId;
   const postText = req.body.description;
-  const postImage = "http://localhost:3001"+ req.body.image
+  const postImage = "http://localhost:3001" + req.body.image
 
   db.query(
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
@@ -262,6 +288,6 @@ app.get("/post", (req, res) => {
   })
 })
 
-  app.listen(3001, () => {
-    console.log("Your server is running on port 3001")
-  })
+app.listen(3001, () => {
+  console.log("Your server is running on port 3001")
+})

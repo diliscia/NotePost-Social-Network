@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
 import AvailableFriends from "./components/friend/availableFriends";
 import MyProfile from "./components/user/myProfile";
+import FriendsList from './components/friend/friendsList'
 
 function App() {
 
@@ -49,6 +50,9 @@ function App() {
                     <LinkContainer to="/add-friend" className="ps-2">
                       <Nav.Link>Add Friend</Nav.Link>
                     </LinkContainer>
+                    <LinkContainer to="/friendsList" className="ps-2">
+                      <Nav.Link>Friends</Nav.Link>
+                    </LinkContainer>
                     <LinkContainer to="/upload" className="ps-2">
                       <Nav.Link>Post</Nav.Link>
                     </LinkContainer>
@@ -72,18 +76,17 @@ function App() {
         </Navbar>
         <UserContext.Provider value={{ user, setUser }}>
           <Routes>
-
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
-            <Route exact path="/" />
+              <Route exact path="/" />
               <Route exact path="/add-article" element={<AddArticle />} />
               <Route exact path="/upload" element={<Upload />} />
               <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/add-friend" element={<AvailableFriends />} />
+              <Route exact path="/friendsList" element={<FriendsList />} />
               <Route exact path="/my-profile" element={<MyProfile />} />
             </Route>
-
           </Routes>
         </UserContext.Provider>
       </div>
