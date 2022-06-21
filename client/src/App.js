@@ -11,7 +11,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
-import AvailableFriends from "./components/friend/AvailableFriends";
+import AvailableFriends from "./components/friend/availableFriends";
 import MyProfile from "./components/user/myProfile";
 import FriendsList from './components/friend/friendsList'
 
