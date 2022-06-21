@@ -117,7 +117,7 @@ app.post("/login", (req, res) => {
             req.session.user = result;
             res.json({ auth: true, token: token, result: result });
           } else {
-            res.json({ 
+            res.json({
               auth: false,
               message: "Wrong email/password combination!",
             });
@@ -150,12 +150,12 @@ const verifyJWT = (req, res, next) => {
 //================== Friends ==============
 //verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends/:id',  (req, res) => {
-  const id =req.params.id;
-  console.log('id= '+id)
+app.get('/api/availableFriends/:id', (req, res) => {
+  const id = req.params.id;
+  // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u left join Friends f on u.id=f.user1Id "
-    + " Where f.id is null and u.id=? ";
+    + " Where f.id is null and u.id!=? ";
   db.query(sqlSelect, id, (err, result) => {
     if (err) {
       console.log(err);
@@ -171,10 +171,11 @@ app.get('/api/availableFriends/:id',  (req, res) => {
     }
   })
 });
-
-app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
+//, verifyJWT
+app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
+  // console.log(user1Id, user2Id)
   const sqlInsert = "Insert Into Friends (user1Id,user2Id) Values (?,?) , (?,?) ";
   db.query(sqlInsert, [user1Id, user2Id, user2Id, user1Id], (err, result) => {
     if (err) {
@@ -182,12 +183,7 @@ app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
       res.status(500).send("Error while Insert");
     }
     else {
-      if (result.length > 0) {
-        res.send(result);
-      }
-      else {
-        res.status(404).send("Insert has a problem");
-      }
+      res.send(result);
     }
   })
 });
