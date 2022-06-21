@@ -13,6 +13,7 @@ function AvailableFriends() {
     const [availableFriends, setAvailableFriends] = useState([]);
 
     const makeRequest = (user1Id, user2Id) => {
+        // alert(user1Id + user2Id)
         Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
@@ -59,6 +60,7 @@ function AvailableFriends() {
             <h1 className="text-center my-5 text-success">Available users that you can request Friendship</h1>
             {availableFriends.map((u) => (
                 <div key={u.id} className="my-5 card p-3">
+                    <p>id={u.id} user1Id={user1Id} </p>
                     <img src={u.userImage} alt='user image'></img>
                     <h3 className=' text-primary'>{u.firstName}</h3>
                     <p><i>{u.lastName} </i></p>
