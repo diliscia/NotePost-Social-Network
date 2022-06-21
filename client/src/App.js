@@ -3,6 +3,8 @@ import Login from "./components/user/login";
 import Logout from "./components/user/logout";
 import Register from "./components/user/register";
 import AddArticle from "./components/post/add";
+import Upload from "./components/post/upload";
+import Home from "./components/post/home";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
@@ -46,6 +48,9 @@ function App() {
                     <LinkContainer to="/add-friend" className="ps-2">
                       <Nav.Link>Add Friend</Nav.Link>
                     </LinkContainer>
+                    <LinkContainer to="/upload" className="ps-2">
+                      <Nav.Link>Post</Nav.Link>
+                    </LinkContainer>
                     <LinkContainer to="/logout" className="ps-2">
                       <Nav.Link>Logout</Nav.Link>
                     </LinkContainer>
@@ -70,8 +75,9 @@ function App() {
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/login" element={<Login />} />
             <Route element={<ProtectedRoutes />}>
-              <Route exact path="/" />
+              <Route exact path="/" element={<Home />}/>
               <Route exact path="/add-article" element={<AddArticle />} />
+              <Route exact path="/upload" element={<Upload />} />
               <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/add-friend" element={<AvailableFriends />} />
             </Route>

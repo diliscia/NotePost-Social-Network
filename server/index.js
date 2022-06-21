@@ -137,6 +137,7 @@ const verifyJWT = (req, res, next) => {
   } else {
     jwt.verify(token, "jwtSecret", (err, decoded) => {
       if (err) {
+        console.log(err)
         res.json({ auth: false, message: "You failed to authenticate" });
       } else {
         req.userId = decoded.id;
@@ -191,7 +192,7 @@ app.post('/api/makeFriendship:user1Id:user2Id', verifyJWT, (req, res) => {
   })
 });
 
-//================== Friends ==============
+//================== Images ==============
 
 app.post('/images', upload.single('image'), async (req, res) => {
   const file = req.file
@@ -201,8 +202,6 @@ app.post('/images', upload.single('image'), async (req, res) => {
   const result = await uploadFile(file)
   const description = req.body.description
   await unlinkFile(file.path)
-  console.log(file)
-  console.log(result)
   res.send({ imagePath: `/images/${result.Key}` })
 })
 
@@ -212,6 +211,33 @@ app.get('/images/:key', (req, res) => {
   const readStream = getFileStream(key)
 
   readStream.pipe(res)
+})
+
+//================== Post ==============
+
+app.post("/upload", verifyJWT, (req, res) => {
+  console.log("Hello")
+  const userId = req.userId;
+  const postText = req.body.description;
+  const postImage = "http://localhost:3001"+ req.body.image
+
+  db.query(
+    "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
+    [userId, postText, postImage],
+    (err, results) => {
+      console.log(err)
+      res.send(results)
+    }
+  )
+})
+
+app.get("/post", (req, res) => {
+  db.query("SELECT * FROM Posts", (err, results) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send(results)
+  })
 })
 
   app.listen(3001, () => {

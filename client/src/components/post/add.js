@@ -23,7 +23,7 @@ export default function AddArticle() {
           filename={file} 
           onChange={e => setFile(e.target.files[0])} 
           type="file" 
-          accept="image/*"
+          accept="images/*"
         ></input>
         <input
           onChange={e => setDescription(e.target.value)} 
