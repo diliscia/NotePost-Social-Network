@@ -154,7 +154,7 @@ const verifyJWT = (req, res, next) => {
 app.get('/api/friendsList/:id', (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+  const sqlSelect = "Select u.id, u.firstName, u.lastName, u.userImage "
     + " From Users u join Friends f on u.id=f.user1Id "
     + " Where u.id!=?"
   db.query(sqlSelect, id, (err, result) => {
