@@ -13,6 +13,22 @@ function AvailableFriends() {
     const [user1Id, setUser1Id] = useState(0);
     const [availableFriends, setAvailableFriends] = useState([]);
 
+    useEffect(() => {
+        // alert(process.env.REACT_APP_S3) 
+        if (localStorage.getItem("token")) {
+            setUser1Id(localStorage.getItem('id'))
+            // console.log(user1Id)
+            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                },
+            }).then((response) => {
+                setAvailableFriends(response.data)
+                // console.log(response.data)
+            })
+        }
+    }, []);
+
     const makeRequest = (user1Id, user2Id) => {
         // alert(user1Id + user2Id)
         Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
@@ -29,8 +45,8 @@ function AvailableFriends() {
     const getAvailableFriends = () => {
         // alert('Bye')
         // console.log('hello')
-        if (!localStorage.getItem("token")) {
-            setUser1Id(localStorage.getItem('id'))
+        // if (!localStorage.getItem("token")) {
+        //     setUser1Id(localStorage.getItem('id'))
             Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
@@ -39,24 +55,10 @@ function AvailableFriends() {
                 console.log(response)
                 setAvailableFriends(response.data)
             })
-        }
+        // }
     }
 
-    useEffect(() => {
-        // alert(process.env.REACT_APP_S3) 
-        if (localStorage.getItem("token")) {
-            setUser1Id(localStorage.getItem('id'))
-            // console.log(user1Id)
-            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token"),
-                },
-            }).then((response) => {
-                setAvailableFriends(response.data)
-                // console.log(response.data)
-            })
-        }
-    }, []);
+
 
     const styles = {
         width: 400,
