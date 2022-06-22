@@ -247,11 +247,9 @@ app.get('/:username', verifyJWT, (req, res) => {
 
 app.post('/images', verifyJWT, upload.single('image'), async (req, res) => {
   const file = req.file
-
   //apply filter
   // resize 
   const result = await uploadFile(file)
-  const description = req.body.description
   await unlinkFile(file.path)
   res.send({ imagePath: `/images/${result.Key}` })
 })
@@ -266,15 +264,20 @@ app.get('/images/:key', (req, res) => {
 //================== Post ==============
 
 app.post("/upload", verifyJWT, (req, res) => {
+  console.log(req.body)
   const userId = req.userId;
-  const postText = req.body.description;
+  const postText = req.body.postText;
   const postImage = "http://localhost:3001" + req.body.image
-
+  
   db.query(
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
     [userId, postText, postImage],
     (err, results) => {
-      res.send(results)
+      if (err) {
+        res.sendStatus(500).send("Server error!")
+      } else {
+        res.sendStatus(201);
+      }
     }
   )
 })
@@ -282,9 +285,10 @@ app.post("/upload", verifyJWT, (req, res) => {
 app.get("/api/posts", verifyJWT, (req, res) => {
   db.query("SELECT * FROM Posts", (err, results) => {
     if (err) {
-      console.log(err)
+      res.sendStatus(500).send("Server error!")
+    }else {
+      res.send(results)
     }
-    res.send(results)
   })
 })
 

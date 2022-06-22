@@ -1,95 +1,128 @@
-import React, {useState} from 'react'
+import { useEffect, useState } from "react";
 import Axios from "axios";
+import {useNavigate } from "react-router-dom";
 
 function Upload() {
+  let navigate = useNavigate();
+  const initialValues = {
+    postText: "",
+    postImage:[],
+  };
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("")
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
   const [image, setImage] = useState([]);
   const [file, setFile] = useState()
 
-  const submit = (event) => {
-    event.preventDefault()
+  const handleFileChange = (e) => {
+    formValues['postImage'] = e.target.files[0]
+    // const image = e.target.files[0];
+    // var imageValidation = document.getElementById("image-error");
+    // imageValidation.innerHTML = ""
 
+    // if (image.size > 100000) {
+    //   imageValidation.innerHTML = "You cannot upload file that larger than 1MB";
+    //   return false;
+    // }
+
+    // if (!image.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+    //   imageValidation.innerHTML = "Please select an image";
+    //   return false;
+    // }
+
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
+  };
+
+  const validate = (values) => {
+    const errors = {};
+    if (!values.postText) {
+      errors.postText = "Content is required!";
+    } else if (values.postText.length < 1 || values.postText.length > 500) {
+      errors.postText = "Content must be at least 1 characters and less than 500 characters long";
+    } 
+
+    if (values.postImage.size > 100000) {
+      errors.postImage = "You cannot upload file that larger than 1MB";
+    }
+    if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+      errors.postImage = "Invalid file";
+    }
+    return errors;
+  };
+
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      addPost(formValues);
+    }
+  }, [formErrors]);
+
+  const addPost = (formValues) => {
     const formData = new FormData()
-    formData.append("image", image)
-    formData.append("description", description)
-  
-   Axios.post("http://localhost:3001/images", formData, {
+    formData.append("image", formValues.postImage)
+    formData.append("description", formValues.postText)
+ 
+    Axios.post("http://localhost:3001/images", formData, {
     headers: {
       "x-access-token": localStorage.getItem("token"),
     },
   }).then((response) => {
     const key = response.data.imagePath
-    Axios.post("http://localhost:3001/upload", {title: title, description:description, image: key}, {
+    Axios.post("http://localhost:3001/upload", {postText: formValues.postText, image: key}, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
+    }).then(() => {
+      alert("Successfully added!");
+      navigate("/");
     })
+    .catch((error) => {
+      var failMessage = document.getElementById("fail-added");
+      failMessage.innerHTML = error.response.data;
+    });
   })
-}
-
-
+  };
 
   return (
     <div className="container">
-      <h1>Create a post</h1>
       <div id="fail-added" className="text-danger"></div>
-      <form> 
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="title" className="form-label">
-            Title
-          </label>
           <input
             type="text"
             className="form-control"
-            id="title"
-            name="title"
-            placeholder="Title ..."
-            max-length="20"
-            onChange = {(event) => {
-              setTitle(event.target.value)
-            }}
-            // value={formValues.firstname}
-            // onChange={handleChange}
+            id="postText"
+            name="postText"
+            placeholder="What is in your mind?"
+            value={formValues.postText}
+            onChange={handleChange}
           />
-          {/* <p className="text-danger"> {formErrors.firstname} </p> */}
+          <p className="text-danger">{formErrors.postText}</p>
         </div>
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            Description
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="description"
-            name="description"
-            placeholder="Description ..."
-            max-length="50"
-            onChange = {(event) => {
-              setDescription(event.target.value)
-            }}
-            // value={formValues.lastname}
-            // onChange={handleChange}
-          />
-          </div>
-           <div className="mb-3">
           <input 
           filename={file} 
-          onChange={e => setImage(e.target.files[0])} 
+            onChange={handleFileChange}
           type="file" 
           accept="image/*"
         ></input>
-          {/* <p className="text-danger"> {formErrors.lastname} </p> */}
+         <div id="image-error" className="text-danger"></div>
+          <p className="text-danger"> {formErrors.postImage} </p>
         </div>
-
-        {/* <button className="btn btn-primary">Sign Up</button> */}
-
-        <button onClick = {submit}> upload</button>
-      
+        <button className="btn btn-primary">Post</button>
       </form>
     </div>
-  )
+  );
 }
 
-export default Upload
+export default Upload;
