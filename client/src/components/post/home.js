@@ -105,11 +105,12 @@ function Home() {
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>
                   <p className="card-text">{val.postText}</p>
-                  <img
+                  {val.postImage === null ? "" : <img
                     className="img-fluid"
                     style={stylesimagepost}
-                    src={val.postImage}
-                  />
+                    src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
+                  />}
+                  
                 </div>
               </div>
             );

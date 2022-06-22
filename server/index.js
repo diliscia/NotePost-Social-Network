@@ -262,13 +262,14 @@ app.put('/api/profile/edit', verifyJWT, (req, res) => {
 
 app.post('/images', upload.single('image'), async (req, res) => {
   const file = req.file
+  console.log(file)
+  file.filename = 'images/' + file.filename
   //apply filter
   // resize 
   const result = await uploadFile(file)
   await unlinkFile(file.path)
-  res.send({ imagePath: `/images/${result.Key}` })
+  res.send({ imagePath: result.Key })
 })
-
 
 app.get('/images/:key', (req, res) => {
   const key = req.params.key
@@ -282,7 +283,21 @@ app.post("/upload", verifyJWT, (req, res) => {
   console.log(req.body)
   const userId = req.userId;
   const postText = req.body.postText;
-  const postImage = "http://localhost:3001" + req.body.image
+
+  if (req.body.image === undefined) {
+    db.query(
+      "INSERT INTO Posts (userId, postText) VALUES (?, ?)",
+      [userId, postText],
+      (err, results) => {
+        if (err) {
+          res.sendStatus(500).send("Server error!")
+        } else {
+          res.sendStatus(201);
+        }
+      }
+    )
+  } else {
+  const postImage = req.body.image
   
   db.query(
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
@@ -295,6 +310,7 @@ app.post("/upload", verifyJWT, (req, res) => {
       }
     }
   )
+  }
 })
 
 app.get("/api/posts", verifyJWT, (req, res) => {
@@ -332,7 +348,7 @@ app.get('/api/update-post/:id',verifyJWT, (req, res)=> {
 app.put("/api/update-post/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
   const postText = req.body.postText;
-  const postImage = "http://localhost:3001" + req.body.image;
+  const postImage =  req.body.image;
 
   const sqlUpdate = "UPDATE Posts SET postText = ?, postImage = ? WHERE id = ?";
   db.query(sqlUpdate, [postText, postImage, id], (err, result) => {
