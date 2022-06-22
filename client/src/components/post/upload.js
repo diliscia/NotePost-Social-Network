@@ -56,7 +56,7 @@ function Upload() {
     } else if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
       errors.postImage = "Invalid file";
     }
-    if (values.postImage.size > 100000) {
+    if (values.postImage.size > 1000000) {
       errors.postImage = "You cannot upload file that larger than 1MB";
     }
     

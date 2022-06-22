@@ -298,7 +298,7 @@ app.post("/upload", verifyJWT, (req, res) => {
 })
 
 app.get("/api/posts", verifyJWT, (req, res) => {
-  db.query("SELECT * FROM Posts", (err, results) => {
+  db.query("SELECT * FROM Posts WHERE userId = ? ORDER BY createdAt DESC", req.userId, (err, results) => {
     if (err) {
       res.sendStatus(500).send("Server error!")
     }else {
@@ -306,6 +306,17 @@ app.get("/api/posts", verifyJWT, (req, res) => {
     }
   })
 })
+
+app.get("/api/allposts", verifyJWT, (req, res) => {
+  db.query("SELECT * FROM Users as u INNER JOIN Posts p ON p.userId = u.id ORDER BY p.createdAt DESC", (err, results) => {
+    if (err) {
+      res.sendStatus(500).send("Server error!")
+    }else {
+      res.send(results)
+    }
+  })
+})
+
 
 app.listen(3001, () => {
   console.log("Your server is running on port 3001")
