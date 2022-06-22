@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { UserContext } from "./components/user/UserContext";
 import AvailableFriends from "./components/friend/availableFriends";
 import MyProfile from "./components/user/myProfile";
+import EditProfile from "./components/user/editProfile";
 import FriendsList from './components/friend/friendsList'
 
 function App() {
@@ -86,7 +87,7 @@ function App() {
               <Route exact path="/add-friend" element={<AvailableFriends />} />
               <Route exact path="/friendsList" element={<FriendsList />} />
               <Route exact path="/my-profile" element={<MyProfile />} />
-              
+              <Route exact path="/edit-profile" element={<EditProfile />} />
             </Route>
           </Routes>
         </UserContext.Provider>

@@ -22,19 +22,33 @@ function EditProfile(){
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
 
-    useEffect (()=>{
-        Axios.get(`http://localhost:3001/user/${id}`)
-        .then((response)=>{
+    const closeSuccessAlert = () => {
+        var successMessage = document.getElementById('successAlert');
+        successMessage.style.display = 'none';
+    }
+    const closeFailAlert = () => {
+        var failMessage = document.getElementById('failAlert');
+        failMessage.style.display = 'none';
+    }
+  
+    useEffect(() => {
+        Axios.get(`http://localhost:3001/api/profile`, {
+                    headers: {
+                        "x-access-token": localStorage.getItem("token"),
+                    },
+                }).then((response) => {
             console.log(response);
             setFormValues(response.data[0]);
-        }).catch((error)=>{
-            navigate("/");
+         }).catch((error)=>{
+            console.log(error);
         });
     },[]);
 
     useEffect (()=>{
-        if(Object.keys(formErrors).length === 0 && isSubmit && localStorage.getItem("token")){
-            Axios.put(`http://localhost:3001/user/${id}`, formValues, {
+        closeFailAlert();
+        closeSuccessAlert();
+        if(Object.keys(formErrors).length === 0 && isSubmit === true && localStorage.getItem("token")){
+            Axios.put(`http://localhost:3001/api/profile/edit`, formValues, {
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
                 },
@@ -44,6 +58,7 @@ function EditProfile(){
                 successMessage.style.display = 'block';
             })
             .catch((error)=>{
+                console.log(error);
                 var fail = document.getElementById('failAlert');
                 var failMsg = document.getElementById('failAlertMsg');
     
@@ -71,41 +86,36 @@ function EditProfile(){
         }
     };
 
-    const closeSuccessAlert = () => {
-        var successMessage = document.getElementById('successAlert');
-        successMessage.style.display = 'none';
-    }
-    const closeFailAlert = () => {
-        var failMessage = document.getElementById('failAlert');
-        failMessage.style.display = 'none';
-    }
-
     const validateForm = (values) => {
         const errors = {}
+        const regexFirstName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+        const regexLastName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+        const regexUsername = /^[A-Za-z0-9]{4,50}$/g;
     
-        if (!values.firstname){
-            errors.firstname = "Task is required";
+        if (!values.firstname) {
+          errors.firstname = "First name is required";
+        } else if (!regexFirstName.test(values.firstname)) {
+          errors.firstname =
+            "First name can only contains letters and must be between 1-50 characters.";
         }
-        else if (values.firstname.length < 1 || values.firstname.length > 100){
-            errors.firstname = "Firstname should be between 1 to 100 characters"
+    
+        if (!values.lastname) {
+          errors.lastname = "Last name is required";
+        } else if (!regexLastName.test(values.lastname)) {
+          errors.lastname =
+            "Last name can only contains letters and must be between 1-50 characters.";
         }
-
-        if (!values.lastname){
-            errors.lastname = "Task is required";
-        }
-        else if (values.lastname.length < 1 || values.lastname.length > 100){
-            errors.firstname = "Lastnama should be between 1 to 100 characters"
-        }
-
-        if (!values.username){
-            errors.username = "Task is required";
-        }
-        else if (values.username.length < 1 || values.username.length > 100){
-            errors.username = "Username should be between 1 to 100 characters"
+    
+        if (!values.username.trim()) {
+          errors.username = "Username is required!";
+        } else if (!regexUsername.test(values.username)) {
+          errors.username =
+            "Username can contains lowercase and uppercase letters and numbers. And must be between 4-50 characters.";
         }
 
         return errors;
     };
+
 
     return (
         <div className='container my-5'> 
@@ -119,21 +129,21 @@ function EditProfile(){
             </div>
             <h1 className='text-center'>Edit your Profile</h1>
             <form className='m-4 w-75 mx-auto' onSubmit={handleSubmit}>
-                <label htmlFor="firstname" className='form-label my-3 mb-1'>firstname</label>
-                <input type="text" className="form-control" 
-                    name="firstname" id="firstname" value={formValues.task} onChange={handleChange}/>
-                <p className='errors'>{formErrors.firstname}</p>
 
-                <label htmlFor="lastname" className='form-label my-3 mb-1'>lastname</label>
+                <label htmlFor="firstname" className='form-label my-3 mb-1'>First name: </label>
                 <input type="text" className="form-control" 
-                    name="lastname" id="lastname" value={formValues.last} onChange={handleChange}/>
-                <p className='errors'>{formErrors.lastname}</p>
+                    name="firstname" id="firstname" value={formValues.firstname} onChange={handleChange}/>
+                <p className="text-danger">{formErrors.firstname}</p>
 
-                <label htmlFor="username" className='form-label my-3 mb-1'>username</label>
+                <label htmlFor="lastname" className='form-label my-3 mb-1'>Last name: </label>
                 <input type="text" className="form-control" 
-                    name="username" id="username" value={formValues.task}username onChange={handleChange}/>
-                <p className='errors'>{formErrors.username}</p>
+                    name="lastname" id="lastname" value={formValues.lastname} onChange={handleChange}/>
+                <p className="text-danger">{formErrors.lastname}</p>
 
+                <label htmlFor="username" className='form-label my-3 mb-1'>User name: </label>
+                <input type="text" className="form-control" 
+                    name="username" id="username" value={formValues.username} onChange={handleChange}/>
+                <p className="text-danger">{formErrors.username}</p>
 
 
                 <div className='d-flex justify-content-center'>
