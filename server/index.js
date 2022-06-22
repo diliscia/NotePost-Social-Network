@@ -216,18 +216,18 @@ app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
 
 //================== Profile ==============
 
-app.get('/:username', verifyJWT, (req, res) => {
-  const username = req.params.username;
-  console.log("username " + username);
-  const sqlQuery = "SELECT * FROM Users WHERE  username = ?";
-  db.query(sqlQuery, username, (err, profile) => {
+app.get('/api/profile', verifyJWT, (req, res) => {
+  // const id = req.params.id;
+  // console.log("userid " + id);
+  const sqlQuery = "SELECT * FROM Users WHERE id = ?";
+  db.query(sqlQuery, req.userId, (err, profile) => {
     if (err) {
-      console.log( err);
+      console.log(err);
       res.status(500).send("Error while retrieving profile info");
     }
     else {
       if (profile.length > 0) {
-        console.log( profile);
+        console.log(profile);
         res.send(profile);
       }
       else {
@@ -237,6 +237,25 @@ app.get('/:username', verifyJWT, (req, res) => {
   })
 });
 
+// Edit profile
+app.put('/api/profile/edit', verifyJWT, (req, res) => {
+  // const id = req.params.id;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const username = req.body.username;
+
+  const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
+  db.query(sqlUpdate, [firstname, lastname, username, req.userId], (err, result) => {
+      if (err) {
+          console.log(err);
+          res.status(400).send("Error updating the profile. Please try again");
+      }
+      else {
+          console.log(result);
+          res.sendStatus(201);
+      }
+  })
+});
 
 //================== Images ==============
 
