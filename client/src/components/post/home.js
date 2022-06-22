@@ -13,7 +13,11 @@ function Home() {
     }).then((response) =>{
       setUpload(response.data);
     })
-  },[])
+  },[]) 
+
+  const styles = {
+    width: 600,
+  };
 
   return (
     <div className="container">
@@ -25,7 +29,7 @@ function Home() {
           <p className="card-text">
             {val.postText}
           </p>
-          <img src={val.postImage}/>
+          <img style={styles} src={val.postImage}/>
         </div>
       </div>
         )
