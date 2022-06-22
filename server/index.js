@@ -13,7 +13,7 @@ const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 
-app.use( 
+app.use(
   cors({
     origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -153,7 +153,7 @@ const verifyJWT = (req, res, next) => {
 
 //verifyJWT,
 // list friends of current user
-app.get('/api/friendsList/:id', (req, res) => {
+app.get('/api/friendsList/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -178,7 +178,7 @@ app.get('/api/friendsList/:id', (req, res) => {
 
 //verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends/:id', (req, res) => {
+app.get('/api/availableFriends/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -199,8 +199,10 @@ app.get('/api/availableFriends/:id', (req, res) => {
     }
   })
 });
+
+
 //, verifyJWT
-app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
+app.post('/api/makeFriendship/:user1Id/:user2Id', verifyJWT, (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
   // console.log(user1Id, user2Id)
@@ -224,12 +226,12 @@ app.get('/:username', verifyJWT, (req, res) => {
   const sqlQuery = "SELECT * FROM Users WHERE  username = ?";
   db.query(sqlQuery, username, (err, profile) => {
     if (err) {
-      console.log( err);
+      console.log(err);
       res.status(500).send("Error while retrieving profile info");
     }
     else {
       if (profile.length > 0) {
-        console.log( profile);
+        console.log(profile);
         res.send(profile);
       }
       else {
