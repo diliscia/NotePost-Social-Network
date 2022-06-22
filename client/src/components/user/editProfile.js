@@ -87,7 +87,7 @@ function EditProfile(){
     };
 
     const validateForm = (values) => {
-        const errors = {}
+        const errors = {};
         const regexFirstName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
         const regexLastName = /^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
         const regexUsername = /^[A-Za-z0-9]{4,50}$/g;
@@ -112,7 +112,6 @@ function EditProfile(){
           errors.username =
             "Username can contains lowercase and uppercase letters and numbers. And must be between 4-50 characters.";
         }
-
         return errors;
     };
 

@@ -6,7 +6,6 @@ import Axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 // import { AuthContext, UserContext } from "../components/UserContext";
 import { Link } from "react-router-dom";
-import Resizer from "react-image-file-resizer";
 
 function MyProfile() {
 
