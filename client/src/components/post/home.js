@@ -108,7 +108,7 @@ function Home() {
                   <img
                     className="img-fluid"
                     style={stylesimagepost}
-                    src={val.postImage}
+                    src={"https://postnote-app.s3.amazonaws.com/"+val.postImage}
                   />
                 </div>
               </div>
