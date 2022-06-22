@@ -30,14 +30,13 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-    expires: 60 * 60 * 24,
+      expires: 60 * 60 * 24,
     },
   })
 );
 
 app.use(express.json());
 const bcrypt = require("bcrypt");
-const { getUnpackedSettings } = require("http2");
 const saltRounds = 10;
 
 const db = mysql.createConnection({
@@ -116,7 +115,6 @@ app.post("/login", (req, res) => {
             const id = result[0].id;
             const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 300 });
             req.session.user = result;
-            // delete result[0].password; // never send password to the client
             res.json({ auth: true, token: token, result: result });
           } else {
             res.json({
@@ -153,7 +151,7 @@ const verifyJWT = (req, res, next) => {
 
 //verifyJWT,
 // list friends of current user
-app.get('/api/friendsList/:id', verifyJWT, (req, res) => {
+app.get('/api/friendsList/:id', (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -178,7 +176,7 @@ app.get('/api/friendsList/:id', verifyJWT, (req, res) => {
 
 //verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends/:id', verifyJWT, (req, res) => {
+app.get('/api/availableFriends/:id', (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -199,10 +197,8 @@ app.get('/api/availableFriends/:id', verifyJWT, (req, res) => {
     }
   })
 });
-
-
 //, verifyJWT
-app.post('/api/makeFriendship/:user1Id/:user2Id', verifyJWT, (req, res) => {
+app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
   // console.log(user1Id, user2Id)
@@ -220,18 +216,18 @@ app.post('/api/makeFriendship/:user1Id/:user2Id', verifyJWT, (req, res) => {
 
 //================== Profile ==============
 
-app.get('/api/profile', verifyJWT, (req, res) => {
-  // const id = req.params.id;
-  // console.log("userid " + id);
-  const sqlQuery = "SELECT * FROM Users WHERE id = ?";
-  db.query(sqlQuery, req.userId, (err, profile) => {
+app.get('/:username', verifyJWT, (req, res) => {
+  const username = req.params.username;
+  console.log("username " + username);
+  const sqlQuery = "SELECT * FROM Users WHERE  username = ?";
+  db.query(sqlQuery, username, (err, profile) => {
     if (err) {
-      console.log(err);
+      console.log( err);
       res.status(500).send("Error while retrieving profile info");
     }
     else {
       if (profile.length > 0) {
-        console.log(profile);
+        console.log( profile);
         res.send(profile);
       }
       else {
@@ -241,30 +237,11 @@ app.get('/api/profile', verifyJWT, (req, res) => {
   })
 });
 
-// Edit profile
-app.put('/api/profile/edit', verifyJWT, (req, res) => {
-  // const id = req.params.id;
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const username = req.body.username;
-
-  const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
-  db.query(sqlUpdate, [firstname, lastname, username, req.userId], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(400).send("Error updating the profile. Please try again");
-      }
-      else {
-          console.log(result);
-          res.sendStatus(201);
-      }
-  })
-});
 
 //================== Images ==============
 
 
-app.post('/images', verifyJWT, upload.single('image'), async (req, res) => {
+app.post('/images', upload.single('image'), async (req, res) => {
   const file = req.file
   //apply filter
   // resize 

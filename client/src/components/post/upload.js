@@ -12,7 +12,6 @@ function Upload() {
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const [image, setImage] = useState([]);
   const [file, setFile] = useState()
 
   const handleFileChange = (e) => {
@@ -51,13 +50,16 @@ function Upload() {
     } else if (values.postText.length < 1 || values.postText.length > 500) {
       errors.postText = "Content must be at least 1 characters and less than 500 characters long";
     } 
-
+    
+    if (values.postImage.length === 0) {
+      errors.postImage ="Image is required!"
+    } else if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+      errors.postImage = "Invalid file";
+    }
     if (values.postImage.size > 100000) {
       errors.postImage = "You cannot upload file that larger than 1MB";
     }
-    if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-      errors.postImage = "Invalid file";
-    }
+    
     return errors;
   };
 
@@ -72,12 +74,8 @@ function Upload() {
     formData.append("image", formValues.postImage)
     formData.append("description", formValues.postText)
  
-    Axios.post("http://localhost:3001/images", formData, {
-    headers: {
-      "x-access-token": localStorage.getItem("token"),
-    },
-  }).then((response) => {
-    const key = response.data.imagePath
+    Axios.post("http://localhost:3001/images", formData).then((response) => {
+      const key = response.data.imagePath
     Axios.post("http://localhost:3001/upload", {postText: formValues.postText, image: key}, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
