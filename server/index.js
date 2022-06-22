@@ -153,47 +153,45 @@ app.get("/api/friendsList/:id", (req, res) => {
     + " where f.user1Id=?)"
 
   db.query(sqlSelect, [id, id], (err, result) => {
-    db.query(sqlSelect, id, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error while retrieving the list");
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while retrieving the list");
+    }
+    else {
+      // console.log(result)
+      if (result.length > 0) {
+        res.send(result);
+      } else {
+        res.status(404).send("List has a problem");
       }
-      else {
-        // console.log(result)
-        if (result.length > 0) {
-          res.send(result);
-        } else {
-          res.status(404).send("List has a problem");
-        }
-      }
-    });
+    }
   });
 });
+
 //verifyJWT,
 // list if available users that are not friends of current user
 app.get("/api/availableFriends/:id", (req, res) => {
   const id = req.params.id;
-  // console.log('id= ' + id)
+  console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u where u.id!=? and u.id not in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
     + " where f.user1Id=?)";
   db.query(sqlSelect, [id, id], (err, result) => {
-    db.query(sqlSelect, id, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error while retrieving the list");
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while retrieving the list");
+    } else {
+      if (result.length > 0) {
+        res.send(result);
       } else {
-        if (result.length > 0) {
-          res.send(result);
-        } else {
-          res.status(404).send("List has a problem");
-        }
+        res.status(404).send("List has a problem");
       }
-    });
+    }
   });
 });
+
 
 //, verifyJWT
 app.post("/api/makeFriendship/:user1Id/:user2Id", (req, res) => {
