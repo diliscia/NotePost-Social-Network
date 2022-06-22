@@ -37,8 +37,8 @@ function MyProfile() {
   };
 
   const stylesimagepost = {
-    width: 2000
-  }
+    width: 2000,
+  };
 
   const [uploads, setUpload] = useState([]);
 
@@ -51,6 +51,27 @@ function MyProfile() {
       setUpload(response.data);
     });
   }, []);
+
+  const deletePost = (id) => {
+    Axios.delete(`http://localhost:3001/api/delete-post/${id}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response)=>{
+        getPostList() 
+        navigate("/my-profile")
+    })
+}
+
+const getPostList = () => {
+  Axios.get('http://localhost:3001/api/posts',{
+    headers: {
+      "x-access-token": localStorage.getItem("token"),
+    },
+  }).then((response)=>{
+    setUpload(response.data);
+  });
+}
 
   function formatDate(date) {
     var hours = date.getHours();
@@ -102,20 +123,24 @@ function MyProfile() {
               <div className="card mt-3">
                 <div className="card-body bg-warning">
                   <div className="d-inline align-top">
-                <img
-                className="photo rounded-circle"
-                style= {profilepicture}
-                src={profile.userImage}
-              ></img>
-              </div>
-                  <h6 className="card-subtitle d-inline">
-                    {profile.username}
-                  </h6>
+                    <img
+                      className="photo rounded-circle"
+                      style={profilepicture}
+                      src={profile.userImage}
+                    ></img>
+                  </div>
+                  <h6 className="card-subtitle d-inline">{profile.username}</h6>
                   <p className="">
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>
                   <p className="card-text">{val.postText}</p>
-                  <img className="img-fluid" style={stylesimagepost} src={val.postImage} />
+                  <a href={"/update-post/"+ val.id}>Edit</a><span> | </span>
+                  <a href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
+                  <img
+                    className="img-fluid"
+                    style={stylesimagepost}
+                    src={val.postImage}
+                  />
                 </div>
               </div>
             );

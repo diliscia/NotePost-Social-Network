@@ -317,6 +317,45 @@ app.get("/api/allposts", verifyJWT, (req, res) => {
   })
 })
 
+app.get('/api/update-post/:id',verifyJWT, (req, res)=> {
+  const id = req.params.id
+  const sqlSelectArticle = "SELECT * FROM Posts WHERE id = ?"
+  db.query(sqlSelectArticle, id, (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error! Unable to get the post");
+    } else {
+      res.send(result);
+    }
+  });
+})
+
+app.put("/api/update-post/:id", verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const postText = req.body.postText;
+  const postImage = "http://localhost:3001" + req.body.image;
+
+  const sqlUpdate = "UPDATE Posts SET postText = ?, postImage = ? WHERE id = ?";
+  db.query(sqlUpdate, [postText, postImage, id], (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error! Unable to update the articles");
+    } else {
+      res.sendStatus(204);
+    }
+  });
+});
+
+app.delete('/api/delete-post/:id', verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM Posts WHERE id=? "
+  db.query(sqlDelete, id, (err, result) => {
+      if (err) {
+          res.sendStatus(500).send("Server error")
+      }
+      else {
+          res.sendStatus(204);
+      }
+  })
+});
 
 app.listen(3001, () => {
   console.log("Your server is running on port 3001")

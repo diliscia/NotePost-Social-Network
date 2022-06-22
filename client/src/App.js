@@ -4,6 +4,7 @@ import Logout from "./components/user/logout";
 import Register from "./components/user/register";
 import AddArticle from "./components/post/add";
 import Upload from "./components/post/upload";
+import UpdatePost from "./components/post/update";
 import Home from "./components/post/home";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -88,6 +89,7 @@ function App() {
               <Route exact path="/friendsList" element={<FriendsList />} />
               <Route exact path="/my-profile" element={<MyProfile />} />
               <Route exact path="/edit-profile" element={<EditProfile />} />
+              <Route exact path="/update-post/:id" element={<UpdatePost />} />
             </Route>
           </Routes>
         </UserContext.Provider>
