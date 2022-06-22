@@ -269,9 +269,7 @@ app.post('/images', upload.single('image'), async (req, res) => {
   const result = await uploadFile(file)
   await unlinkFile(file.path)
   res.send({ imagePath: result.Key })
- 
 })
-
 
 app.get('/images/:key', (req, res) => {
   const key = req.params.key
@@ -285,6 +283,20 @@ app.post("/upload", verifyJWT, (req, res) => {
   console.log(req.body)
   const userId = req.userId;
   const postText = req.body.postText;
+
+  if (req.body.image === undefined) {
+    db.query(
+      "INSERT INTO Posts (userId, postText) VALUES (?, ?)",
+      [userId, postText],
+      (err, results) => {
+        if (err) {
+          res.sendStatus(500).send("Server error!")
+        } else {
+          res.sendStatus(201);
+        }
+      }
+    )
+  } else {
   const postImage = req.body.image
   
   db.query(
@@ -298,6 +310,7 @@ app.post("/upload", verifyJWT, (req, res) => {
       }
     }
   )
+  }
 })
 
 app.get("/api/posts", verifyJWT, (req, res) => {
