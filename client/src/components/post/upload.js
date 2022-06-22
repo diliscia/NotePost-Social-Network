@@ -97,16 +97,17 @@ function Upload() {
     <div className="container">
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <input
+        <div className="mt-3">
+          <textarea
             type="text"
             className="form-control"
             id="postText"
             name="postText"
             placeholder="What is in your mind?"
+            rows="4" cols="50"
             value={formValues.postText}
             onChange={handleChange}
-          />
+          ></textarea>
           <p className="text-danger">{formErrors.postText}</p>
         </div>
         <div className="mb-3">
