@@ -34,6 +34,10 @@ function UpdatePost() {
 
   }
 
+  const stylesimagepost = {
+    width: 2000,
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
@@ -54,21 +58,30 @@ function UpdatePost() {
       errors.postText = "Content must be at least 1 characters and less than 500 characters long";
     } 
     
-    if (values.postImage.length === 0) {
-      errors.postImage ="Image is required!"
-    } else if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-      errors.postImage = "Invalid file";
+    if (typeof values.postImage === "string") {
+      return errors;
+    } else { 
+      if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+        errors.postImage = "Invalid file";
+      }
+      if (values.postImage.size > 1000000) {
+        errors.postImage = "You cannot upload file that larger than 1MB";
+      }
+
     }
-    if (values.postImage.size > 1000000) {
-      errors.postImage = "You cannot upload file that larger than 1MB";
-    }
-    
     return errors;
   };
 
   useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
+    if (Object.keys(formErrors).length === 0 && isSubmit && (typeof formValues.postImage !== "string")) {
+      console.log("Hello")
       updatePost(formValues);
+    }
+    if (
+      Object.keys(formErrors).length === 0 &&
+      isSubmit && (typeof formValues.postImage === "string")
+    ) {
+      updateWithoutImage(formValues);
     }
   }, [formErrors]);
 
@@ -78,6 +91,7 @@ function UpdatePost() {
         "x-access-token": localStorage.getItem("token"),
       },
     }).then((response) => {
+        console.log(response.data[0])
         setFormValues(response.data[0]);
       })
       .catch((error) => {
@@ -109,6 +123,22 @@ function UpdatePost() {
     })
   };
 
+  const updateWithoutImage = (formValues) => {
+      Axios.put(`http://localhost:3001/api/update-post/${id}`,{postText: formValues.postText},{
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }).then(() => {
+        alert("Successfully updated!")
+        navigate("/my-profile")
+      }).catch((error) => {
+        console.log(error)
+        var failMessage = document.getElementById('fail-updated');
+        failMessage.innerHTML = error.response.data;
+      });
+
+  };
+
   return (
     <div className="container">
       <div id="fail-added" className="text-danger"></div>
@@ -126,6 +156,11 @@ function UpdatePost() {
           ></textarea>
           <p className="text-danger">{formErrors.postText}</p>
         </div>
+        {formValues.postImage === null ? "" : <img
+                    className="img-fluid mb-3"
+                    style={stylesimagepost}
+                    src={"https://postnote-app.s3.amazonaws.com/"+ formValues.postImage}
+                  />}
         <div className="mb-3">
           <input 
           filename={file} 
@@ -136,6 +171,7 @@ function UpdatePost() {
          <div id="image-error" className="text-danger"></div>
           <p className="text-danger"> {formErrors.postImage} </p>
         </div>
+        
         <button className="btn btn-primary">Post</button>
       </form>
     </div>

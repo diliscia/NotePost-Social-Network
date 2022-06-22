@@ -103,8 +103,13 @@ const getPostList = () => {
               <img
                 className="photo img-fluid"
                 style={styles}
-                src={profile.userImage}
+                src={"https://postnote-app.s3.amazonaws.com/" + profile.userImage}
               ></img>
+            <a href={"/edit-image"} className="btn btn-success mx-2">
+                Edit Image
+            </a>
+            </div>
+            <div className="mb-3">
               <h5 className="text">First name: {profile.firstname}</h5>
               <h5 className="text">Last name: {profile.lastname}</h5>
               <h5 className="text">User name: {profile.username}</h5>
@@ -112,7 +117,7 @@ const getPostList = () => {
             </div>
           </div>
           <a href={"/edit-profile"} className="btn btn-success mx-2">
-            Edit
+            Edit Profile
           </a>
           {/* <Link to={"/edit-profile"} ><button type="button" className="btn btn-outline-dark me-3">Edit</button></Link> */}
         </div>
@@ -126,7 +131,7 @@ const getPostList = () => {
                     <img
                       className="photo rounded-circle"
                       style={profilepicture}
-                      src={profile.userImage}
+                      src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
                     ></img>
                   </div>
                   <h6 className="card-subtitle d-inline">{profile.username}</h6>
@@ -136,11 +141,11 @@ const getPostList = () => {
                   <p className="card-text">{val.postText}</p>
                   <a href={"/update-post/"+ val.id}>Edit</a><span> | </span>
                   <a href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
-                  <img
+                  {val.postImage === null ? "" : <img
                     className="img-fluid"
                     style={stylesimagepost}
-                    src={val.postImage}
-                  />
+                    src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
+                  />}
                 </div>
               </div>
             );
