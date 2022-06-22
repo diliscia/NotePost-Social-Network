@@ -30,7 +30,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
+<<<<<<< Updated upstream
       expires: 120 * 60 * 24,
+=======
+      expires: 60 * 60 * 24,
+>>>>>>> Stashed changes
     },
   })
 );
@@ -155,12 +159,18 @@ app.get('/api/friendsList/:id', (req, res) => {
   const id = req.params.id;
   console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+<<<<<<< Updated upstream
     + " From Users u where u.id!=? and u.id in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
     + " where f.user1Id=?)"
 
   db.query(sqlSelect, [id, id], (err, result) => {
+=======
+    + " From Users u join Friends f on u.id=f.user1Id "
+    + " Where f.user2Id=?"
+  db.query(sqlSelect, id, (err, result) => {
+>>>>>>> Stashed changes
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
@@ -184,11 +194,19 @@ app.get('/api/availableFriends/:id', (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+<<<<<<< Updated upstream
     + " From Users u where u.id!=? and u.id not in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
     + " where f.user1Id=?)";
   db.query(sqlSelect, [id, id], (err, result) => {
+=======
+    + "From Users u where u.id!=4 and u.id not in"
+    + " (Select f.user2Id"
+    + " From Users u left join Friends f on u.id=f.user1Id "
+    + " where f.user1Id=4) ";
+  db.query(sqlSelect, id, (err, result) => {
+>>>>>>> Stashed changes
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
