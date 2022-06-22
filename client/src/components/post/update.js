@@ -142,6 +142,7 @@ function UpdatePost() {
   return (
     <div className="container">
       <div id="fail-added" className="text-danger"></div>
+      <h1 className='text-center'>Edit your Post</h1>
       <form onSubmit={handleSubmit}>
         <div className="mt-3">
           <textarea
