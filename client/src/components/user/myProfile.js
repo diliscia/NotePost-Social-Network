@@ -105,6 +105,11 @@ const getPostList = () => {
                 style={styles}
                 src={profile.userImage}
               ></img>
+            <a href={"/edit-image"} className="btn btn-success mx-2">
+                Edit Image
+            </a>
+            </div>
+            <div className="mb-3">
               <h5 className="text">First name: {profile.firstname}</h5>
               <h5 className="text">Last name: {profile.lastname}</h5>
               <h5 className="text">User name: {profile.username}</h5>
@@ -112,7 +117,7 @@ const getPostList = () => {
             </div>
           </div>
           <a href={"/edit-profile"} className="btn btn-success mx-2">
-            Edit
+            Edit Profile
           </a>
           {/* <Link to={"/edit-profile"} ><button type="button" className="btn btn-outline-dark me-3">Edit</button></Link> */}
         </div>
