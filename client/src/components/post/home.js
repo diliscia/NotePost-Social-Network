@@ -10,7 +10,7 @@ function Home() {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
-    }).then((response) =>{
+    }).then((response) => {
       setUpload(response.data);
     })
   },[]) 
