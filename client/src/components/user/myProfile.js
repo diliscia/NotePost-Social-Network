@@ -136,11 +136,11 @@ const getPostList = () => {
                   <p className="card-text">{val.postText}</p>
                   <a href={"/update-post/"+ val.id}>Edit</a><span> | </span>
                   <a href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
-                  <img
+                  {val.postImage === null ? "" : <img
                     className="img-fluid"
                     style={stylesimagepost}
-                    src={"https://postnote-app.s3.amazonaws.com/" + val.postImage}
-                  />
+                    src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
+                  />}
                 </div>
               </div>
             );

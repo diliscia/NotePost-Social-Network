@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap/dist/js/bootstrap.js';
 import '../../App.css';
 import Axios from 'axios';
 

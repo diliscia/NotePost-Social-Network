@@ -52,7 +52,6 @@ function Upload() {
     }
     
     if (values.postImage.length === 0) {
-      console.log("helloe")
       return errors;
     } else {
       if (!values.postImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
