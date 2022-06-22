@@ -17,6 +17,11 @@ import MyProfile from "./components/user/myProfile";
 import EditProfile from "./components/user/editProfile";
 import EditImage from "./components/user/editImage";
 import FriendsList from './components/friend/friendsList'
+import {
+  MDBContainer,
+  MDBNavbar,
+  MDBNavbarBrand
+} from 'mdb-react-ui-kit';
 
 function App() {
 
@@ -32,6 +37,20 @@ function App() {
       {/* <div className="container"> */}
         <Navbar bg="light" expand="lg">
           <Container>
+            <>
+          <MDBNavbar light bgColor='light'>
+        <MDBContainer>
+          <MDBNavbarBrand href='#'>
+            <img
+              src="https://postnote-app.s3.amazonaws.com/images/8a7d03e98a9c9711975de3bca8ea7513"
+              height='30'
+              alt=''
+              loading='lazy'
+            />
+          </MDBNavbarBrand>
+        </MDBContainer>
+        </MDBNavbar>
+    </>
             <Navbar.Brand href="#home">PostNote</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
