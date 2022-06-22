@@ -105,7 +105,7 @@ const getPostList = () => {
                 style={styles}
                 src={"https://postnote-app.s3.amazonaws.com/" + profile.userImage}
               ></img>
-            <a href={"/edit-image"} className="btn btn-success mx-2">
+            <a href={"/edit-image"} className="btn btn-secondary my-2 mx-2">
                 Edit Image
             </a>
             </div>
@@ -116,7 +116,7 @@ const getPostList = () => {
               <h5 className="text">Email: {profile.email}</h5>
             </div>
           </div>
-          <a href={"/edit-profile"} className="btn btn-success mx-2">
+          <a href={"/edit-profile"} className="btn btn-secondary mx-2">
             Edit Profile
           </a>
           {/* <Link to={"/edit-profile"} ><button type="button" className="btn btn-outline-dark me-3">Edit</button></Link> */}
@@ -126,7 +126,7 @@ const getPostList = () => {
           {uploads.map((val) => {
             return (
               <div className="card mt-3">
-                <div className="card-body bg-warning">
+                <div className="card-body">
                   <div className="d-inline align-top">
                     <img
                       className="photo rounded-circle"
@@ -134,15 +134,15 @@ const getPostList = () => {
                       src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
                     ></img>
                   </div>
-                  <h6 className="card-subtitle d-inline">{profile.username}</h6>
+                  <h6 className="card-subtitle d-inline">{profile.firstname} {profile.lastname}</h6>
                   <p className="">
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>
-                  <p className="card-text">{val.postText}</p>
-                  <a href={"/update-post/"+ val.id}>Edit</a><span> | </span>
-                  <a href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
+                  <h5 className="card-text">{val.postText}</h5>
+                  <a className="btn btn-secondary" href={"/update-post/"+ val.id}>Edit</a><span>  </span>
+                  <a className="btn btn-danger" href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
                   {val.postImage === null ? "" : <img
-                    className="img-fluid"
+                    className="img-fluid my-2"
                     style={stylesimagepost}
                     src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
                   />}

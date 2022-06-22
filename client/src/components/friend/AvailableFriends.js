@@ -3,6 +3,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import '../../App.css';
 import Axios from 'axios';
+import { MDBCol } from 'mdb-react-ui-kit';
 
 function AvailableFriends() {
 
@@ -57,15 +58,19 @@ function AvailableFriends() {
 
     return (
         <div className="container my-5">
-            <h1 className="text-center my-5 text-success">Available users that you can request Friendship</h1>
+            <h1 className="text-center my-5">Search for Friends</h1>
             {availableFriends.map((u) => (
                 <div key={u.id} className="my-5 card p-3">
-                    {/* <p>id={u.id} user1Id={user1Id} </p> */}
-                    <img style={styles} src={u.userImage} alt='user image'></img>
-                    <h3 className=' text-primary'>{u.firstName}</h3>
-                    <p><i>{u.lastName} </i></p>
+                    <div className="columns">
+                    <table>
+                        <tr>
+                        <th><img style={styles} src={"https://postnote-app.s3.amazonaws.com/"+ u.userImage} alt='user image'></img></th>
+                        <th><h3 className='text'> {u.firstName} {u.lastName}</h3></th>
+                        </tr>
+                    </table>
+                    </div>
                     <div>
-                        <button className="btn btn-danger mx-2" onClick={() => { makeRequest(user1Id, u.id) }}>Request</button>
+                            <button className="btn btn-primary mx-2" onClick={() => { makeRequest(user1Id, u.id) }}>Request</button>
                     </div>
                 </div>
             ))}

@@ -56,7 +56,7 @@ function Upload() {
   }, []);
 
   const styles = {
-    width: 200,
+    width: 400,
   };
 
   const validate = (values) => {
@@ -135,14 +135,14 @@ function Upload() {
         </div>
         <h1 className='text-center'>Edit your Image</h1>
         <form className='m-4 w-75 mx-auto' onSubmit={handleSubmit}>
-            <div className="mb-3">
+            <div className="mb-3 text-center">
             <img
-                className="photo img-fluid"
+                className="photo img-fluid "
                 style={styles}
                 src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
             ></img>
         </div>
-        <div className="mb-3">
+        <div className="mb-3 text-center">
           <input 
           filename={file} 
             onChange={handleFileChange}
@@ -152,8 +152,10 @@ function Upload() {
          <div id="image-error" className="text-danger"></div>
           <p className="text-danger"> {formErrors.profileImage} </p>
         </div>
-        <button className="btn btn-primary">Upload Image</button>
-        <a href="/my-profile" className="btn btn-primary text-center my-3 mx-1" type="submit">Back to My Profile</a>
+        <div className='text-center'>
+            <button className="btn btn-primary">Upload Image</button>
+            <a href="/my-profile" className="btn btn-primary text-center my-3 mx-1" type="submit">Back to My Profile</a>
+        </div>
         </form>
     </div>
   );

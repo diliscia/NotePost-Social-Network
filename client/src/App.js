@@ -29,54 +29,51 @@ function App() {
 
   return (
     <Router>
-      <div className="containter">
+      {/* <div className="container"> */}
         <Navbar bg="light" expand="lg">
           <Container> 
             <Navbar.Brand href="#home">PostNote</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
-              <Nav className="mr-auto">
-                <LinkContainer to="/">
-                  <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/add-article">
-                  <Nav.Link>Post</Nav.Link>
-                </LinkContainer>
+              <Navbar>
+
+                  {/* <Nav.Link href="/add-article">Post</Nav.Link> */}
                 {localStorage.getItem("token") ? (
-                  <div className="border-start border-4 border-success">
-                    <Navbar.Text className="ps-2">
+                  <Navbar className="mr-auto">
+                      <Nav.Link href="/">Home</Nav.Link>
+                      <Nav.Link href="/my-profile">My Profile</Nav.Link>
+                      <Nav.Link href="/add-friend">Add Friend</Nav.Link>
+                      <Nav.Link href="/friendsList">Friends</Nav.Link>
+                      <Nav.Link href="/upload">Post</Nav.Link>
+                      <Nav.Link href="/logout">Logout</Nav.Link>
+
+                    <Navbar.Collapse className="justify-content-end">
+                    <Navbar.Text>
                       Signed in as: {localStorage.getItem('username')}
                     </Navbar.Text>
-                    <LinkContainer to="/my-profile" className="ps-2 mt-1">
-                      <Nav.Link>My Profile</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/add-friend" className="ps-2">
-                      <Nav.Link>Add Friend</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/friendsList" className="ps-2">
-                      <Nav.Link>Friends</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/upload" className="ps-2">
-                      <Nav.Link>Post</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/logout" className="ps-2">
-                      <Nav.Link>Logout</Nav.Link>
-                    </LinkContainer>
-                  </div>
+                    </Navbar.Collapse>
+                    </Navbar>
                 ) : (
-                  <div className="border-start border-4 border-success">
-                    <LinkContainer to="/login" className="ps-2">
-                      <Nav.Link>Login</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/register" className="ps-2">
-                      <Nav.Link>Register</Nav.Link>
-                    </LinkContainer>
-                  </div>
+                  <Navbar className="mr-auto">
+                      <Nav.Link href="/login">Login</Nav.Link>
+                      <Nav.Link href="/register">Register</Nav.Link>
+                  </Navbar>
                 )}
-              </Nav>
+              </Navbar>
             </Navbar.Collapse>
           </Container>
         </Navbar>
+  {/* <Navbar bg="light" expand="lg">
+  <Container>
+  <Navbar.Brand href="#home">PostNote</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+      <Navbar.Text>
+        Signed in as: <a href="#login">Mark Otto</a>
+      </Navbar.Text>
+    </Navbar.Collapse>
+  </Container>
+</Navbar> */}
         <UserContext.Provider value={{ user, setUser }}>
           <Routes>
             <Route exact path="/register" element={<Register />} />
@@ -95,7 +92,8 @@ function App() {
             </Route>
           </Routes>
         </UserContext.Provider>
-      </div>
+      {/* </div> */}
+      
     </Router>
   );
 }

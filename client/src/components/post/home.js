@@ -26,7 +26,7 @@ function Home() {
   }, []);
 
   const styles = {
-    width: 1500,
+    width: 200,
   };
 
   const profilepicture = {
@@ -81,7 +81,7 @@ function Home() {
               ></img>
               </div>
               <div className="d-inline">
-                <h5 className="text"> {profile.username}</h5>
+                <h5 className="text">{profile.firstname} {profile.lastname}</h5>
               </div>
   
           </div>
@@ -92,7 +92,7 @@ function Home() {
           {uploads.map((val) => {
             return (
               <div className="card mt-3">
-                <div className="card-body bg-warning">
+                <div className="card-body">
                   <div className="d-inline align-top">
                     <img
                       className="photo rounded-circle"
@@ -100,11 +100,11 @@ function Home() {
                       src={"https://postnote-app.s3.amazonaws.com/"+ val.userImage}
                     ></img>
                   </div>
-                  <h6 className="card-subtitle d-inline">{val.username}</h6>
+                  <h6 className="card-subtitle d-inline">{val.firstname} {val.lastname}</h6>
                   <p className="">
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>
-                  <p className="card-text">{val.postText}</p>
+                  <h5 className="card-text">{val.postText}</h5>
                   {val.postImage === null ? "" : <img
                     className="img-fluid"
                     style={stylesimagepost}
