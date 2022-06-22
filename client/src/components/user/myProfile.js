@@ -103,7 +103,7 @@ const getPostList = () => {
               <img
                 className="photo img-fluid"
                 style={styles}
-                src={profile.userImage}
+                src={"https://postnote-app.s3.amazonaws.com/" + profile.userImage}
               ></img>
             <a href={"/edit-image"} className="btn btn-success mx-2">
                 Edit Image
@@ -131,7 +131,7 @@ const getPostList = () => {
                     <img
                       className="photo rounded-circle"
                       style={profilepicture}
-                      src={profile.userImage}
+                      src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
                     ></img>
                   </div>
                   <h6 className="card-subtitle d-inline">{profile.username}</h6>

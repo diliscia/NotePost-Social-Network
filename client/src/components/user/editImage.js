@@ -31,11 +31,6 @@ function Upload() {
 
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
@@ -63,37 +58,48 @@ function Upload() {
   const styles = {
     width: 200,
   };
+
   const validate = (values) => {
     const errors = {};
+    console.log(values)
     
     if (values.profileImage.length === 0) {
-      errors.profileImage ="Image is required!"
-    } else if (!values.profileImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-      errors.profileImage = "Invalid file";
+      return errors;
+    } else { 
+      if (!values.profileImage.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+        errors.profileImage = "Invalid file";
+      }
+      if (values.profileImage.size > 1000000) {
+        errors.profileImage = "You cannot upload file that larger than 1MB";
+      }
+
     }
-    if (values.profileImage.size > 1000000) {
-      errors.profileImage = "You cannot upload file that larger than 1MB";
-    }
-    
     return errors;
   };
 
   useEffect(() => {
     closeFailAlert();
     closeSuccessAlert();
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
+    if (Object.keys(formErrors).length === 0 && isSubmit && (formValues.profileImage.length !== 0)) {
       addPost(formValues);
     }
+    if (
+        Object.keys(formErrors).length === 0 &&
+        isSubmit && (formValues.profileImage.length === 0)
+      ) {
+        navigate('/my-profile');
+      }
   }, [formErrors]);
 
   const addPost = (formValues) => {
     const formData = new FormData()
     formData.append("image", formValues.profileImage)
+    formData.append("description", "my profile picture")
 
  
     Axios.post("http://localhost:3001/images", formData).then((response) => {
       const key = response.data.imagePath
-    Axios.post("http://localhost:3001/upload", {image: key}, {
+    Axios.put("http://localhost:3001/uploadProfilePicture", {image: key}, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
@@ -133,7 +139,7 @@ function Upload() {
             <img
                 className="photo img-fluid"
                 style={styles}
-                src={profile.userImage}
+                src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
             ></img>
         </div>
         <div className="mb-3">
@@ -147,6 +153,7 @@ function Upload() {
           <p className="text-danger"> {formErrors.profileImage} </p>
         </div>
         <button className="btn btn-primary">Upload Image</button>
+        <a href="/my-profile" className="btn btn-primary text-center my-3 mx-1" type="submit">Back to My Profile</a>
         </form>
     </div>
   );

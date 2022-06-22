@@ -248,6 +248,24 @@ app.put("/api/profile/edit", verifyJWT, (req, res) => {
   );
 });
 
+app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
+  console.log(req.body);
+  const userId = req.userId;
+  const userImage = req.body.image;
+
+    db.query(
+      "UPDATE Users SET userImage=? where id=?",
+      [userImage, userId],
+      (err, results) => {
+        if (err) {
+          res.sendStatus(500).send("Server error!");
+        } else {
+          res.sendStatus(201);
+        }
+      }
+    );
+});
+
 //================== Images ==============
 
 app.post("/images", upload.single("image"), async (req, res) => {

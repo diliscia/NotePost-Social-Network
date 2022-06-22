@@ -77,7 +77,7 @@ function Home() {
               <img
                 className="photo img-fluid"
                 style={styles}
-                src={profile.userImage}
+                src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
               ></img>
               </div>
               <div className="d-inline">
@@ -97,7 +97,7 @@ function Home() {
                     <img
                       className="photo rounded-circle"
                       style={profilepicture}
-                      src={val.userImage}
+                      src={"https://postnote-app.s3.amazonaws.com/"+ val.userImage}
                     ></img>
                   </div>
                   <h6 className="card-subtitle d-inline">{val.username}</h6>
