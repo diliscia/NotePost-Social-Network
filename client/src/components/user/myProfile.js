@@ -79,7 +79,6 @@ function MyProfile() {
           <h1>My Profile</h1>
           <div>
             <div className="mb-3">
-              <h5 className="image">Profile Picture:</h5>
               <img
                 className="photo img-fluid"
                 style={styles}

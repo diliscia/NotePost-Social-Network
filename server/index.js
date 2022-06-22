@@ -30,7 +30,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 60 * 60 * 24,
+      expires: 120 * 60 * 24,
     },
   })
 );
@@ -113,7 +113,7 @@ app.post("/login", (req, res) => {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
             const id = result[0].id;
-            const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 300 });
+            const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 600 });
             req.session.user = result;
             res.json({ auth: true, token: token, result: result });
           } else {
