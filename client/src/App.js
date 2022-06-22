@@ -15,6 +15,7 @@ import { UserContext } from "./components/user/UserContext";
 import AvailableFriends from "./components/friend/availableFriends";
 import MyProfile from "./components/user/myProfile";
 import EditProfile from "./components/user/editProfile";
+import EditImage from "./components/user/editImage";
 import FriendsList from './components/friend/friendsList'
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
               <Route exact path="/friendsList" element={<FriendsList />} />
               <Route exact path="/my-profile" element={<MyProfile />} />
               <Route exact path="/edit-profile" element={<EditProfile />} />
+              <Route exact path="/edit-image" element={<EditImage />} />
               <Route exact path="/update-post/:id" element={<UpdatePost />} />
             </Route>
           </Routes>
