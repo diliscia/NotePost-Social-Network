@@ -96,7 +96,6 @@ function Register() {
               "Email " +
               formValues.email +
               " is already exist in the system. Please choose sign in";
-              navigate("/login")
           } else if (error.response.status === 500) {
             failMessage.innerHTML = "Server error! Register failed";
           } else if (error.response.status === 404) {

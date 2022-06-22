@@ -3,41 +3,18 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import '../../App.css';
 import Axios from 'axios';
-import { MDBCol } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
+
 
 function AvailableFriends() {
 
+    let navigate = useNavigate();
 
     const [user1Id, setUser1Id] = useState(0);
     const [availableFriends, setAvailableFriends] = useState([]);
 
-    const makeRequest = (user1Id, user2Id) => {
-        // alert(user1Id + user2Id)
-        Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
-            headers: {
-                "x-access-token": localStorage.getItem("token"),
-            },
-        }).then((response) => {
-            getAvailableFriends();
-        })
-    }
-
-    const getAvailableFriends = () => {
-        // alert('Bye')
-        // console.log('hello')
-        if (!localStorage.getItem("token")) {
-            setUser1Id(localStorage.getItem('id'))
-            Axios.get(`http://localhost:3001/api/availableFriends/${user1Id}`, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token"),
-                },
-            }).then((response) => {
-                setAvailableFriends(response.data)
-            })
-        }
-    }
-
     useEffect(() => {
+        // alert(process.env.REACT_APP_S3) 
         if (localStorage.getItem("token")) {
             setUser1Id(localStorage.getItem('id'))
             // console.log(user1Id)
@@ -52,9 +29,40 @@ function AvailableFriends() {
         }
     }, []);
 
+    const makeRequest = (user1Id, user2Id) => {
+        // alert(user1Id + user2Id)
+        Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token"),
+            },
+        }).then((response) => {
+            // alert('Hello')
+            getAvailableFriends();
+            navigate('/add-friend');
+        })
+    }
+
+    const getAvailableFriends = () => {
+        // alert('Bye')
+        // console.log('hello')
+        // if (!localStorage.getItem("token")) {
+        //     setUser1Id(localStorage.getItem('id'))
+            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                },
+            }).then((response) => {
+                console.log(response)
+                setAvailableFriends(response.data)
+            })
+        // }
+    }
+
+
+
     const styles = {
         width: 400,
-      };
+    };
 
     return (
         <div className="container my-5">

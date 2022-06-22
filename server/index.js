@@ -30,7 +30,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 120 * 60 * 24,
+      expires: 60 * 60 * 24,
     },
   })
 );
@@ -146,15 +146,19 @@ const verifyJWT = (req, res, next) => {
 app.get("/api/friendsList/:id", (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
-  const sqlSelect =
-    "Select u.id, u.firstName, u.lastName, u.userImage " +
-    " From Users u join Friends f on u.id=f.user1Id " +
-    " Where u.id!=?";
-  db.query(sqlSelect, id, (err, result) => {
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u where u.id!=? and u.id in "
+    + " (Select f.user2Id "
+    + " From Users u left join Friends f on u.id=f.user1Id "
+    + " where f.user1Id=?)"
+
+  db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
-    } else {
+    }
+    else {
+      // console.log(result)
       if (result.length > 0) {
         res.send(result);
       } else {
@@ -168,12 +172,13 @@ app.get("/api/friendsList/:id", (req, res) => {
 // list if available users that are not friends of current user
 app.get("/api/availableFriends/:id", (req, res) => {
   const id = req.params.id;
-  // console.log('id= ' + id)
-  const sqlSelect =
-    "Select u.id, u.firstName, u.lastName, u.userImage " +
-    " From Users u left join Friends f on u.id=f.user1Id " +
-    " Where f.id is null and u.id!=? ";
-  db.query(sqlSelect, id, (err, result) => {
+  console.log('id= ' + id) 
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u where u.id!=? and u.id not in "
+    + " (Select f.user2Id "
+    + " From Users u left join Friends f on u.id=f.user1Id "
+    + " where f.user1Id=?)";
+  db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
@@ -186,6 +191,8 @@ app.get("/api/availableFriends/:id", (req, res) => {
     }
   });
 });
+
+
 //, verifyJWT
 app.post("/api/makeFriendship/:user1Id/:user2Id", (req, res) => {
   const user1Id = req.params.user1Id;
@@ -253,17 +260,17 @@ app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
   const userId = req.userId;
   const userImage = req.body.image;
 
-    db.query(
-      "UPDATE Users SET userImage=? where id=?",
-      [userImage, userId],
-      (err, results) => {
-        if (err) {
-          res.sendStatus(500).send("Server error!");
-        } else {
-          res.sendStatus(201);
-        }
+  db.query(
+    "UPDATE Users SET userImage=? where id=?",
+    [userImage, userId],
+    (err, results) => {
+      if (err) {
+        res.sendStatus(500).send("Server error!");
+      } else {
+        res.sendStatus(201);
       }
-    );
+    }
+  );
 });
 
 //================== Images ==============
@@ -401,3 +408,4 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
 app.listen(3001, () => {
   console.log("Your server is running on port 3001");
 });
+
