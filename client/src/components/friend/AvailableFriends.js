@@ -43,6 +43,7 @@ function AvailableFriends() {
     }
 
     useEffect(() => {
+        // alert(process.env.REACT_APP_S3) 
         if (localStorage.getItem("token")) {
             setUser1Id(localStorage.getItem('id'))
             // console.log(user1Id)
@@ -59,7 +60,7 @@ function AvailableFriends() {
 
     const styles = {
         width: 400,
-      };
+    };
 
     return (
         <div className="container my-5">
@@ -67,7 +68,7 @@ function AvailableFriends() {
             {availableFriends.map((u) => (
                 <div key={u.id} className="my-5 card p-3">
                     {/* <p>id={u.id} user1Id={user1Id} </p> */}
-                    <img style={styles} src={u.userImage} alt='user image'></img>
+                    <img style={styles} src={process.env.REACT_APP_S3 + u.userImage} alt='user image'></img>
                     <h3 className=' text-primary'>{u.firstName}</h3>
                     <p><i>{u.lastName} </i></p>
                     <div>

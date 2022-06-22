@@ -145,7 +145,7 @@ const verifyJWT = (req, res, next) => {
 // list friends of current user
 app.get("/api/friendsList/:id", (req, res) => {
   const id = req.params.id;
-  console.log('id= ' + id)
+  // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u where u.id!=? and u.id in "
     + " (Select f.user2Id "
@@ -172,7 +172,7 @@ app.get("/api/friendsList/:id", (req, res) => {
 // list if available users that are not friends of current user
 app.get("/api/availableFriends/:id", (req, res) => {
   const id = req.params.id;
-  console.log('id= ' + id)
+  console.log('id= ' + id) 
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
     + " From Users u where u.id!=? and u.id not in "
     + " (Select f.user2Id "
