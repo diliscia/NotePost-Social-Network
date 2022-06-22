@@ -58,7 +58,6 @@ function Login() {
             var failMessage = document.getElementById("fail-added");
             failMessage.innerHTML = response.data.message
           } else {
-
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", response.data.result[0].username)
             localStorage.setItem("id", response.data.result[0].id)

@@ -153,7 +153,7 @@ const verifyJWT = (req, res, next) => {
 
 //verifyJWT,
 // list friends of current user
-app.get('/api/friendsList/:id', (req, res) => {
+app.get('/api/friendsList/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -178,7 +178,7 @@ app.get('/api/friendsList/:id', (req, res) => {
 
 //verifyJWT,
 // list if available users that are not friends of current user
-app.get('/api/availableFriends/:id', (req, res) => {
+app.get('/api/availableFriends/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
@@ -199,8 +199,10 @@ app.get('/api/availableFriends/:id', (req, res) => {
     }
   })
 });
+
+
 //, verifyJWT
-app.post('/api/makeFriendship/:user1Id/:user2Id', (req, res) => {
+app.post('/api/makeFriendship/:user1Id/:user2Id', verifyJWT, (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
   // console.log(user1Id, user2Id)
@@ -224,12 +226,12 @@ app.get('/api/profile', verifyJWT, (req, res) => {
   const sqlQuery = "SELECT * FROM Users WHERE id = ?";
   db.query(sqlQuery, req.userId, (err, profile) => {
     if (err) {
-      console.log( err);
+      console.log(err);
       res.status(500).send("Error while retrieving profile info");
     }
     else {
       if (profile.length > 0) {
-        console.log( profile);
+        console.log(profile);
         res.send(profile);
       }
       else {
@@ -264,11 +266,9 @@ app.put('/api/profile/edit', verifyJWT, (req, res) => {
 
 app.post('/images', verifyJWT, upload.single('image'), async (req, res) => {
   const file = req.file
-
   //apply filter
   // resize 
   const result = await uploadFile(file)
-  const description = req.body.description
   await unlinkFile(file.path)
   res.send({ imagePath: `/images/${result.Key}` })
 })
@@ -283,15 +283,20 @@ app.get('/images/:key', (req, res) => {
 //================== Post ==============
 
 app.post("/upload", verifyJWT, (req, res) => {
+  console.log(req.body)
   const userId = req.userId;
-  const postText = req.body.description;
+  const postText = req.body.postText;
   const postImage = "http://localhost:3001" + req.body.image
-
+  
   db.query(
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
     [userId, postText, postImage],
     (err, results) => {
-      res.send(results)
+      if (err) {
+        res.sendStatus(500).send("Server error!")
+      } else {
+        res.sendStatus(201);
+      }
     }
   )
 })
@@ -299,9 +304,10 @@ app.post("/upload", verifyJWT, (req, res) => {
 app.get("/api/posts", verifyJWT, (req, res) => {
   db.query("SELECT * FROM Posts", (err, results) => {
     if (err) {
-      console.log(err)
+      res.sendStatus(500).send("Server error!")
+    }else {
+      res.send(results)
     }
-    res.send(results)
   })
 })
 
