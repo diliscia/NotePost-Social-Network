@@ -153,16 +153,20 @@ const verifyJWT = (req, res, next) => {
 // list friends of current user
 app.get('/api/friendsList/:id', (req, res) => {
   const id = req.params.id;
-  // console.log('id= ' + id)
+  console.log('id= ' + id)
   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
-    + " From Users u join Friends f on u.id=f.user1Id "
-    + " Where u.id!=?"
-  db.query(sqlSelect, id, (err, result) => {
+    + " From Users u where u.id!=? and u.id in "
+    + " (Select f.user2Id "
+    + " From Users u left join Friends f on u.id=f.user1Id "
+    + " where f.user1Id=?)"
+
+  db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
     }
     else {
+      // console.log(result)
       if (result.length > 0) {
         res.send(result);
       }
@@ -179,10 +183,12 @@ app.get('/api/friendsList/:id', (req, res) => {
 app.get('/api/availableFriends/:id', (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
-  const sqlSelect = "Select u.id, u.firstName, u.lastName, u.userImage "
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u where u.id!=? and u.id not in "
+    + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
-    + " Where f.id is null and u.id!=? ";
-  db.query(sqlSelect, id, (err, result) => {
+    + " where f.user1Id=?)";
+  db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while retrieving the list");
@@ -246,14 +252,14 @@ app.put('/api/profile/edit', verifyJWT, (req, res) => {
 
   const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
   db.query(sqlUpdate, [firstname, lastname, username, req.userId], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(400).send("Error updating the profile. Please try again");
-      }
-      else {
-          console.log(result);
-          res.sendStatus(201);
-      }
+    if (err) {
+      console.log(err);
+      res.status(400).send("Error updating the profile. Please try again");
+    }
+    else {
+      console.log(result);
+      res.sendStatus(201);
+    }
   })
 });
 
@@ -283,7 +289,7 @@ app.post("/upload", verifyJWT, (req, res) => {
   const userId = req.userId;
   const postText = req.body.postText;
   const postImage = "http://localhost:3001" + req.body.image
-  
+
   db.query(
     "INSERT INTO Posts (userId, postText, postImage) VALUES (?, ?, ?)",
     [userId, postText, postImage],
@@ -301,7 +307,7 @@ app.get("/api/posts", verifyJWT, (req, res) => {
   db.query("SELECT * FROM Posts WHERE userId = ? ORDER BY createdAt DESC", req.userId, (err, results) => {
     if (err) {
       res.sendStatus(500).send("Server error!")
-    }else {
+    } else {
       res.send(results)
     }
   })
@@ -311,13 +317,13 @@ app.get("/api/allposts", verifyJWT, (req, res) => {
   db.query("SELECT * FROM Users as u INNER JOIN Posts p ON p.userId = u.id ORDER BY p.createdAt DESC", (err, results) => {
     if (err) {
       res.sendStatus(500).send("Server error!")
-    }else {
+    } else {
       res.send(results)
     }
   })
 })
 
-app.get('/api/update-post/:id',verifyJWT, (req, res)=> {
+app.get('/api/update-post/:id', verifyJWT, (req, res) => {
   const id = req.params.id
   const sqlSelectArticle = "SELECT * FROM Posts WHERE id = ?"
   db.query(sqlSelectArticle, id, (err, result) => {
@@ -348,12 +354,12 @@ app.delete('/api/delete-post/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM Posts WHERE id=? "
   db.query(sqlDelete, id, (err, result) => {
-      if (err) {
-          res.sendStatus(500).send("Server error")
-      }
-      else {
-          res.sendStatus(204);
-      }
+    if (err) {
+      res.sendStatus(500).send("Server error")
+    }
+    else {
+      res.sendStatus(204);
+    }
   })
 });
 

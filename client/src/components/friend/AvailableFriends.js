@@ -5,9 +5,12 @@ import { LinkContainer } from "react-router-bootstrap";
 // import 'bootstrap/dist/js/bootstrap.js';
 import '../../App.css';
 import Axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 
 function AvailableFriends() {
 
+    let navigate = useNavigate();
 
     const [user1Id, setUser1Id] = useState(0);
     const [availableFriends, setAvailableFriends] = useState([]);
@@ -19,7 +22,9 @@ function AvailableFriends() {
                 "x-access-token": localStorage.getItem("token"),
             },
         }).then((response) => {
+            // alert('Hello')
             getAvailableFriends();
+            navigate('/add-friend');
         })
     }
 
@@ -28,11 +33,12 @@ function AvailableFriends() {
         // console.log('hello')
         if (!localStorage.getItem("token")) {
             setUser1Id(localStorage.getItem('id'))
-            Axios.get(`http://localhost:3001/api/availableFriends/${user1Id}`, {
+            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
                 },
             }).then((response) => {
+                console.log(response)
                 setAvailableFriends(response.data)
             })
         }

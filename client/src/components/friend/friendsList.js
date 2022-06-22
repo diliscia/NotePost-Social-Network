@@ -10,6 +10,7 @@ function FriendsList() {
     useEffect(() => {
         if (localStorage.getItem("token")) {
             Axios.get(`http://localhost:3001/api/friendsList/${localStorage.getItem('id')}`, {
+            // Axios.get(`http://localhost:3001/api/friendsList`, {
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
                 },
