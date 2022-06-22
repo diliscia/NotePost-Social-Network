@@ -21,7 +21,6 @@ function AvailableFriends() {
         }).then((response) => {
             getAvailableFriends();
         })
-
     }
 
     const getAvailableFriends = () => {
@@ -53,13 +52,18 @@ function AvailableFriends() {
             })
         }
     }, []);
+
+    const styles = {
+        width: 400,
+      };
+
     return (
         <div className="container my-5">
             <h1 className="text-center my-5 text-success">Available users that you can request Friendship</h1>
             {availableFriends.map((u) => (
                 <div key={u.id} className="my-5 card p-3">
                     {/* <p>id={u.id} user1Id={user1Id} </p> */}
-                    <img src={u.userImage} alt='user image'></img>
+                    <img style={styles} src={u.userImage} alt='user image'></img>
                     <h3 className=' text-primary'>{u.firstName}</h3>
                     <p><i>{u.lastName} </i></p>
                     <div>
@@ -70,4 +74,5 @@ function AvailableFriends() {
         </div>
     );
 }
+
 export default AvailableFriends;

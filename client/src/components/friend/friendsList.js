@@ -25,10 +25,10 @@ function FriendsList() {
       };
 
     return (
-        <div className="container my-5 card">
+        <div className="container my-5">
             <h1 className="text-center my-5 text-success">Your Friends</h1>
             {friendsList.map((u) => (
-                <div key={u.id} className="my-5 p-3">
+                <div key={u.id} className="my-5card p-3">
                     {/* <p>id={u.id} user1Id={user1Id} </p> */}
                     <img style={styles} src={u.userImage} alt='user image'></img>
                     <h3 className=' text-primary'>{u.firstName}</h3>
@@ -37,6 +37,6 @@ function FriendsList() {
             ))}
         </div>
     );
-
 }
+
 export default FriendsList
