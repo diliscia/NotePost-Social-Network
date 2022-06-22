@@ -144,3 +144,40 @@
 - implement friends list
 3. Need assistance / figure things out
 - Updating page
+
+<<2022-06-22>>
+2022/06/22 Marcelo
+1. Done / not done since last scrum:
+- Implement edit profile page - done
+- Setup UI for project - not done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement change image profile page
+- Make interface (UI) look better (CSS) 
+- Improve add friends function
+- watch tutorials 
+3. Need assistance / figure things out
+- Implement upload/download image from react-to-S3
+
+2022/06/22 Ly
+1. Done / not done since last scrum:
+- Implement Post (Delete and Update) - done
+- Implement Comments - not done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement Comments
+- SQL for diplay only friends posts
+- Improve add friends function
+- watch tutorials 
+3. Need assistance / figure things out
+- Testing
+
+2022/06/22 Alireza
+1. Done / not done since last scrum:
+- Implement friends list - done
+- Implement add friends - done 
+2. To do until next Scrum:
+- Improve add friends function 
+- watch tutorials 
+3. Need assistance / figure things out
+- Updating page
