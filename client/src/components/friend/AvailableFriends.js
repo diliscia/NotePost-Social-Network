@@ -66,6 +66,8 @@ function AvailableFriends() {
     const cancelRequest = (event, user1Id, user2Id) => {
         console.log(event)
         setRequest(false)
+        setFriend(0)
+        // alert(user1Id + user2Id)
         Axios.post(`http://localhost:3001/api/cancelRequest/${user1Id}/${user2Id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
