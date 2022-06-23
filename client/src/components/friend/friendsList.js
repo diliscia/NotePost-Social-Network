@@ -23,7 +23,7 @@ function FriendsList() {
     }, []);
 
     const styles = {
-        width: 300,
+        height: 150,
     };
 
 
