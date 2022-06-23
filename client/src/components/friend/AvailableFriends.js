@@ -61,19 +61,19 @@ function AvailableFriends() {
 
 
     const styles = {
-        width: 400,
+        width: 300,
     };
 
     return (
         <div className="container my-5">
-            <h1 className="text-center my-5">Search for Friends</h1>
+            <h1 className="text-center my-5">Add new Friends</h1>
             {availableFriends.map((u) => (
                 <div key={u.id} className="my-5 card p-3">
                     <div className="columns">
                     <table>
                         <tr>
                         <th><img style={styles} src={"https://postnote-app.s3.amazonaws.com/"+ u.userImage} alt='user image'></img></th>
-                        <th><h3 className='text'> {u.firstName} {u.lastName}</h3></th>
+                        <th><h3 className='text mx-3'> {u.firstName} {u.lastName}</h3></th>
                         </tr>
                     </table>
                     </div>

@@ -23,7 +23,7 @@ function FriendsList() {
     }, []);
 
     const styles = {
-        width: 400,
+        width: 300,
     };
 
 
@@ -36,7 +36,7 @@ function FriendsList() {
                     <table>
                         <tr>
                         <th><img style={styles} src={"https://postnote-app.s3.amazonaws.com/"+ u.userImage} alt='user image'></img></th>
-                        <th><h3 className='text'> {u.firstName} {u.lastName}</h3></th>
+                        <th><h3 className='text mx-3'> {u.firstName} {u.lastName}</h3></th>
                         </tr>
                     </table>
                     </div>

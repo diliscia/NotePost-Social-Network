@@ -60,14 +60,14 @@ function App() {
                 {localStorage.getItem("token") ? (
                   <Navbar className="mr-auto">
                       <Nav.Link href="/">Home</Nav.Link>
-                      <Nav.Link href="/my-profile">My Profile</Nav.Link>
-                      <Nav.Link href="/add-friend">Add Friend</Nav.Link>
-                      <Nav.Link href="/friendsList">Friends</Nav.Link>
                       <Nav.Link href="/upload">Post</Nav.Link>
+                      <Nav.Link href="/friendsList">Friends</Nav.Link>
+                      <Nav.Link href="/add-friend">Add Friends</Nav.Link>
+                      <Nav.Link href="/my-profile">My Profile</Nav.Link>
                       <Nav.Link href="/logout">Logout</Nav.Link>
 
                     <Navbar.Collapse className="justify-content-end">
-                    <Navbar.Text>
+                    <Navbar.Text className="dark">
                       Signed in as: {localStorage.getItem('username')}
                     </Navbar.Text>
                     </Navbar.Collapse>
