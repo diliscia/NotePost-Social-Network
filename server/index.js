@@ -159,7 +159,7 @@ app.get("/api/friendsList/:id", (req, res) => {
     }
     else {
       // console.log(result)
-      if (result.length > 0) { 
+      if (result.length > 0) {
         res.send(result);
       } else {
         res.status(404).send("List has a problem");
@@ -172,12 +172,13 @@ app.get("/api/friendsList/:id", (req, res) => {
 // list if available users that are not friends of current user
 app.get("/api/availableFriends/:id", (req, res) => {
   const id = req.params.id;
-  console.log('id= ' + id) 
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
-    + " From Users u where u.id!=? and u.id not in "
+  console.log('id= ' + id)
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage,f.status "
+    + " From Users u left join Friends f on u.id=f.user2Id"
+    + " where u.id!=? and u.id not in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
-    + " where f.user1Id=?)";
+    + " where f.user1Id=? and f.status='ACCEPTED')"; 
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
@@ -194,13 +195,13 @@ app.get("/api/availableFriends/:id", (req, res) => {
 
 
 //, verifyJWT
-app.post("/api/makeFriendship/:user1Id/:user2Id", (req, res) => {
+app.post("/api/makeRequest/:user1Id/:user2Id", (req, res) => {
   const user1Id = req.params.user1Id;
   const user2Id = req.params.user2Id;
   // console.log(user1Id, user2Id)
   const sqlInsert =
-    "Insert Into Friends (user1Id,user2Id) Values (?,?) , (?,?) ";
-  db.query(sqlInsert, [user1Id, user2Id, user2Id, user1Id], (err, result) => {
+    "Insert Into Friends (user1Id,user2Id) Values (?,?)  ";
+  db.query(sqlInsert, [user1Id, user2Id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while Insert");
@@ -209,6 +210,24 @@ app.post("/api/makeFriendship/:user1Id/:user2Id", (req, res) => {
     }
   });
 });
+
+//, verifyJWT
+app.post("/api/cancelRequest/:user1Id/:user2Id", (req, res) => {
+  const user1Id = req.params.user1Id;
+  const user2Id = req.params.user2Id;
+  // console.log(user1Id, user2Id)
+  const sqlDelete =
+    "Delete from Friends where user1Id = ? and user2Id= ?   ";
+  db.query(sqlDelete, [user1Id, user2Id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while Delete");
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 
 //================== Profile ==============
 

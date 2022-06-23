@@ -36,7 +36,7 @@ function AvailableFriends() {
         setRequest(true)
         setFriend(user2Id)
         // alert(user1Id + user2Id)
-        Axios.post(`http://localhost:3001/api/makeFriendship/${user1Id}/${user2Id}`, {
+        Axios.post(`http://localhost:3001/api/makeRequest/${user1Id}/${user2Id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
             },
@@ -63,7 +63,19 @@ function AvailableFriends() {
         // }
     }
 
-
+    const cancelRequest = (event, user1Id, user2Id) => {
+        console.log(event)
+        setRequest(false)
+        Axios.post(`http://localhost:3001/api/cancelRequest/${user1Id}/${user2Id}`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token"),
+            },
+        }).then((response) => {
+            // alert('Hello')
+            getAvailableFriends();
+            navigate('/add-friend');
+        })
+    }
 
     const styles = {
         width: 300,
@@ -83,8 +95,9 @@ function AvailableFriends() {
                         </table>
                     </div>
                     <div>
-                        {request === true && friend === u.id ?
-                            <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { makeRequest(event, user1Id, u.id) }}>Cancel</button>
+                        u.status={u.status}
+                        {((request === true && friend === u.id) || u.status == 'PENDING') ?
+                            <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { cancelRequest(event, user1Id, u.id) }}>Cancel</button>
                             : <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { makeRequest(event, user1Id, u.id) }}>Request</button>}
                     </div>
                 </div>
