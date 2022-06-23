@@ -44,8 +44,8 @@ function App() {
             <img
               src="https://postnote-app.s3.amazonaws.com/images/8a7d03e98a9c9711975de3bca8ea7513"
               height='30'
-              alt=''
-              loading='lazy'
+              alt='PostNote logo'
+              className="d-inline-block align-top"
             />
           </MDBNavbarBrand>
         </MDBContainer>
@@ -58,7 +58,7 @@ function App() {
 
                   {/* <Nav.Link href="/add-article">Post</Nav.Link> */}
                 {localStorage.getItem("token") ? (
-                  <Navbar className="mr-auto">
+                  <Navbar className="mr-auto menu">
                       <Nav.Link href="/">Home</Nav.Link>
                       <Nav.Link href="/upload">Post</Nav.Link>
                       <Nav.Link href="/friendsList">Friends</Nav.Link>

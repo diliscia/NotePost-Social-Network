@@ -96,18 +96,20 @@ const getPostList = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-3">
+        <div className="col-3 my-3">
           <h1>My Profile</h1>
           <div>
-            <div className="mb-3">
+            <div className="">
               <img
                 className="photo img-fluid"
                 style={styles}
                 src={"https://postnote-app.s3.amazonaws.com/" + profile.userImage}
               ></img>
-            <a href={"/edit-image"} className="btn btn-secondary my-2 mx-2">
-                Edit Image
-            </a>
+              <div className="mx-4">
+                <a href={"/edit-image"} className="btn btn-secondary my-2 mx-2">
+                    Edit Image
+                </a>
+              </div>
             </div>
             <div className="mb-3">
               <h5 className="text">First name: {profile.firstname}</h5>
@@ -116,9 +118,11 @@ const getPostList = () => {
               <h5 className="text">Email: {profile.email}</h5>
             </div>
           </div>
+          <div className="mx-4">
           <a href={"/edit-profile"} className="btn btn-secondary mx-2">
             Edit Profile
           </a>
+          </div>
           {/* <Link to={"/edit-profile"} ><button type="button" className="btn btn-outline-dark me-3">Edit</button></Link> */}
         </div>
 
