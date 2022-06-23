@@ -109,7 +109,7 @@ function Register() {
 
   return (
     <div className="container">
-      <h1>Registration</h1>
+      <h1 className='text-center my-5'>Registration</h1>
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

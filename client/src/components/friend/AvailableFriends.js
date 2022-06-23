@@ -61,7 +61,7 @@ function AvailableFriends() {
 
 
     const styles = {
-        width: 300,
+        height: 150,
     };
 
     return (
@@ -78,7 +78,7 @@ function AvailableFriends() {
                     </table>
                     </div>
                     <div>
-                            <button className="btn btn-primary mx-2" onClick={() => { makeRequest(user1Id, u.id) }}>Request</button>
+                            <button className="btn btn-primary mx-3" onClick={() => { makeRequest(user1Id, u.id) }}>Request</button>
                     </div>
                 </div>
             ))}

@@ -51,7 +51,7 @@ function App() {
         </MDBContainer>
         </MDBNavbar>
     </>
-            <Navbar.Brand href="#home">PostNote</Navbar.Brand>
+            <Navbar.Brand href="#home" className="menu">PostNote</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar>
@@ -73,7 +73,7 @@ function App() {
                     </Navbar.Collapse>
                     </Navbar>
                 ) : (
-                  <Navbar className="mr-auto">
+                  <Navbar className="mr-auto menu">
                       <Nav.Link href="/login">Login</Nav.Link>
                       <Nav.Link href="/register">Register</Nav.Link>
                   </Navbar>

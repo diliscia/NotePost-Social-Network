@@ -83,7 +83,7 @@ function Login() {
   return (
     <div className="container">
       <div id="fail-added" className="text-danger"></div>
-      <h1>Login</h1>
+      <h1 className='text-center my-5'>Login</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">

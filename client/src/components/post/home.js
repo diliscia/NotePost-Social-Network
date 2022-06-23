@@ -81,7 +81,7 @@ function Home() {
               ></img>
               </div>
               <div className="d-inline">
-                <h5 className="text">{profile.firstname} {profile.lastname}</h5>
+                <h5 className="text mx-2">{profile.firstname} {profile.lastname}</h5>
               </div>
   
           </div>
