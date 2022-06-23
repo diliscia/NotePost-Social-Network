@@ -159,7 +159,7 @@ app.get("/api/friendsList/:id", (req, res) => {
     }
     else {
       // console.log(result)
-      if (result.length > 0) {
+      if (result.length > 0) { 
         res.send(result);
       } else {
         res.status(404).send("List has a problem");
