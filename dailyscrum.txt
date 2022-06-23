@@ -181,3 +181,41 @@
 - watch tutorials 
 3. Need assistance / figure things out
 - Updating page
+
+<<2022-06-23>>
+2022/06/23 Marcelo
+1. Done / not done since last scrum:
+- Implement change image profile page - done
+- Make interface (UI) look better (CSS) - done
+- Improve add friends function - done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement Admin functions
+- watch tutorials
+3. Need assistance / figure things out
+- Implement delete the old image in S3 when updating image in React 
+
+2022/06/23 Ly
+1. Done / not done since last scrum:
+- Implement Comments - not done
+- SQL for diplay only friends posts - not done
+- Improve add friends function - done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement Comments
+- Improve friends function (request/accept/deny)
+- watch tutorials
+3. Need assistance / figure things out
+- Testing
+
+2022/06/23 Alireza
+1. Done / not done since last scrum:
+- Improve add friends function (only one way) - done
+- watch tutorials - done
+2. To do until next Scrum:
+- Improve friends functions (request/accept/deny)
+- Implement SQL for user seeing posts of user and friends only
+- Implement site statistics (admin)
+- watch tutorials
+3. Need assistance / figure things out
+- Graph in React
