@@ -184,7 +184,9 @@ function Comment() {
                 ></textarea>
                 <p className="text-danger">{formErrors.comment}</p>
               </div>
+              <div className="text-center">
               <button className="btn btn-primary">Add comment</button>
+              </div>
             </form>
             {commentList.map((value, key) => {
               return (

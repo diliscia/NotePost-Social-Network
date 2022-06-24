@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
@@ -7,7 +7,7 @@ function Register() {
 
   const [formValues, setFormValues] = useState({
     firstname: "",
-    lastname: "",
+    lastname: "", 
     username: "",
     email: "",
     password: "",
@@ -21,6 +21,7 @@ function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+    // alert(`${name} ${value}`)
   };
 
   const validate = (values) => {
@@ -30,7 +31,6 @@ function Register() {
     const regexUsername = /^[A-Za-z0-9]{4,50}$/g;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,50}$/i;
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,100}$/i;
-    const regexRole = /^[A-Za-z0-9]{4,50}$/g;
 
     if (!values.firstname) {
       errors.firstname = "First name is required";
@@ -77,9 +77,6 @@ function Register() {
 
     if (!values.role.trim()) {
       errors.role = "Role is required!";
-    } else if (!regexRole.test(values.role)) {
-      errors.role =
-        "Role must be ADMIN or NORMAL-USER.";
     }
 
     return errors;
@@ -117,7 +114,7 @@ function Register() {
   }, [formErrors]);
 
   return (
-    <div className="container">
+    <div className="containerUser">
       <h1 className='text-center my-5'>Add a User</h1>
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>
@@ -217,7 +214,7 @@ function Register() {
           />
           <p className="text-danger">{formErrors.password2}</p>
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="role" className="form-label">
             Role
           </label>
@@ -231,6 +228,18 @@ function Register() {
             value={formValues.role}
             onChange={handleChange}
           />
+          <p className="text-danger"> {formErrors.role} </p>
+        </div> */}
+        <div className="mb-3">
+        <p> Role: {formValues.role}</p>
+          <label htmlFor="role" className="form-label mx-2">
+            ADMIN:
+          </label>
+          <input type="radio" name="role" value="ADMIN" onChange={handleChange}/>
+          <label htmlFor="role" className="form-label mx-2">
+            NORMAL-USER:
+          </label>
+          <input type="radio" name="role" value="NORMAL-USER" onChange={handleChange}/>
           <p className="text-danger"> {formErrors.role} </p>
         </div>
 

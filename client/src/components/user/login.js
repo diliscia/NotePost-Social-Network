@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import './user.css';
+import _default from "react-bootstrap/esm/Accordion";
 function Login() {
   let navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -37,8 +38,8 @@ function Login() {
       errors.password = "Password is required!";
     } else if (!regexPassword.test(values.password)) {
       errors.password =
-        "Password must be at least 6 " +
-        "characters long and must contain at least one uppercase letter, one lower case letter, and one number. It must not be longer than 100 characters";
+        "Password must be at least 6 characters long, must contain at least one uppercase letter," +
+        " one lower case letter and one number. Must not be longer than 100 characters";
     }
 
     return errors;
@@ -120,7 +121,7 @@ function Login() {
             value={formValues.password}
             onChange={handleChange}
           />
-          <p className="text-danger">{formErrors.password}</p>
+            <p className="text-danger">{formErrors.password}</p>
         </div>
         <button className="btn btn-primary">Log in</button>
         <p>
