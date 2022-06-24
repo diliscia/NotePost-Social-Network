@@ -129,7 +129,7 @@ function Upload() {
   };
 
   return (
-    <div className="container">
+    <div className="containerUser">
       <div id="fail-added" className="text-danger"></div>
       <h1 className='text-center my-5'>Add a new Post</h1>
       <form onSubmit={handleSubmit}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import './user.css';
 
 function Register() {
   let navigate = useNavigate();
@@ -108,7 +109,7 @@ function Register() {
   }, [formErrors]);
 
   return (
-    <div className="container">
+    <div className="containerUser">
       <h1 className='text-center my-5'>Registration</h1>
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>

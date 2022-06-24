@@ -141,13 +141,13 @@ function UpdatePost() {
 
   return (
     <div className="container">
-      <div id="fail-added" className="text-danger"></div>
-      <h1 className='text-center'>Edit your Post</h1>
+      <div id="fail-added" className="text-danger "></div>
+      <h1 className='text-center my-5'  >Edit your Post</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mt-3">
+        <div className="mt-3 ">
           <textarea
             type="text"
-            className="form-control"
+            className="form-control container"
             id="postText"
             name="postText"
             placeholder="What is in your mind?"
@@ -157,23 +157,27 @@ function UpdatePost() {
           ></textarea>
           <p className="text-danger">{formErrors.postText}</p>
         </div>
+        <div className="postImage container">
         {formValues.postImage === null ? "" : <img
                     className="img-fluid mb-3"
                     style={stylesimagepost}
                     src={"https://postnote-app.s3.amazonaws.com/"+ formValues.postImage}
                   />}
-        <div className="mb-3">
-          <input 
-          filename={file} 
-            onChange={handleFileChange}
-          type="file" 
-          accept="image/*"
-        ></input>
-         <div id="image-error" className="text-danger"></div>
-          <p className="text-danger"> {formErrors.postImage} </p>
         </div>
-        
-        <button className="btn btn-primary">Post</button>
+        <div className="containerUser">
+          <div className="mb-3 ">
+            <input 
+            filename={file} 
+              onChange={handleFileChange}
+            type="file" 
+            accept="image/*"
+            ></input>
+            <div id="image-error" className="text-danger"></div>
+            <p className="text-danger"> {formErrors.postImage} </p>
+          </div>
+          
+          <button className="btn btn-primary">Post</button>
+        </div>
       </form>
     </div>
   );

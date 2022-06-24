@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
-
+import './user.css';
 function Login() {
   let navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -87,7 +87,7 @@ function Login() {
   }, [formErrors]);
 
   return (
-    <div className="container">
+    <div className="containerUser">
       <div id="fail-added" className="text-danger"></div>
       <h1 className='text-center my-5'>Login</h1>
       <form onSubmit={handleSubmit}>
@@ -97,7 +97,7 @@ function Login() {
           </label>
           <input
             type="email"
-            className="form-control"
+            className="form-control centered"
             id="email"
             name="email"
             max-length="50"
@@ -113,7 +113,7 @@ function Login() {
           </label>
           <input
             type="password"
-            className="form-control "
+            className="form-control"
             id="password"
             name="password"
             placeholder="uppercase,lowercase,number,6-100chars"

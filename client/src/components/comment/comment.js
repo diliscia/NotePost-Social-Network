@@ -138,7 +138,7 @@ function Comment() {
   }
 
   return (
-    <div className="container">
+    <div className="containerComm">
       <div className="card mt-4">
         <div className="card-body">
           <div className="d-inline align-top">
@@ -153,26 +153,27 @@ function Comment() {
             <p className="">
               {formatDate(new Date(Date.parse(post.createdAt)))}
             </p>
-            <p className="card-text">{post.postText}</p>
+            <h5 className="card-text">{post.postText}</h5>
           </div>
         </div>
-
-        {post.postImage === null ? (
-          ""
-        ) : (
-          <img
-            className="img-fluid mb-3"
-            style={stylesimagepost}
-            src={"https://postnote-app.s3.amazonaws.com/" + post.postImage}
-          />
-        )}
+        <div className=" container">
+          {post.postImage === null ? (
+            ""
+          ) : (
+            <img
+              className="img-fluid mb-3"
+              style={stylesimagepost}
+              src={"https://postnote-app.s3.amazonaws.com/" + post.postImage}
+            />
+          )}
+        </div>
         <div className="card-body">
           <div>
             <form onSubmit={handleSubmit}>
               <div className="mt-3">
                 <textarea
                   type="text"
-                  className="form-control"
+                  className="form-control container"
                   id="comment"
                   name="comment"
                   placeholder="Write a comment..."
@@ -213,7 +214,7 @@ function Comment() {
                     >
                       Edit
                     </a>
-                    <span> | </span>
+                    <span> </span>
                     {/* <a className="btn btn-danger" href="#" onClick={()=>{deleteComment(commentList.id)}}>Delete</a> */}
                   </div>
                 </div>
