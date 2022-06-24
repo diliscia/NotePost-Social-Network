@@ -8,6 +8,7 @@ import AddUser from './components/user/addUser'
 import AddArticle from "./components/post/add";
 import Upload from "./components/post/upload";
 import UpdatePost from "./components/post/update";
+import Comment from "./components/comment/comment";
 import Home from "./components/post/home";
 import AdminHome from "./components/post/adminHome";
 import ProtectedRoutes from "./components/protectedroute";
@@ -42,18 +43,12 @@ function App() {
         <Navbar bg="light" expand="lg">
           <Container>
             <>
-          <MDBNavbar light bgColor='light'>
-        <MDBContainer>
-          <MDBNavbarBrand href='#'>
             <img
               src="https://postnote-app.s3.amazonaws.com/images/8a7d03e98a9c9711975de3bca8ea7513"
               height='30'
               alt='PostNote logo'
               className="d-inline-block align-top"
             />
-          </MDBNavbarBrand>
-        </MDBContainer>
-        </MDBNavbar>
     </>
             <Navbar.Brand href="#home" className="menu">PostNote</Navbar.Brand>
             <Navbar.Toggle />
@@ -106,6 +101,7 @@ function App() {
               <Route exact path="/edit-image" element={<EditImage />} />
               <Route exact path="/update-post/:id" element={<UpdatePost />} />
               <Route exact path="/addUser" element={<AddUser />} />
+              <Route exact path="/comments-of-post/:id" element={<Comment />} />
             </Route>
           </Routes>
         </UserContext.Provider>
