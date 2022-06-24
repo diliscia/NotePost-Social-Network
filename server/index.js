@@ -173,15 +173,36 @@ const verifyJWT = (req, res, next) => {
 
 //verifyJWT,
 // list friends of current user
-app.get("/api/friendsList/:id", (req, res) => {
-  const id = req.params.id;
-  // console.log('id= ' + id)
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage,f.status "
-    + " From Users u  left join Friends f on u.id=f.user2Id "
-    + " where  u.id in "
-    + " (SELECT f.user2Id from Friends f "
-    + " where ( f.user1Id= ? or f.user2Id= ? )) "
+// app.get("/api/friendsList/:id", (req, res) => {
+//   const id = req.params.id;
+//   // console.log('id= ' + id)
+//   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage,f.status "
+//     + " From Users u  left join Friends f on u.id=f.user2Id "
+//     + " where  u.id in "
+//     + " (SELECT f.user2Id from Friends f "
+//     + " where ( f.user1Id= ? or f.user2Id= ? )) "
 
+//   db.query(sqlSelect, [id, id], (err, result) => {
+//     if (err) {
+//       res.status(500).send("Error while retrieving the list");
+//     }
+//     else {
+//       // console.log(result)
+//       if (result.length > 0) {
+//         res.send(result);
+//       } else {
+//         res.status(404).send("List has a problem");
+//       }
+//     }
+//   });
+// });
+
+
+// Ly's Version 
+
+app.get("/api/friendsList", verifyJWT, (req, res) => {
+  const id = req.userId;
+  const sqlSelect = "SELECT f.user1Id, f.user2Id, f.status, u.id as 'friendId', u.userImage, u.firstname, u.lastname, u.username FROM postnote.Friends f JOIN postnote.Users u on user2Id = u.id WHERE status='ACCEPTED' and user1Id = ? union SELECT f.user1Id, f.user2Id, f.status, u.id as 'friendId', u.userImage, u.firstname, u.lastname, u.username FROM postnote.Friends f JOIN postnote.Users u on user1Id = u.id WHERE status='ACCEPTED' and user2Id = ?"
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       res.status(500).send("Error while retrieving the list");
@@ -189,6 +210,7 @@ app.get("/api/friendsList/:id", (req, res) => {
     else {
       // console.log(result)
       if (result.length > 0) {
+        console.log(result)
         res.send(result);
       } else {
         res.status(404).send("List has a problem");
@@ -199,14 +221,32 @@ app.get("/api/friendsList/:id", (req, res) => {
 
 //verifyJWT,
 // list if available users that are not friends of current user
-app.get("/api/availableFriends/:id", (req, res) => {
-  const id = req.params.id;
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
-    + " From Users u where u.id!=? and u.id not in "
-    + " (Select f.user2Id "
-    + " From Users u left join Friends f on u.id=f.user1Id "
-    + " where f.user1Id=? and f.status='ACCEPTED')";
-  db.query(sqlSelect, [id, id], (err, result) => {
+// app.get("/api/availableFriends/:id", (req, res) => {
+//   const id = req.params.id;
+//   const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+//     + " From Users u where u.id!=? and u.id not in "
+//     + " (Select f.user2Id "
+//     + " From Users u left join Friends f on u.id=f.user1Id "
+//     + " where f.user1Id=? and f.status='ACCEPTED')";
+//   db.query(sqlSelect, [id, id], (err, result) => {
+//     if (err) {
+//       res.status(500).send("Error while retrieving the list");
+//     } else {
+//       if (result.length > 0) {
+//         console.log
+//         res.send(result);
+//       } else {
+//         res.status(404).send("List has a problem");
+//       }
+//     }
+//   });
+// });
+
+// Ly's version
+app.get("/api/availableFriends", verifyJWT, (req, res) => {
+  const id = req.userId;
+  const sqlSelect = "Select u.id as 'userId', u.email, u.password, u.firstname, u.lastname, u.userImage, u.role, u.username, f.status, f.user1Id from postnote.Users u join postnote.Friends f on f.user2Id = u.id where f.user1Id = ? and status = 'PENDING' Union Select u.id as 'userId', u.email, u.password, u.firstname, u.lastname, u.userImage, u.role, u.username, f.status, f.user1Id from postnote.Users u join postnote.Friends f on f.user1Id = u.id where f.user2Id = ? and status = 'PENDING' Union Select u.id, u.email, u.password, u.firstName,u.lastName,u.userImage, u.role, u.username, null as 'status', null as 'user1Id'  From Users u where u.id != ? and u.id not in  (Select f.user2Id From Users u left join Friends f on u.id=f.user1Id where f.user1Id = ? union Select f.user1Id From Users u left join Friends f on u.id=f.user2Id where f.user2Id = ?)";
+  db.query(sqlSelect, [id, id, id, id, id], (err, result) => {
     if (err) {
       res.status(500).send("Error while retrieving the list");
     } else {
@@ -219,48 +259,92 @@ app.get("/api/availableFriends/:id", (req, res) => {
   });
 });
 
-
 //, verifyJWT
-app.post("/api/makeRequest/:user1Id/:user2Id", (req, res) => {
-  const user1Id = req.params.user1Id;
+// app.post("/api/makeRequest/:user1Id/:user2Id", (req, res) => {
+//   const user1Id = req.params.user1Id;
+//   const user2Id = req.params.user2Id;
+//   // console.log(user1Id, user2Id)
+//   const sqlInsert =
+//     "Insert Into Friends (user1Id,user2Id) Values (?,?)  ";
+//   db.query(sqlInsert, [user1Id, user2Id], (err, result) => {
+//     if (err) {
+//       res.status(500).send("Error while Insert");
+//     } else {
+//       res.send(result);
+//     }
+//   });
+// });
+
+//Ly's version
+app.post("/api/makeRequest/:user2Id", verifyJWT, (req, res) => {
   const user2Id = req.params.user2Id;
-  // console.log(user1Id, user2Id)
   const sqlInsert =
     "Insert Into Friends (user1Id,user2Id) Values (?,?)  ";
-  db.query(sqlInsert, [user1Id, user2Id], (err, result) => {
+  db.query(sqlInsert, [req.userId, user2Id], (err, result) => {
     if (err) {
-      res.status(500).send("Error while Insert");
+      res.status(500).send("Server Error");
     } else {
-      res.send(result);
+      res.sendStatus(204)
     }
   });
 });
 
 //, verifyJWT
-app.post("/api/cancelRequest/:user1Id/:user2Id", (req, res) => {
-  const user1Id = req.params.user1Id;
+// app.post("/api/cancelRequest/:user1Id/:user2Id", (req, res) => {
+//   const user1Id = req.params.user1Id;
+//   const user2Id = req.params.user2Id;
+//   // console.log(user1Id, user2Id)
+//   const sqlDelete =
+//     "Delete from Friends where user1Id = ? and user2Id= ?   ";
+//   db.query(sqlDelete, [user1Id, user2Id], (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error while Delete");
+//     } else {
+//       res.send(result);
+//     }
+//   });
+// });
+
+// Ly's version
+app.delete("/api/cancelRequest/:user2Id", verifyJWT, (req, res) => {
+  console.log("cancel request")
   const user2Id = req.params.user2Id;
-  // console.log(user1Id, user2Id)
   const sqlDelete =
-    "Delete from Friends where user1Id = ? and user2Id= ?   ";
-  db.query(sqlDelete, [user1Id, user2Id], (err, result) => {
+    "Delete from Friends where user1Id = ? and user2Id= ?";
+  db.query(sqlDelete, [req.userId, user2Id], (err, result) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while Delete");
     } else {
-      res.send(result);
+      res.sendStatus(204)
     }
   });
 });
 
 //, verifyJWT
-app.put("/api/acceptRequest/:user1Id/:user2Id", (req, res) => {
+// app.put("/api/acceptRequest/:user1Id/:user2Id", (req, res) => {
+//   const user1Id = req.params.user1Id;
+//   const user2Id = req.params.user2Id;
+//   // console.log(user1Id, user2Id)
+//   const sqlUpdate =
+//     "Update Friends set status='ACCEPTED' where user1Id = ? and user2Id= ?   ";
+//   db.query(sqlUpdate, [user1Id, user2Id], (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error while Accept Friendship");
+//     } else {
+//       res.send(result);
+//     }
+//   });
+// });
+
+// Ly's version
+app.put("/api/acceptRequest/:user1Id", verifyJWT, (req, res) => {
+  console.log("Hi")
   const user1Id = req.params.user1Id;
-  const user2Id = req.params.user2Id;
-  // console.log(user1Id, user2Id)
   const sqlUpdate =
     "Update Friends set status='ACCEPTED' where user1Id = ? and user2Id= ?   ";
-  db.query(sqlUpdate, [user1Id, user2Id], (err, result) => {
+  db.query(sqlUpdate, [user1Id, req.userId], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error while Accept Friendship");
@@ -269,6 +353,22 @@ app.put("/api/acceptRequest/:user1Id/:user2Id", (req, res) => {
     }
   });
 });
+
+// Ly's version
+app.delete("/api/declineRequest/:user1Id", verifyJWT, (req, res) => {
+  console.log("cancelrequest")
+  const user2Id = req.params.user1Id;
+  const sqlDelete =
+    "Delete from Friends where user1Id = ? and user2Id= ?";
+  db.query(sqlDelete, [user2Id, req.userId], (err, result) => {
+    if (err) {
+      res.status(500).send("Error while Delete");
+    } else {
+      res.sendStatus(204)
+    }
+  });
+});
+
 
 //================== Profile ==============
 

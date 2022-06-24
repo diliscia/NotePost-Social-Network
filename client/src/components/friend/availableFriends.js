@@ -1,111 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, Nav, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import '../../App.css';
-import Axios from 'axios';
-import { useNavigate } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
+import "../../App.css";
+import Axios from "axios";
 
 function AvailableFriends() {
+  const [availableFriends, setAvailableFriends] = useState([]);
 
-    let navigate = useNavigate();
-
-    const [user1Id, setUser1Id] = useState(0);
-    const [availableFriends, setAvailableFriends] = useState([]);
-    const [request, setRequest] = useState(false)
-    const [friend, setFriend] = useState(0)
-
-    useEffect(() => {
-        // alert(process.env.REACT_APP_S3) 
-        if (localStorage.getItem("token")) {
-            setUser1Id(localStorage.getItem('id'))
-            // console.log(user1Id)
-            Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
-                headers: {
-                    "x-access-token": localStorage.getItem("token"),
-                },
-            }).then((response) => {
-                setAvailableFriends(response.data)
-                // console.log(response.data)
-            })
-        }
+  useEffect(() => {
+      Axios.get(`http://localhost:3001/api/availableFriends`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+        .then((response) => {
+          setAvailableFriends(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          var failMessage = document.getElementById("fail-updated");
+          failMessage.innerHTML = error.response.data;
+        });
     }, []);
 
-    const makeRequest = (event, user1Id, user2Id) => {
-        console.log(event)
-        setRequest(true)
-        setFriend(user2Id)
-        // alert(user1Id + user2Id)
-        Axios.post(`http://localhost:3001/api/makeRequest/${user1Id}/${user2Id}`, {
+  const styles = {
+    width: 300,
+  };
+
+  const getAvailableFriends = () => {
+    Axios.get(`http://localhost:3001/api/availableFriends`, {
+        headers: {
+            "x-access-token": localStorage.getItem("token"),
+        },
+    }).then((response) => {
+        console.log("getAvailableFriends")
+        setAvailableFriends(response.data)
+    })
+}
+
+const makeRequest = (user2Id) => {
+    Axios.post(
+        `http://localhost:3001/api/makeRequest/${user2Id}`, "data" , {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        }
+      ).then((response) => {
+        console.log("makeRequest")
+        getAvailableFriends()
+      })
+}
+    const cancelRequest = (user2Id) => {
+        Axios.delete(`http://localhost:3001/api/cancelRequest/${user2Id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
             },
         }).then((response) => {
-            // alert('Hello')
+            console.log("cancelRequest")
             getAvailableFriends();
-            navigate('/add-friend');
         })
     }
 
-    const getAvailableFriends = () => {
-        // alert('Bye')
-        // console.log('hello')
-        // if (!localStorage.getItem("token")) {
-        //     setUser1Id(localStorage.getItem('id'))
-        Axios.get(`http://localhost:3001/api/availableFriends/${localStorage.getItem('id')}`, {
+    const confirmFriend = (user1Id) => {
+        Axios.put(`http://localhost:3001/api/acceptRequest/${user1Id}`,  "data" , {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
             },
         }).then((response) => {
-            // console.log(response)
-            setAvailableFriends(response.data)
-        })
-        // }
-    }
-
-    const cancelRequest = (event, user1Id, user2Id) => {
-        // console.log(event)
-        setRequest(false)
-        setFriend(0)
-        // alert(user1Id + user2Id)
-        Axios.post(`http://localhost:3001/api/cancelRequest/${user1Id}/${user2Id}`, {
-            headers: {
-                "x-access-token": localStorage.getItem("token"),
-            },
-        }).then((response) => {
-            // alert('Hello')
+            console.log("confirmFriend")
             getAvailableFriends();
-            navigate('/add-friend');
         })
     }
 
-    const styles = {
-        width: 300,
-    };
+    const declineRequest = (user1Id) => {
+        Axios.delete(`http://localhost:3001/api/declineRequest/${user1Id}`, {
+            headers: {
+                "x-access-token": localStorage.getItem("token"),
+            },
+        }).then((response) => {
+            console.log("cancelRequest")
+            getAvailableFriends();
+        })
+    }
 
-    return (
-        <div className="container my-5">
-            <h1 className="text-center my-5">Add new Friends</h1>
-            {availableFriends.map((u) => (
-                <div key={u.id} className="my-5 card p-3">
-                    <div className="columns">
-                        <table>
-                            <tr>
-                                <th><img style={styles} src={"https://postnote-app.s3.amazonaws.com/" + u.userImage} alt='user image'></img></th>
-                                <th><h3 className='text mx-3'> {u.firstName} {u.lastName}</h3></th>
-                            </tr>
-                        </table>
-                    </div>
-                    <div>
-                        {/* u.status={u.status} */}
-                        {((request === true && friend === u.id) || u.status == 'PENDING') ?
-                            <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { cancelRequest(event, user1Id, u.id) }}>Cancel</button>
-                            : <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { makeRequest(event, user1Id, u.id) }}>Request</button>}
-                    </div>
-                </div>
-            ))}
+  return (
+    <div className="container my-5">
+      <h1 className="text-center my-5">Add new Friends</h1>
+      {availableFriends.map((u) => (
+        <div key={u.id} className="my-5 card p-3">
+          <div className="card">
+            <div className="card-body">
+              <div>
+                <img
+                  style={styles}
+                  src={"https://postnote-app.s3.amazonaws.com/" + u.userImage}
+                  alt="user image"
+                ></img>
+                <h3 className="text mx-3">
+                  {" "}
+                  {u.firstname} {u.lastname}
+                </h3>
+                {
+                (u.status === "PENDING" ? (u.user1Id !== u.userId ? <button className="btn btn-primary mx-2" id={u.id} onClick={() => {cancelRequest(u.userId)}}>CANCEL</button> : <div> <button className="btn btn-primary mx-2" id={u.id} onClick={() => {confirmFriend(u.userId)}}>CONFIRM</button> <button className="btn btn-primary mx-2" id={u.id} onClick={() => {declineRequest(u.userId)}}>DECLINE</button></div> ) : <button className="btn btn-primary mx-2" id={u.id} onClick={() => {makeRequest(u.userId)}}>REQUEST</button>)
+            }
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 export default AvailableFriends;
