@@ -223,18 +223,19 @@
 <<2022-06-24>>
 2022/06/24 Marcelo
 1. Done / not done since last scrum:
-- Implement Admin functions
+- Implement Admin functions - done
 - watch tutorials
 2. To do until next Scrum:
-- 
+- Improve UI 
+- watch tutorials of delete image S3 from react
 3. Need assistance / figure things out
 - Implement delete the old image in S3 when updating image in React 
 
 2022/06/24 Ly
 1. Done / not done since last scrum:
-- Implement Comments
-- Improve friends function (request/accept/deny)
-- watch tutorials
+- Implement Comments -done
+- Improve friends function (request/accept/deny) -done
+- watch tutorials -done
 2. To do until next Scrum:
 - 
 3. Need assistance / figure things out
