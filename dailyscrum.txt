@@ -219,3 +219,36 @@
 - watch tutorials
 3. Need assistance / figure things out
 - Graph in React
+
+<<2022-06-24>>
+2022/06/24 Marcelo
+1. Done / not done since last scrum:
+- Implement Admin functions
+- watch tutorials
+2. To do until next Scrum:
+- 
+3. Need assistance / figure things out
+- Implement delete the old image in S3 when updating image in React 
+
+2022/06/24 Ly
+1. Done / not done since last scrum:
+- Implement Comments
+- Improve friends function (request/accept/deny)
+- watch tutorials
+2. To do until next Scrum:
+- 
+3. Need assistance / figure things out
+- Testing
+
+2022/06/24 Alireza
+1. Done / not done since last scrum:
+- Improve friends functions (request/accept/deny) - done
+- Implement SQL for user seeing posts of user and friends only - not done
+- Implement site statistics (admin) - not done
+- watch tutorials -done
+2. To do until next Scrum:
+- Implement SQL for user seeing posts of user and friends only
+- Implement site statistics (admin)
+- watch tutorials
+3. Need assistance / figure things out
+- Graph in React
