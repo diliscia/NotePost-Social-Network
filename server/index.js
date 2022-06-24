@@ -431,26 +431,24 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
 
 
 //================== Comments ==============
-app.get("/api/comment/commentsForPost/:id", verifyJWT, (req, res) => {
+app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
   const sqlComments = "SELECT * FROM Comments JOIN Users On Comments.userId = Users.id WHERE Comments.postId =?"
-
   db.query(sqlComments, id, (err, result) => {
     if (err) {
+      console.log(err)
       res.sendStatus(500).send("Server error")
     } else {
       res.send(result)
-
     }
   })
 })
 
-app.post("/api/comment/addcomment/:id"), verifyJWT, (req, res) =>{
-  console.log(req.body)
+app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
+  console.log("Hello")
   const id = req.params.id
   const comment = req.body.formValues.comment
   const sqlAddComment ="INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
-
   db.query(sqlAddComment, [req.userId, id, comment], (err, result) => {
     if (err) {
       res.sendStatus(500).send("Server error! Unable to post the article");
@@ -458,7 +456,7 @@ app.post("/api/comment/addcomment/:id"), verifyJWT, (req, res) =>{
       res.sendStatus(201);
     }
   })
-}
+})
 
 
 //================== Ports ==============

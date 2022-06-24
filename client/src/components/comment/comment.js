@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
 
-function UpdatePost() {
+function Comment() {
   const { id } = useParams();
   const initialValues = {
     postText: "",
@@ -33,21 +33,19 @@ function UpdatePost() {
         failMessage.innerHTML = error.response.data;
       });
 
-    const getListOfComments = (id) => {
-      Axios.get(`http://localhost:3001/api/commentsForPost/${id}`, {
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-        },
+    Axios.get(`http://localhost:3001/api/comment/listcomments/${id}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    })
+      .then((response) => {
+        setCommentList(response.data);
       })
-        .then((response) => {
-          console.log(response);
-          setCommentList(response.data);
-        })
-        .catch((error) => {
-          var failMessage = document.getElementById("fail-updated");
-          failMessage.innerHTML = error.response.data;
-        });
-    };
+      .catch((error) => {
+        console.log(error);
+        var failMessage = document.getElementById("fail-updated");
+        failMessage.innerHTML = error.response.data;
+      });
   }, []);
 
   const profilepicture = {
@@ -78,11 +76,11 @@ function UpdatePost() {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      addArticle(formValues);
+      addComment(formValues);
     }
   }, [formErrors]);
 
-  const addArticle = (formValues) => {
+  const addComment = (formValues) => {
     Axios.post(
       `http://localhost:3001/api/comment/addcomment/${id}`,
       { formValues },
@@ -94,8 +92,10 @@ function UpdatePost() {
     )
       .then(() => {
         alert("Successfully added!");
+        getCommentList()
       })
       .catch((error) => {
+        console.log(error)
         var failMessage = document.getElementById("fail-added");
         failMessage.innerHTML = error.response.data;
       });
@@ -119,6 +119,22 @@ function UpdatePost() {
       " at " +
       strTime
     );
+  }
+
+  const getCommentList = () => {
+    Axios.get(`http://localhost:3001/api/comment/listcomments/${id}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    })
+      .then((response) => {
+        setCommentList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        var failMessage = document.getElementById("fail-updated");
+        failMessage.innerHTML = error.response.data;
+      });
   }
 
   return (
@@ -169,35 +185,40 @@ function UpdatePost() {
               </div>
               <button className="btn btn-primary">Add comment</button>
             </form>
-            <div className="card mt-3">
-              <div className="card-body">
-                <div className="d-inline align-top">
-                  <img
-                    className="photo rounded-circle"
-                    style={profilepicture}
-                    src={
-                      "https://postnote-app.s3.amazonaws.com/" +
-                      commentList.userImage
-                    }
-                  ></img>
+            {commentList.map((value, key) => {
+              return (
+                <div key={value.id} className="card mt-3">
+                  <div className="card-body">
+                    <div className="d-inline align-top">
+                      <img
+                        className="photo rounded-circle"
+                        style={profilepicture}
+                        src={
+                          "https://postnote-app.s3.amazonaws.com/" +
+                          value.userImage
+                        }
+                      ></img>
+                    </div>
+                    <h6 className="card-subtitle d-inline">
+                      {value.firstname} {value.lastname}
+                    </h6>
+                    <p className="">
+                      {formatDate(new Date(Date.parse(value.createdAt)))}
+                    </p>
+                    <h5 className="card-text">{value.postText}</h5>
+                    <p>{value.commentText}</p>
+                    <a
+                      className="btn btn-secondary"
+                      href={"/update-comment/" + value.id}
+                    >
+                      Edit
+                    </a>
+                    <span> | </span>
+                    {/* <a className="btn btn-danger" href="#" onClick={()=>{deleteComment(commentList.id)}}>Delete</a> */}
+                  </div>
                 </div>
-                <h6 className="card-subtitle d-inline">
-                  {commentList.firstname} {commentList.lastname}
-                </h6>
-                <p className="">
-                  {formatDate(new Date(Date.parse(commentList.createdAt)))}
-                </p>
-                <h5 className="card-text">{commentList.postText}</h5>
-                <a
-                  className="btn btn-secondary"
-                  href={"/update-comment/" + commentList.id}
-                >
-                  Edit
-                </a>
-                <span> | </span>
-                {/* <a className="btn btn-danger" href="#" onClick={()=>{deleteComment(commentList.id)}}>Delete</a> */}
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -205,4 +226,4 @@ function UpdatePost() {
   );
 }
 
-export default UpdatePost;
+export default Comment;
