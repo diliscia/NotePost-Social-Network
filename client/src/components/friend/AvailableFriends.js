@@ -57,14 +57,14 @@ function AvailableFriends() {
                 "x-access-token": localStorage.getItem("token"),
             },
         }).then((response) => {
-            console.log(response)
+            // console.log(response)
             setAvailableFriends(response.data)
         })
         // }
     }
 
     const cancelRequest = (event, user1Id, user2Id) => {
-        console.log(event)
+        // console.log(event)
         setRequest(false)
         setFriend(0)
         // alert(user1Id + user2Id)
@@ -97,7 +97,7 @@ function AvailableFriends() {
                         </table>
                     </div>
                     <div>
-                        u.status={u.status}
+                        {/* u.status={u.status} */}
                         {((request === true && friend === u.id) || u.status == 'PENDING') ?
                             <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { cancelRequest(event, user1Id, u.id) }}>Cancel</button>
                             : <button className="btn btn-primary mx-2" id={u.id} onClick={(event) => { makeRequest(event, user1Id, u.id) }}>Request</button>}

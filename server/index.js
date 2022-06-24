@@ -146,11 +146,11 @@ const verifyJWT = (req, res, next) => {
 app.get("/api/friendsList/:id", (req, res) => {
   const id = req.params.id;
   // console.log('id= ' + id)
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
-    + " From Users u where u.id!=? and u.id in "
-    + " (Select f.user2Id "
-    + " From Users u left join Friends f on u.id=f.user1Id "
-    + " where f.user1Id=?)"
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage,f.status "
+    + " From Users u  left join Friends f on u.id=f.user2Id "
+    + " where  u.id in "
+    + " (SELECT f.user2Id from Friends f "
+    + " where ( f.user1Id= ? or f.user2Id= ? )) "
 
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
@@ -178,7 +178,7 @@ app.get("/api/availableFriends/:id", (req, res) => {
     + " where u.id!=? and u.id not in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
-    + " where f.user1Id=? and f.status='ACCEPTED')"; 
+    + " where f.user1Id=? and f.status='ACCEPTED')";
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
       console.log(err);
@@ -228,6 +228,22 @@ app.post("/api/cancelRequest/:user1Id/:user2Id", (req, res) => {
   });
 });
 
+//, verifyJWT
+app.put("/api/acceptRequest/:user1Id/:user2Id", (req, res) => {
+  const user1Id = req.params.user1Id;
+  const user2Id = req.params.user2Id;
+  // console.log(user1Id, user2Id)
+  const sqlUpdate =
+    "Update Friends set status='ACCEPTED' where user1Id = ? and user2Id= ?   ";
+  db.query(sqlUpdate, [user1Id, user2Id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error while Accept Friendship");
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 //================== Profile ==============
 
