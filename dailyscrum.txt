@@ -224,9 +224,10 @@
 2022/06/24 Marcelo
 1. Done / not done since last scrum:
 - Implement Admin functions - done
-- watch tutorials
+- watch tutorials - done
 2. To do until next Scrum:
-- Improve UI 
+- Improve UI
+- Implement List of Users with Edit/Delete buttons (Admin can change user's role)
 - watch tutorials of delete image S3 from react
 3. Need assistance / figure things out
 - Implement delete the old image in S3 when updating image in React 
@@ -234,10 +235,12 @@
 2022/06/24 Ly
 1. Done / not done since last scrum:
 - Implement Comments -done
-- Improve friends function (request/accept/deny) -done
+- Improve friends function (request/accept/deny) - not done
 - watch tutorials -done
 2. To do until next Scrum:
-- 
+- Improve friends function (request/accept/deny)
+- Add delete/edit for the comments
+- watch tutorials
 3. Need assistance / figure things out
 - Testing
 
@@ -249,6 +252,7 @@
 - watch tutorials -done
 2. To do until next Scrum:
 - Implement SQL for user seeing posts of user and friends only
+- Setup MySQL when Admin Deletes a User (delete all user info: Posts, comments)
 - Implement site statistics (admin)
 - watch tutorials
 3. Need assistance / figure things out
