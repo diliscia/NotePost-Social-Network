@@ -174,5 +174,4 @@ const getPostList = () => {
   );
 }
 
-
 export default MyProfile;
