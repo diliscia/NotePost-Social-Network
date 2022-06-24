@@ -104,12 +104,20 @@ function Upload() {
         "x-access-token": localStorage.getItem("token"),
       },
     }).then(() => {
-      alert("Successfully added!");
-      navigate("/");
+      // alert("Successfully added!");
+      // navigate("/");
+      var successMessage = document.getElementById('successAlert');
+      successMessage.style.display = 'block';
     })
     .catch((error) => {
-      var failMessage = document.getElementById("fail-added");
-      failMessage.innerHTML = error.response.data;
+      // var failMessage = document.getElementById("fail-added");
+      // failMessage.innerHTML = error.response.data;
+      var fail = document.getElementById('failAlert');
+      var failMsg = document.getElementById('failAlertMsg');
+
+      failMsg.innerText = error.response.data;
+      fail.style.display = 'block';
+      
     });
   })
   };

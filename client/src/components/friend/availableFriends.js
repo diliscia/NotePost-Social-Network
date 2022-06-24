@@ -86,7 +86,7 @@ const makeRequest = (user2Id) => {
       <h1 className="text-center my-5">Add new Friends</h1>
       {availableFriends.map((u) => (
         <div key={u.id} className="my-5 card p-3">
-          <div className="card">
+          {/* <div className="card"> */}
             <div className="card-body">
               <div>
                 <img
@@ -103,7 +103,7 @@ const makeRequest = (user2Id) => {
             }
               </div>
             </div>
-          </div>
+          {/* </div> */}
           <div>
           </div>
         </div>

@@ -84,11 +84,15 @@ function Register() {
   };
 
   useEffect(() => {
+    closeFailAlert();
+    closeSuccessAlert();
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       Axios.post("http://localhost:3001/register", formValues)
         .then(() => {
-          alert("Successfully register!");
-          navigate("/login");
+          // alert("Successfully register!");
+          var successMessage = document.getElementById('successAlert');
+          successMessage.style.display = 'block';
+          // navigate("/login");
         })
         .catch((error) => {
           var failMessage = document.getElementById("fail-added");
@@ -108,8 +112,24 @@ function Register() {
     }
   }, [formErrors]);
 
+  const closeSuccessAlert = () => {
+    var successMessage = document.getElementById('successAlert');
+    successMessage.style.display = 'none';
+    }
+    const closeFailAlert = () => {
+        var failMessage = document.getElementById('failAlert');
+        failMessage.style.display = 'none';
+    }
   return (
     <div className="containerUser">
+        <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+            <strong>You have registered successfully</strong>
+            <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
+        </div> 
+        <div className="alert alert-danger alert-dismissible fade show" role="alert" id="failAlert">
+            <strong id="failAlertMsg">Error while trying to register. Please try again.</strong>
+            <button type="button" className="btn-close" onClick={closeFailAlert}></button>
+        </div>
       <h1 className='text-center my-5'>Registration</h1>
       <div id="fail-added" className="text-danger"></div>
       <form onSubmit={handleSubmit}>

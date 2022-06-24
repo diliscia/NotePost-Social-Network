@@ -11,6 +11,8 @@ function MyProfile() {
   const [uploads, setUpload] = useState([]);
 
   useEffect(() => {
+    closeFailAlert();
+    closeSuccessAlert();
     Axios.get(`http://localhost:3001/api/profile`, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
@@ -50,7 +52,9 @@ function MyProfile() {
         "x-access-token": localStorage.getItem("token"),
       },
     }).then((response)=>{
-        getPostList() 
+        var successMessage = document.getElementById('successAlert');
+        successMessage.style.display = 'block';
+        getPostList()         
         navigate("/my-profile")
     })
   }
@@ -85,8 +89,25 @@ const getPostList = () => {
     );
   }
 
+  const closeSuccessAlert = () => {
+    var successMessage = document.getElementById('successAlert');
+    successMessage.style.display = 'none';
+    }
+    const closeFailAlert = () => {
+        var failMessage = document.getElementById('failAlert');
+        failMessage.style.display = 'none';
+    }
+
   return (
     <div className="container">
+        <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+            <strong>Post deleted succesfully</strong>
+            <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
+        </div> 
+        <div className="alert alert-danger alert-dismissible fade show" role="alert" id="failAlert">
+            <strong id="failAlertMsg">Error while to delete your post. Please try again.</strong>
+            <button type="button" className="btn-close" onClick={closeFailAlert}></button>
+        </div>
       <div className="row">
         <div className="col-3 my-3">
           <h1>My Profile</h1>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 // import '../../App.css';
-import './user.css';
+// import './user.css';
 import Axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 // import { AuthContext, UserContext } from "../components/UserContext";
@@ -118,7 +118,7 @@ function EditProfile(){
 
 
     return (
-        <div className='containerUser my-5'> 
+        <div className='container my-5'> 
             <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
                 <strong>You Profile has been updated successfully</strong>
                 <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
@@ -129,7 +129,8 @@ function EditProfile(){
             </div>
             <h1 className='text-center'>Edit your Profile</h1>
             <form  onSubmit={handleSubmit}>
-                <div className="mb-3">
+            <div className="containerUser">
+             <div className="mb-3 text-center">
 
                 <label htmlFor="firstname" className='form-label my-3 mb-1'>First name: </label>
                 <input type="text" className="form-control" 
@@ -150,6 +151,7 @@ function EditProfile(){
                 <div className='d-flex justify-content-center'>
                     <button className="btn btn-primary text-center my-3 mx-1" type="submit">Save Changes</button>
                     <a href="/my-profile" className="btn btn-primary text-center my-3 mx-1" type="submit">Back to My Profile</a>
+                </div>
                 </div>
                 </div>
             </form>

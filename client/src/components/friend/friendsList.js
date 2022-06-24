@@ -59,7 +59,7 @@ function FriendsList() {
       <h1 className="text-center my-5">Your Friends</h1>
       {friendsList.map((u) => (
         <div key={u.id} className="my-5 card p-3">
-          <div className="card">
+          {/* <div className="card"> */}
             <div className="card-body">
               <div>
                 <img
@@ -92,7 +92,7 @@ function FriendsList() {
                 )}
               </div>
             </div>
-          </div>
+          {/* </div> */}
           <div></div>
         </div>
       ))}

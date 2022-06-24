@@ -6,10 +6,24 @@ function Logout() {
   const {user, setUser} = useContext(UserContext);
   localStorage.clear();
   setUser(null)
+ 
+  const closeSuccessAlert = () => {
+    var successMessage = document.getElementById('successAlert');
+    successMessage.style.display = 'none';
+}
+
+const closeFailAlert = () => {
+    var failMessage = document.getElementById('failAlert');
+    failMessage.style.display = 'none';
+}
+
 return (
-  <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
-  <strong>You have been logged out succesfully</strong>
-</div>
+  <div className="container">
+  <div className="alert alert-success alert-dismissible fade show text-center" role="alert" id="successAlert">
+  <strong>You logged out successfully</strong>
+  <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
+  </div> 
+  </div> 
 );
 }
 
