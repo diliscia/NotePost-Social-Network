@@ -129,7 +129,6 @@ const verifyJWT = (req, res, next) => {
   } else {
     jwt.verify(token, "jwtSecret", (err, decoded) => {
       if (err) {
-        console.log(err);
         res.json({ auth: false, message: "You failed to authenticate" });
       } else {
         req.userId = decoded.id;
@@ -154,7 +153,6 @@ app.get("/api/friendsList/:id", (req, res) => {
 
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while retrieving the list");
     }
     else {
@@ -172,16 +170,13 @@ app.get("/api/friendsList/:id", (req, res) => {
 // list if available users that are not friends of current user
 app.get("/api/availableFriends/:id", (req, res) => {
   const id = req.params.id;
-  console.log('id= ' + id)
-  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage,f.status "
-    + " From Users u left join Friends f on u.id=f.user2Id"
-    + " where u.id!=? and u.id not in "
+  const sqlSelect = "Select u.id,u.firstName,u.lastName,u.userImage "
+    + " From Users u where u.id!=? and u.id not in "
     + " (Select f.user2Id "
     + " From Users u left join Friends f on u.id=f.user1Id "
     + " where f.user1Id=? and f.status='ACCEPTED')";
   db.query(sqlSelect, [id, id], (err, result) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while retrieving the list");
     } else {
       if (result.length > 0) {
@@ -203,7 +198,6 @@ app.post("/api/makeRequest/:user1Id/:user2Id", (req, res) => {
     "Insert Into Friends (user1Id,user2Id) Values (?,?)  ";
   db.query(sqlInsert, [user1Id, user2Id], (err, result) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while Insert");
     } else {
       res.send(result);
@@ -253,11 +247,9 @@ app.get("/api/profile", verifyJWT, (req, res) => {
   const sqlQuery = "SELECT * FROM Users WHERE id = ?";
   db.query(sqlQuery, req.userId, (err, profile) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while retrieving profile info");
     } else {
       if (profile.length > 0) {
-        console.log(profile);
         res.send(profile);
       } else {
         res.status(404).send("User does not exist");
@@ -280,10 +272,8 @@ app.put("/api/profile/edit", verifyJWT, (req, res) => {
     [firstname, lastname, username, req.userId],
     (err, result) => {
       if (err) {
-        console.log(err);
         res.status(400).send("Error updating the profile. Please try again");
       } else {
-        console.log(result);
         res.sendStatus(201);
       }
     }
@@ -291,7 +281,6 @@ app.put("/api/profile/edit", verifyJWT, (req, res) => {
 });
 
 app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
-  console.log(req.body);
   const userId = req.userId;
   const userImage = req.body.image;
 
@@ -312,7 +301,6 @@ app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
 
 app.post("/images", upload.single("image"), async (req, res) => {
   const file = req.file;
-  console.log(file);
   file.filename = "images/" + file.filename;
   //apply filter
   // resize
@@ -330,7 +318,6 @@ app.get("/images/:key", (req, res) => {
 //================== Post ==============
 
 app.post("/upload", verifyJWT, (req, res) => {
-  console.log(req.body);
   const userId = req.userId;
   const postText = req.body.postText;
 
@@ -384,7 +371,7 @@ app.get("/api/allposts", verifyJWT, (req, res) => {
       if (err) {
         res.sendStatus(500).send("Server error!");
       } else {
-        res.send(results);
+        res.send(results)
       }
     }
   );
@@ -392,11 +379,13 @@ app.get("/api/allposts", verifyJWT, (req, res) => {
 
 app.get("/api/update-post/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
-  const sqlSelectArticle = "SELECT * FROM Posts WHERE id = ?";
+  const sqlSelectArticle = "SELECT * FROM Posts JOIN Users ON Users.id = Posts.userId WHERE Posts.id = ?";
   db.query(sqlSelectArticle, id, (err, result) => {
     if (err) {
+      console.log(err)
       res.sendStatus(500).send("Server error! Unable to get the post");
     } else {
+      console.log(result)
       res.send(result);
     }
   });
@@ -440,6 +429,39 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
   });
 });
 
+
+//================== Comments ==============
+app.get("/api/comment/commentsForPost/:id", verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const sqlComments = "SELECT * FROM Comments JOIN Users On Comments.userId = Users.id WHERE Comments.postId =?"
+
+  db.query(sqlComments, id, (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error")
+    } else {
+      res.send(result)
+
+    }
+  })
+})
+
+app.post("/api/comment/addcomment/:id"), verifyJWT, (req, res) =>{
+  console.log(req.body)
+  const id = req.params.id
+  const comment = req.body.formValues.comment
+  const sqlAddComment ="INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
+
+  db.query(sqlAddComment, [req.userId, id, comment], (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error! Unable to post the article");
+    } else {
+      res.sendStatus(201);
+    }
+  })
+}
+
+
+//================== Ports ==============
 app.listen(3001, () => {
   console.log("Your server is running on port 3001");
 });

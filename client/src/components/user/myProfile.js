@@ -1,17 +1,14 @@
 import React, { useState, useEffect, Component } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 import "../../App.css";
+import Comment from '../comment/comment';
 import Axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-// import { AuthContext, UserContext } from "../components/UserContext";
-import { Link } from "react-router-dom";
 
 function MyProfile() {
   let navigate = useNavigate();
 
   const [profile, setProfile] = useState([]);
-  // const id = localStorage.getItem('id')
+  const [uploads, setUpload] = useState([]);
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/api/profile`, {
@@ -19,12 +16,19 @@ function MyProfile() {
         "x-access-token": localStorage.getItem("token"),
       },
     })
-      .then((response) => {
-        console.log(response);
-        setProfile(response.data[0]);
+      .then((res) => {
+        setProfile(res.data[0]);
       })
       .catch((error) => {
         navigate("/");
+      });
+
+      Axios.get("http://localhost:3001/api/posts", {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }).then((response) => {
+        setUpload(response.data);
       });
   }, []);
 
@@ -39,18 +43,6 @@ function MyProfile() {
   const stylesimagepost = {
     width: 2000,
   };
-
-  const [uploads, setUpload] = useState([]);
-
-  useEffect(() => {
-    Axios.get("http://localhost:3001/api/posts", {
-      headers: {
-        "x-access-token": localStorage.getItem("token"),
-      },
-    }).then((response) => {
-      setUpload(response.data);
-    });
-  }, []);
 
   const deletePost = (id) => {
     Axios.delete(`http://localhost:3001/api/delete-post/${id}`, {
@@ -150,6 +142,28 @@ const getPostList = () => {
                     style={stylesimagepost}
                     src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
                   />}
+                  <a href={"/comments-of-post/" + val.id}>View all comments</a>
+                </div>
+                <div>
+                  {/* <div>
+                    <input type="text" placeholder="Write a comment..."></input>
+                    <button>Add Comment</button>
+                  </div> */}
+                  <div> 
+                    
+                    {/* <Comment key={val.id} comments={getListOfComments(val.id)}/> */}
+                    {/* <Comment /> */}
+                    {/* {comment.length !==0 && comment[0].id === val.id ? comment.map((value) => {
+                      return (
+                        <div>
+                            <p>{value.userId}</p>
+                            <p>{value.postId}</p>
+                            <p>{value.commentText}</p>
+                        </div>
+                      )
+                    }) : ""
+                  } */}
+                  </div>
                 </div>
               </div>
             );
@@ -159,5 +173,6 @@ const getPostList = () => {
     </div>
   );
 }
+
 
 export default MyProfile;

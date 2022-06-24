@@ -5,6 +5,7 @@ import Register from "./components/user/register";
 import AddArticle from "./components/post/add";
 import Upload from "./components/post/upload";
 import UpdatePost from "./components/post/update";
+import Comment from "./components/comment/comment";
 import Home from "./components/post/home";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -17,11 +18,7 @@ import MyProfile from "./components/user/myProfile";
 import EditProfile from "./components/user/editProfile";
 import EditImage from "./components/user/editImage";
 import FriendsList from './components/friend/friendsList'
-import {
-  MDBContainer,
-  MDBNavbar,
-  MDBNavbarBrand
-} from 'mdb-react-ui-kit';
+
 
 function App() {
 
@@ -38,18 +35,12 @@ function App() {
         <Navbar bg="light" expand="lg">
           <Container>
             <>
-          <MDBNavbar light bgColor='light'>
-        <MDBContainer>
-          <MDBNavbarBrand href='#'>
             <img
               src="https://postnote-app.s3.amazonaws.com/images/8a7d03e98a9c9711975de3bca8ea7513"
               height='30'
               alt='PostNote logo'
               className="d-inline-block align-top"
             />
-          </MDBNavbarBrand>
-        </MDBContainer>
-        </MDBNavbar>
     </>
             <Navbar.Brand href="#home" className="menu">PostNote</Navbar.Brand>
             <Navbar.Toggle />
@@ -108,6 +99,7 @@ function App() {
               <Route exact path="/edit-profile" element={<EditProfile />} />
               <Route exact path="/edit-image" element={<EditImage />} />
               <Route exact path="/update-post/:id" element={<UpdatePost />} />
+              <Route exact path="/comments-of-post/:id" element={<Comment />} />
             </Route>
           </Routes>
         </UserContext.Provider>
