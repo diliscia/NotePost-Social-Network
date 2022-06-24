@@ -43,7 +43,7 @@ function MyProfile() {
   const [uploads, setUpload] = useState([]);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/posts", {
+    Axios.get("http://localhost:3001/api/allposts", {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
@@ -59,12 +59,12 @@ function MyProfile() {
       },
     }).then((response)=>{
         getPostList() 
-        navigate("/my-profile")
+        navigate("/adminHome")
     })
   }
 
 const getPostList = () => {
-  Axios.get('http://localhost:3001/api/posts',{
+  Axios.get("http://localhost:3001/api/allposts", {
     headers: {
       "x-access-token": localStorage.getItem("token"),
     },
@@ -135,10 +135,10 @@ const getPostList = () => {
                     <img
                       className="photo rounded-circle"
                       style={profilepicture}
-                      src={"https://postnote-app.s3.amazonaws.com/"+ profile.userImage}
+                      src={"https://postnote-app.s3.amazonaws.com/"+ val.userImage}
                     ></img>
                   </div>
-                  <h6 className="card-subtitle d-inline">{profile.firstname} {profile.lastname}</h6>
+                  <h6 className="card-subtitle d-inline">{val.firstname} {val.lastname}</h6>
                   <p className="">
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>

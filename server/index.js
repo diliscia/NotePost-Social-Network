@@ -95,6 +95,37 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.post("/addUser", (req, res) => {
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  const role = req.body.role;
+
+  db.query("SELECT * FROM Users WHERE email = ?", email, (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    } else if (result.length > 0) {
+      res.sendStatus(400);
+    } else {
+      bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+          "INSERT INTO Users (firstname, lastname, username, email, role, password) VALUES (?,?,?,?,?, ?)",
+          [firstname, lastname, username, email, role, hash],
+          (err, result) => {
+            if (err) {
+              res.sendStatus(500);
+            } else {
+              res.send("Success!");
+            }
+          }
+        );
+      });
+    }
+  });
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -353,7 +384,7 @@ app.get("/api/allposts", verifyJWT, (req, res) => {
       }
     }
   );
-});
+}); 
 
 app.get("/api/update-post/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
