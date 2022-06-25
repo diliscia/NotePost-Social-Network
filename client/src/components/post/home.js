@@ -17,7 +17,6 @@ function Home() {
       },
     })
       .then((response) => {
-        console.log(response);
         setProfile(response.data[0]);
       })
       .catch((error) => {

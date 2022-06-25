@@ -12,6 +12,8 @@ const { uploadFile, getFileStream } = require("./s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+const path = require('path');
+require('dotenv').config();
 
 app.use(
   cors({
@@ -506,7 +508,18 @@ app.delete('/api/delete/:id', verifyJWT, (req, res) => {
 });
 
 //================== Ports ==============
-app.listen(3001, () => {
-  console.log("Your server is running on port 3001");
+
+const port = process.env.PORT || 3001
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static())
+  app.get('*', (req, res) => {
+    req.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+  })
+}
+
+app.listen(port, (err) => {
+  if (err) return console.log(err);
+  console.log('Server running on port: ', port)
 });
 
