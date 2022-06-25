@@ -11,6 +11,7 @@ import UpdatePost from "./components/post/update";
 import Comment from "./components/comment/comment";
 import Home from "./components/post/home";
 import AdminHome from "./components/post/adminHome";
+import UserList from "./components/user/userList";
 import ProtectedRoutes from "./components/protectedroute";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
@@ -66,7 +67,10 @@ function App() {
                       <Nav.Link href="/add-friend">Add Friends</Nav.Link>
                       {localStorage.getItem("role") === 'ADMIN' ? (
                        <Nav.Link href="/addUser">Add User</Nav.Link>): 
-                      (<></>)}                      
+                      (<></>)}
+                      {localStorage.getItem("role") === 'ADMIN' ? (
+                      <Nav.Link href="/userList">User List</Nav.Link>): 
+                      (<></>)}                            
                       <Nav.Link href="/my-profile">My Profile</Nav.Link>
                       <Nav.Link href="/logout">Logout</Nav.Link>
                     <Navbar.Collapse className="justify-content-end">
@@ -103,6 +107,7 @@ function App() {
               <Route exact path="/update-post/:id" element={<UpdatePost />} />
               <Route exact path="/addUser" element={<AddUser />} />
               <Route exact path="/comments-of-post/:id" element={<Comment />} />
+              <Route exact path="/userList" element={<UserList />} />
             </Route>
           </Routes>
         </UserContext.Provider>

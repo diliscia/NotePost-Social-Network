@@ -589,6 +589,58 @@ app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
   })
 })
 
+//================= Admin ===============
+
+app.get('/api/users', verifyJWT, (req, res) => {
+  const sqlQuery = "SELECT * FROM Users"
+  db.query(sqlQuery, req.userId, (err, users) => {
+      if (err) {
+          console.log(err);
+          res.status(500).send("Error trying to retrieve articles.");
+      }
+      else {
+          console.log(sqlQuery);
+          console.log(users);
+          res.send(users);
+      }
+  })
+});
+
+// Update user
+app.put('/api/user/:id', verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const username = req.body.username;
+
+  const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
+  db.query(sqlUpdate, [firstname, lastname, username, id], (err, result) => {
+      if (err) {
+          console.log(err);
+          res.status(400).send("Error updating the user. Please try again");
+      }
+      else {
+          console.log(result);
+          res.sendStatus(201);
+      }
+  })
+});
+
+// Delete
+app.delete('/api/delete/:id', verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const sqlDelete = "DELETE FROM Users where id=?"
+  db.query(sqlDelete, [id, req.userId], (err, user) => {
+      if (err) {
+          res.status(500).send("Error trying to delete the article")
+          console.log(err);
+      }
+      else {
+          console.log(user);
+          res.send(user);
+      }
+  })
+});
 
 //================== Ports ==============
 app.listen(3001, () => {
