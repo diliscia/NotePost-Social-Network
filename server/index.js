@@ -208,13 +208,7 @@ app.get("/api/friendsList", verifyJWT, (req, res) => {
       res.status(500).send("Error while retrieving the list");
     }
     else {
-      // console.log(result)
-      if (result.length > 0) {
-        console.log(result)
         res.send(result);
-      } else {
-        res.status(404).send("List has a problem");
-      }
     }
   });
 });
