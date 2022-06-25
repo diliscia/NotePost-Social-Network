@@ -61,7 +61,6 @@ function Login() {
           } else {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", response.data.result[0].username)
-            localStorage.setItem("id", response.data.result[0].id)
             localStorage.setItem("role", response.data.result[0].role)
             setUser(response.data.result[0].username) 
             if (localStorage.getItem("role") === "ADMIN") {
