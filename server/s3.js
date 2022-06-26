@@ -39,3 +39,13 @@ function getFileStream(fileKey) {
 }
 
 exports.getFileStream = getFileStream
+
+function deleteFile(fileKey) {
+  const deleteParams = {
+    Key:fileKey,
+    Bucket: bucketName
+  }
+  return s3.deleteObject(deleteParams).promise()
+}
+
+exports.deleteFile = deleteFile

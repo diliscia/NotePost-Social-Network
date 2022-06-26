@@ -14,6 +14,16 @@ function Upload() {
   const [file, setFile] = useState()
 
   const handleFileChange = (e) => {
+
+    console.log(formValues.postImage)
+    Axios.delete(`http://localhost:3001/images/${formValues.postImage}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response)=> {
+      console.log(response)
+    })
+
     formValues['profileImage'] = e.target.files[0]
     // const image = e.target.files[0];
     // var imageValidation = document.getElementById("image-error");
@@ -72,7 +82,6 @@ function Upload() {
       if (values.profileImage.size > 1000000) {
         errors.profileImage = "You cannot upload file that larger than 1MB";
       }
-
     }
     return errors;
   };
@@ -97,7 +106,11 @@ function Upload() {
     formData.append("description", "my profile picture")
 
  
-    Axios.post("http://localhost:3001/images", formData).then((response) => {
+    Axios.post("http://localhost:3001/images", formData, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
       const key = response.data.imagePath
     Axios.put("http://localhost:3001/uploadProfilePicture", {image: key}, {
       headers: {

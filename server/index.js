@@ -8,7 +8,7 @@ const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const upload = multer({ dest: "upload/" });
-const { uploadFile, getFileStream } = require("./s3");
+const { uploadFile, getFileStream, deleteFile } = require("./s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
@@ -314,7 +314,7 @@ app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
 
 //================== Images ==============
 
-app.post("/images", upload.single("image"), async (req, res) => {
+app.post("/images", upload.single("image"), verifyJWT, async (req, res) => {
   const file = req.file;
   file.filename = "images/" + file.filename;
   //apply filter
@@ -324,11 +324,18 @@ app.post("/images", upload.single("image"), async (req, res) => {
   res.send({ imagePath: result.Key });
 });
 
-app.get("/images/:key", (req, res) => {
-  const key = req.params.key;
-  const readStream = getFileStream(key);
-  readStream.pipe(res);
-});
+// app.get("/images/:key", (req, res) => {
+//   const key = req.params.key;
+//   const readStream = getFileStream(key);
+//   readStream.pipe(res);
+// });
+
+app.delete("/images/images/:key", verifyJWT, async (req, res) => {
+  const key = 'images/'+req.params.key;
+  console.log(key)
+  await deleteFile(key);
+  res.send("File deleted successfully")
+})
 
 //================== Post ==============
 
@@ -379,16 +386,30 @@ app.get("/api/posts", verifyJWT, (req, res) => {
   );
 });
 
+app.get("/api/allposts", verifyJWT, (req, res) => {
+  db.query(
+    "SELECT * FROM Users as u INNER JOIN Posts p ON p.userId = u.id ORDER BY p.createdAt DESC",
+    (err, results) => {
+      if (err) {
+        res.sendStatus(500).send("Server error!");
+      } else {
+        res.send(results)
+      }
+    }
+  );
+});
+
 app.get("/api/allpostsUser", verifyJWT, (req, res) => {
   db.query(
-    "SELECT * "
-    + " FROM postnote.Posts p inner join Users u on p.userId=u.id "
-    + " where p.userId=? Or p.userId in "
-    + " (SELECT u.id  FROM Friends f JOIN Users u on user2Id = u.id "
-    + "  WHERE status='ACCEPTED' and user1Id = ? "
-    + "  union "
-    + "  SELECT  u.id FROM Friends f JOIN Users u on user1Id = u.id "
-    + "  WHERE status='ACCEPTED' and user2Id = ?)",
+    "SELECT p.id as 'postId', p.userId as 'postUserId', p.postText, p.postImage, p.createdAt, p.updatedAt, u.username,  u.firstname, u.lastname, u.userImage" +
+    " FROM postnote.Posts p inner join Users u on p.userId=u.id" +
+    " WHERE p.userId= ? Or p.userId in" +
+    " (SELECT u.id  FROM Friends f JOIN Users u on user2Id = u.id" +
+    " WHERE status='ACCEPTED' and user1Id = ?" +
+    " union" +
+    " SELECT  u.id FROM Friends f JOIN Users u on user1Id = u.id" +
+    " WHERE status='ACCEPTED' and user2Id = ?)" +
+    " ORDER BY p.createdAt DESC", 
     [req.userId, req.userId, req.userId],
     (err, results) => {
       if (err) {

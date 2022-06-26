@@ -17,6 +17,16 @@ function UpdatePost() {
   const [file, setFile] = useState()
 
   const handleFileChange = (e) => {
+
+    console.log(formValues.postImage)
+    Axios.delete(`http://localhost:3001/images/${formValues.postImage}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response)=> {
+      console.log(response)
+    })
+
     formValues['postImage'] = e.target.files[0]
     // const image = e.target.files[0];
     // var imageValidation = document.getElementById("image-error");
@@ -51,7 +61,6 @@ function UpdatePost() {
 
   const validate = (values) => {
     const errors = {};
-    console.log(values)
     if (!values.postText) {
       errors.postText = "Content is required!";
     } else if (values.postText.length < 1 || values.postText.length > 500) {
@@ -74,7 +83,6 @@ function UpdatePost() {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit && (typeof formValues.postImage !== "string")) {
-      console.log("Hello")
       updatePost(formValues);
     }
     if (
@@ -105,9 +113,13 @@ function UpdatePost() {
     formData.append("image", formValues.postImage)
     formData.append("description", formValues.postText)
  
-    Axios.post("http://localhost:3001/images", formData).then((response) => {
+    Axios.post("http://localhost:3001/images", formData, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
       const key = response.data.imagePath
-
+      console.log(response.data)
       Axios.put(`http://localhost:3001/api/update-post/${id}`,{postText: formValues.postText, image: key},{
         headers: {
           "x-access-token": localStorage.getItem("token"),

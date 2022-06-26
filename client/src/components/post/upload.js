@@ -86,7 +86,11 @@ function Upload() {
     formData.append("image", formValues.postImage);
     formData.append("description", formValues.postText);
 
-    Axios.post("http://localhost:3001/images", formData).then((response) => {
+    Axios.post("http://localhost:3001/images", formData, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
       const key = response.data.imagePath;
       Axios.post(
         "http://localhost:3001/upload",

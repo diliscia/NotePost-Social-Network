@@ -42,6 +42,7 @@ function Home() {
         "x-access-token": localStorage.getItem("token"),
       },
     }).then((response) => {
+      console.log(response.data)
       setUpload(response.data);
     });
   }, []);
@@ -109,7 +110,7 @@ function Home() {
                     style={stylesimagepost}
                     src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
                   />}
-                   <a href={"/comments-of-post/" + val.id}>View all comments</a>
+                   <a href={"/comments-of-post/" + val.postId}>View all comments</a>
                 </div>
               </div>
             );
