@@ -12,6 +12,8 @@ const { uploadFile, getFileStream } = require("./s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+const path = require('path');
+require('dotenv').config();
 
 app.use(
   cors({
@@ -179,7 +181,7 @@ app.get("/api/friendsList", verifyJWT, (req, res) => {
       res.status(500).send("Error while retrieving the list");
     }
     else {
-        res.send(result);
+      res.send(result);
     }
   });
 });
@@ -377,9 +379,17 @@ app.get("/api/posts", verifyJWT, (req, res) => {
   );
 });
 
-app.get("/api/allposts", verifyJWT, (req, res) => {
+app.get("/api/allpostsUser", verifyJWT, (req, res) => {
   db.query(
-    "SELECT * FROM Users as u INNER JOIN Posts p ON p.userId = u.id ORDER BY p.createdAt DESC",
+    "SELECT * "
+    + " FROM postnote.Posts p inner join Users u on p.userId=u.id "
+    + " where p.userId=? Or p.userId in "
+    + " (SELECT u.id  FROM Friends f JOIN Users u on user2Id = u.id "
+    + "  WHERE status='ACCEPTED' and user1Id = ? "
+    + "  union "
+    + "  SELECT  u.id FROM Friends f JOIN Users u on user1Id = u.id "
+    + "  WHERE status='ACCEPTED' and user2Id = ?)",
+    [req.userId, req.userId, req.userId],
     (err, results) => {
       if (err) {
         res.sendStatus(500).send("Server error!");
@@ -446,10 +456,9 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
 //================== Comments ==============
 app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
-  const sqlComments = "SELECT * FROM Comments JOIN Users On Comments.userId = Users.id WHERE Comments.postId =?"
+  const sqlComments = "SELECT c.id, c.userId, c.postId, c.commentText, c.createdAt, u.firstname, u.lastname, u.userImage FROM Comments c JOIN Users u On c.userId = u.id WHERE c.postId =? ORDER BY createdAt DESC"
   db.query(sqlComments, id, (err, result) => {
     if (err) {
-      console.log(err)
       res.sendStatus(500).send("Server error")
     } else {
       res.send(result)
@@ -457,11 +466,10 @@ app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   })
 })
 
-app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) => {
-  console.log("Hello")
+app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
   const id = req.params.id
   const comment = req.body.formValues.comment
-  const sqlAddComment = "INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
+  const sqlAddComment ="INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
   db.query(sqlAddComment, [req.userId, id, comment], (err, result) => {
     if (err) {
       res.sendStatus(500).send("Server error! Unable to post the article");
@@ -470,6 +478,19 @@ app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) => {
     }
   })
 })
+
+app.delete("/api/comment/deletecomment/:id", verifyJWT, (req, res) => {
+  const id = req.params.id
+  const sqlDelete = "DELETE FROM Comments where id=?"
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error")
+  }
+  else {
+      res.send("Successfully deleted!")
+  }
+})
+});
 
 //================= Admin ===============
 
@@ -540,7 +561,18 @@ app.delete('/api/delete/:id', verifyJWT, (req, res) => {
 });
 
 //================== Ports ==============
-app.listen(3001, () => {
-  console.log("Your server is running on port 3001");
+
+const port = process.env.PORT || 3001
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static())
+  app.get('*', (req, res) => {
+    req.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+  })
+}
+
+app.listen(port, (err) => {
+  if (err) return console.log(err);
+  console.log('Server running on port: ', port)
 });
 

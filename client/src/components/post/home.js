@@ -17,7 +17,6 @@ function Home() {
       },
     })
       .then((response) => {
-        console.log(response);
         setProfile(response.data[0]);
       })
       .catch((error) => {
@@ -38,7 +37,7 @@ function Home() {
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/allposts", {
+    Axios.get("http://localhost:3001/api/allpostsUser", {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import './user.css';
 import _default from "react-bootstrap/esm/Accordion";
+
+
 function Login() {
   let navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
