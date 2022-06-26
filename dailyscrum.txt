@@ -273,7 +273,7 @@
 
 2022/06/25 Ly
 1. Done / not done since last scrum:
-- Improve friends function (request/accept/deny) - done
+- Redo add-friends function (request/accept/deny) - done
 - watch tutorials - done
 2. To do until next Scrum:
 - Configure Heroku
