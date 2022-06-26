@@ -8,7 +8,7 @@ const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const upload = multer({ dest: "upload/" });
-const { uploadFile, getFileStream } = require("./s3");
+const { uploadFile, getFileStream, deleteFile } = require("./s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
@@ -326,9 +326,16 @@ app.post("/images", upload.single("image"), async (req, res) => {
 
 app.get("/images/:key", (req, res) => {
   const key = req.params.key;
+  console.log(key)
   const readStream = getFileStream(key);
   readStream.pipe(res);
 });
+
+app.delete("/images/:key", async (req, res) => {
+  const key = req.params.key;
+  await deleteFile(key);
+  res.send("File deleted successfully")
+})
 
 //================== Post ==============
 
