@@ -379,16 +379,30 @@ app.get("/api/posts", verifyJWT, (req, res) => {
   );
 });
 
+app.get("/api/allposts", verifyJWT, (req, res) => {
+  db.query(
+    "SELECT * FROM Users as u INNER JOIN Posts p ON p.userId = u.id ORDER BY p.createdAt DESC",
+    (err, results) => {
+      if (err) {
+        res.sendStatus(500).send("Server error!");
+      } else {
+        res.send(results)
+      }
+    }
+  );
+});
+
 app.get("/api/allpostsUser", verifyJWT, (req, res) => {
   db.query(
-    "SELECT * "
-    + " FROM postnote.Posts p inner join Users u on p.userId=u.id "
-    + " where p.userId=? Or p.userId in "
-    + " (SELECT u.id  FROM Friends f JOIN Users u on user2Id = u.id "
-    + "  WHERE status='ACCEPTED' and user1Id = ? "
-    + "  union "
-    + "  SELECT  u.id FROM Friends f JOIN Users u on user1Id = u.id "
-    + "  WHERE status='ACCEPTED' and user2Id = ?)",
+    "SELECT p.id as 'postId', p.userId as 'postUserId', p.postText, p.postImage, p.createdAt, p.updatedAt, u.username,  u.firstname, u.lastname, u.userImage" +
+    " FROM postnote.Posts p inner join Users u on p.userId=u.id" +
+    " WHERE p.userId= ? Or p.userId in" +
+    " (SELECT u.id  FROM Friends f JOIN Users u on user2Id = u.id" +
+    " WHERE status='ACCEPTED' and user1Id = ?" +
+    " union" +
+    " SELECT  u.id FROM Friends f JOIN Users u on user1Id = u.id" +
+    " WHERE status='ACCEPTED' and user2Id = ?)" +
+    " ORDER BY p.createdAt DESC", 
     [req.userId, req.userId, req.userId],
     (err, results) => {
       if (err) {

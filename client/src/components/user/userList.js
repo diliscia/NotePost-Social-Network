@@ -74,6 +74,7 @@ function UserList() {
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Username</th>
+                        <th>Role</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -83,6 +84,7 @@ function UserList() {
                             <td className='text-center'>{user.firstname}</td>
                             <td className='text-center'>{user.lastname}</td>
                             <td className='text-center'>{user.username}</td>
+                            <td className='text-center'>{user.role}</td>
                             <td className="text-center">
                                 <a href={"/editUser/" + user.id} className="btn btn-secondary mx-2">Edit</a>
                                 <button className="btn btn-danger mx-2" onClick={()=>{deleteUser(user.id)}}>Delete</button>
