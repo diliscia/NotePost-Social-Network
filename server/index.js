@@ -13,6 +13,7 @@ const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
 const path = require('path');
+const sharp = require('sharp');
 require('dotenv').config();
 
 app.use(
@@ -216,7 +217,6 @@ app.put("/api/acceptRequest/:user1Id", verifyJWT, (req, res) => {
     "Update Friends set status='ACCEPTED' where user1Id = ? and user2Id= ?   ";
   db.query(sqlUpdate, [user1Id, req.userId], (err, result) => {
     if (err) {
-      console.log(err);
       res.status(500).send("Error while Accept Friendship");
     } else {
       res.send(result);
@@ -295,17 +295,16 @@ app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
 
 //================== Images ==============
 
-app.post("/images", upload.single("image"), async (req, res) => {
+app.post("/images", verifyJWT, upload.single("image"), async (req, res) => {
   const file = req.file;
   file.filename = "images/" + file.filename;
-  //apply filter
-  // resize
+  sharp(file).resize({width: 50}).toFile(file).then(() => console.log("doneee")).catch((err)=> console.log(err))
   const result = await uploadFile(file);
   await unlinkFile(file.path);
   res.send({ imagePath: result.Key });
 });
 
-app.get("/images/:key", (req, res) => {
+app.get("/images/:key", verifyJWT, (req, res) => {
   const key = req.params.key;
   const readStream = getFileStream(key);
   readStream.pipe(res);
@@ -378,10 +377,8 @@ app.get("/api/update-post/:id", verifyJWT, (req, res) => {
   const sqlSelectArticle = "SELECT * FROM Posts JOIN Users ON Users.id = Posts.userId WHERE Posts.id = ?";
   db.query(sqlSelectArticle, id, (err, result) => {
     if (err) {
-      console.log(err)
       res.sendStatus(500).send("Server error! Unable to get the post");
     } else {
-      console.log(result)
       res.send(result);
     }
   });
@@ -429,10 +426,9 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
 //================== Comments ==============
 app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
-  const sqlComments = "SELECT * FROM Comments JOIN Users On Comments.userId = Users.id WHERE Comments.postId =?"
+  const sqlComments = "SELECT c.id, c.userId, c.postId, c.commentText, c.createdAt, u.firstname, u.lastname, u.userImage FROM Comments c JOIN Users u On c.userId = u.id WHERE c.postId =? ORDER BY createdAt DESC"
   db.query(sqlComments, id, (err, result) => {
     if (err) {
-      console.log(err)
       res.sendStatus(500).send("Server error")
     } else {
       res.send(result)
@@ -441,7 +437,6 @@ app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
 })
 
 app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
-  console.log("Hello")
   const id = req.params.id
   const comment = req.body.formValues.comment
   const sqlAddComment ="INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
@@ -454,18 +449,27 @@ app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
   })
 })
 
+app.delete("/api/comment/deletecomment/:id", verifyJWT, (req, res) => {
+  const id = req.params.id
+  const sqlDelete = "DELETE FROM Comments where id=?"
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error")
+  }
+  else {
+      res.send("Successfully deleted!")
+  }
+})
+});
 //================= Admin ===============
 
 app.get('/api/users', verifyJWT, (req, res) => {
   const sqlQuery = "SELECT * FROM Users"
   db.query(sqlQuery, req.userId, (err, users) => {
       if (err) {
-          console.log(err);
           res.status(500).send("Error trying to retrieve articles.");
       }
       else {
-          console.log(sqlQuery);
-          console.log(users);
           res.send(users);
       }
   })
@@ -481,11 +485,9 @@ app.put('/api/user/:id', verifyJWT, (req, res) => {
   const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
   db.query(sqlUpdate, [firstname, lastname, username, id], (err, result) => {
       if (err) {
-          console.log(err);
           res.status(400).send("Error updating the user. Please try again");
       }
       else {
-          console.log(result);
           res.sendStatus(201);
       }
   })
@@ -498,10 +500,8 @@ app.delete('/api/delete/:id', verifyJWT, (req, res) => {
   db.query(sqlDelete, [id, req.userId], (err, user) => {
       if (err) {
           res.status(500).send("Error trying to delete the article")
-          console.log(err);
       }
       else {
-          console.log(user);
           res.send(user);
       }
   })

@@ -27,7 +27,6 @@ function App() {
     if (!localStorage.getItem("token")) {
       setUser(localStorage.getItem("username"));
     }
-    console.log(user)
   }, [user]);
 
   return (
@@ -89,11 +88,11 @@ function App() {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes />}>
+          <Route exact path="/logout" element={<Logout />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/adminHome" element={<AdminHome />} />
             <Route exact path="/add-article" element={<AddArticle />} />
             <Route exact path="/upload" element={<Upload />} />
-            <Route exact path="/logout" element={<Logout />} />
             <Route exact path="/add-friend" element={<AvailableFriends />} />
             <Route exact path="/friendsList" element={<FriendsList />} />
             <Route exact path="/my-profile" element={<MyProfile />} />

@@ -74,7 +74,6 @@ function UpdatePost() {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit && (typeof formValues.postImage !== "string")) {
-      console.log("Hello")
       updatePost(formValues);
     }
     if (
@@ -91,7 +90,7 @@ function UpdatePost() {
         "x-access-token": localStorage.getItem("token"),
       },
     }).then((response) => {
-        console.log(response.data[0])
+      
         setFormValues(response.data[0]);
       })
       .catch((error) => {
@@ -105,7 +104,11 @@ function UpdatePost() {
     formData.append("image", formValues.postImage)
     formData.append("description", formValues.postText)
  
-    Axios.post("http://localhost:3001/images", formData).then((response) => {
+    Axios.post("http://localhost:3001/images", formData, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
       const key = response.data.imagePath
 
       Axios.put(`http://localhost:3001/api/update-post/${id}`,{postText: formValues.postText, image: key},{
@@ -113,10 +116,8 @@ function UpdatePost() {
           "x-access-token": localStorage.getItem("token"),
         },
       }).then(() => {
-        alert("Successfully updated!")
         navigate("/my-profile")
       }).catch((error) => {
-        console.log(error)
         var failMessage = document.getElementById('fail-updated');
         failMessage.innerHTML = error.response.data;
       });
@@ -129,7 +130,7 @@ function UpdatePost() {
           "x-access-token": localStorage.getItem("token"),
         },
       }).then(() => {
-        alert("Successfully updated!")
+      
         navigate("/my-profile")
       }).catch((error) => {
         console.log(error)
@@ -142,7 +143,8 @@ function UpdatePost() {
   return (
     <div className="container">
       <div id="fail-added" className="text-danger "></div>
-      <h1 className='text-center my-5'  >Edit your Post</h1>
+     
+      <h1 className='text-center my-5'>Edit your Post</h1>
       <form onSubmit={handleSubmit}>
         <div className="mt-3 ">
           <textarea
@@ -175,7 +177,6 @@ function UpdatePost() {
             <div id="image-error" className="text-danger"></div>
             <p className="text-danger"> {formErrors.postImage} </p>
           </div>
-          
           <button className="btn btn-primary">Post</button>
         </div>
       </form>

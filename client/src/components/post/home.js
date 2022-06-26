@@ -4,11 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [uploads, setUpload] = useState([]);
-
   let navigate = useNavigate();
-
   const [profile, setProfile] = useState([]);
-  // const id = localStorage.getItem('id')
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/api/profile`, {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../user/UserContext";
 
 function Upload() {
   let navigate = useNavigate();
@@ -8,7 +9,7 @@ function Upload() {
     postText: "",
     postImage: [],
   };
-
+  
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
@@ -83,10 +84,15 @@ function Upload() {
 
   const addPost = (formValues) => {
     const formData = new FormData();
+    
     formData.append("image", formValues.postImage);
     formData.append("description", formValues.postText);
 
-    Axios.post("http://localhost:3001/images", formData).then((response) => {
+    Axios.post("http://localhost:3001/images", formData, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
       const key = response.data.imagePath;
       Axios.post(
         "http://localhost:3001/upload",

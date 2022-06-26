@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Comment() {
   const { id } = useParams();
+  let navigate = useNavigate();
   const initialValues = {
     postText: "",
     postImage: [],
@@ -91,13 +93,36 @@ function Comment() {
       }
     )
       .then(() => {
-        alert("Successfully added!");
-        getCommentList()
+        var failMessage = document.getElementById("success-added");
+        failMessage.innerHTML = "Successfully added";
+        setFormValues({"comment":""})
+        console.log(formValues)
+        getCommentList();
+      
       })
       .catch((error) => {
-        console.log(error)
         var failMessage = document.getElementById("fail-added");
         failMessage.innerHTML = error.response.data;
+      });
+  };
+
+  const deleteComment = (commentId) => {
+    Axios.delete(
+      `http://localhost:3001/api/comment/deletecomment/${commentId}`,
+      {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }
+    )
+      .then((response) => {
+        var successMessage = document.getElementById("success-added");
+        successMessage.innerHTML = response.data;
+        getCommentList();
+      })
+      .catch((error) => {
+        var failMessage = document.getElementById("fail-added");
+        failMessage.innerHTML = error;
       });
   };
 
@@ -135,10 +160,12 @@ function Comment() {
         var failMessage = document.getElementById("fail-updated");
         failMessage.innerHTML = error.response.data;
       });
-  }
+  };
 
   return (
     <div className="containerComm">
+      <div id="fail-added" className="text-danger"></div>
+      <div id="success-added" className="text-success"></div>
       <div className="card mt-4">
         <div className="card-body">
           <div className="d-inline align-top">
@@ -185,12 +212,12 @@ function Comment() {
                 <p className="text-danger">{formErrors.comment}</p>
               </div>
               <div className="text-center">
-              <button className="btn btn-primary">Add comment</button>
+                <button className="btn btn-primary">Add comment</button>
               </div>
             </form>
             {commentList.map((value, key) => {
               return (
-                <div key={value.id} className="card mt-3">
+                <div className="card mt-3">
                   <div className="card-body">
                     <div className="d-inline align-top">
                       <img
@@ -210,14 +237,19 @@ function Comment() {
                     </p>
                     <h5 className="card-text">{value.postText}</h5>
                     <p>{value.commentText}</p>
-                    <a
-                      className="btn btn-secondary"
-                      href={"/update-comment/" + value.id}
-                    >
-                      Edit
-                    </a>
-                    <span> </span>
-                    {/* <a className="btn btn-danger" href="#" onClick={()=>{deleteComment(commentList.id)}}>Delete</a> */}
+                    {localStorage.getItem("role") === "ADMIN" ? (
+                      <a
+                        className="btn btn-danger"
+                        href="#"
+                        onClick={() => {
+                          deleteComment(value.id);
+                        }}
+                      >
+                        Delete
+                      </a>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               );
