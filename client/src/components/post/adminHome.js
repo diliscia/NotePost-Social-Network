@@ -43,7 +43,7 @@ function MyProfile() {
   const [uploads, setUpload] = useState([]);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/allposts", {
+    Axios.get("http://localhost:3001/api/posts", {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
@@ -53,25 +53,28 @@ function MyProfile() {
   }, []);
 
   const deletePost = (id) => {
+    // var val = confirm("Are you sure?");
+    // if (val == true) {
     Axios.delete(`http://localhost:3001/api/delete-post/${id}`, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
-    }).then((response)=>{
-        getPostList() 
-        navigate("/adminHome")
+    }).then((response) => {
+      getPostList()
+      navigate("/adminHome")
     })
+
   }
 
-const getPostList = () => {
-  Axios.get("http://localhost:3001/api/allposts", {
-    headers: {
-      "x-access-token": localStorage.getItem("token"),
-    },
-  }).then((response)=>{
-    setUpload(response.data);
-  });
-}
+  const getPostList = () => {
+    Axios.get("http://localhost:3001/api/posts", {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
+      setUpload(response.data);
+    });
+  }
 
   function formatDate(date) {
     var hours = date.getHours();
@@ -107,7 +110,7 @@ const getPostList = () => {
               ></img>
               <div className="mx-4">
                 <a href={"/edit-image"} className="btn btn-secondary my-2 mx-2">
-                    Edit Image
+                  Edit Image
                 </a>
               </div>
             </div>
@@ -119,9 +122,9 @@ const getPostList = () => {
             </div>
           </div>
           <div className="mx-4">
-          <a href={"/edit-profile"} className="btn btn-secondary mx-2">
-            Edit Profile
-          </a>
+            <a href={"/edit-profile"} className="btn btn-secondary mx-2">
+              Edit Profile
+            </a>
           </div>
           {/* <Link to={"/edit-profile"} ><button type="button" className="btn btn-outline-dark me-3">Edit</button></Link> */}
         </div>
@@ -135,7 +138,7 @@ const getPostList = () => {
                     <img
                       className="photo rounded-circle"
                       style={profilepicture}
-                      src={"https://postnote-app.s3.amazonaws.com/"+ val.userImage}
+                      src={"https://postnote-app.s3.amazonaws.com/" + val.userImage}
                     ></img>
                   </div>
                   <h6 className="card-subtitle d-inline">{val.firstname} {val.lastname}</h6>
@@ -143,12 +146,13 @@ const getPostList = () => {
                     {formatDate(new Date(Date.parse(val.createdAt)))}
                   </p>
                   <h5 className="card-text">{val.postText}</h5>
-                  <a className="btn btn-secondary" href={"/update-post/"+ val.id}>Edit</a><span>  </span>
-                  <a className="btn btn-danger" href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
+                  <a className="btn btn-secondary" href={"/update-post/" + val.id}>Edit</a><span>  </span>
+                  <a className="btn btn-danger" href="#" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deletePost(val.id) }} >Delete</a>
+                  {/* <a className="btn btn-danger" href="#" onClick={() => { deletePost(val.id) }}>Delete</a> */}
                   {val.postImage === null ? "" : <img
                     className="img-fluid my-2"
                     style={stylesimagepost}
-                    src={"https://postnote-app.s3.amazonaws.com/"+ val.postImage}
+                    src={"https://postnote-app.s3.amazonaws.com/" + val.postImage}
                   />}
                     <a href={"/comments-of-post/" + val.id}>View all comments</a>
                 </div>
