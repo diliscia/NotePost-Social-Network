@@ -296,3 +296,46 @@
 - watch tutorials
 3. Need assistance / figure things out
 - Graph in React
+
+<<2022-06-26>>
+2022/06/25 Marcelo
+1. Done / not done since last scrum:
+- Improve UI - done
+- Implement List of Users with Edit button working (Admin can change user's role) - done
+- watch tutorials of delete image S3 from react - done
+2. To do until next Scrum:
+- Watch tutorials of adding chart
+- Improve statistics page
+- Improve UI
+- prepare presentation
+3. Need assistance / figure things out
+- 
+
+2022/06/25 Ly
+1. Done / not done since last scrum:
+- Add delete for the comments - done
+- Configure Heroku - not done
+- watch tutorials - done
+2. To do until next Scrum:
+- Resize the image before uploading
+- Delete image from S3 when user delete
+- Configure Heroku
+- watch tutorials
+- Improve UI
+- prepare presentation
+3. Need assistance / figure things out
+- Assistance for Heroku 
+
+2022/06/25 Alireza
+1. Done / not done since last scrum:
+- Configure Hiroku - not done
+- Implement SQL for user seeing posts of user and friends only - done
+- Improve site statistics (admin) - not done
+- watch tutorials - done
+2. To do until next Scrum:
+- Implement confirmation messages
+- watch tutorials 
+- prepare presentation
+- Improve UI
+3. Need assistance / figure things out
+- 
