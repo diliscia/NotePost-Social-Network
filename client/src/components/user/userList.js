@@ -39,18 +39,14 @@ function UserList() {
         });
     }
 
-    const closeSuccessAlert = () => {
-        var successMessage = document.getElementById('successAlert');
-        successMessage.style.display = 'none';
-        }
-        const closeFailAlert = () => {
+
+    const closeFailAlert = () => {
             var failMessage = document.getElementById('failAlert');
             failMessage.style.display = 'none';
         }
 
     useEffect(() => {
-        // closeFailAlert();
-        // closeSuccessAlert();
+        closeFailAlert();
         Axios.get('http://localhost:3001/api/users', {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
@@ -88,7 +84,7 @@ function UserList() {
                             <td className='text-center'>{user.lastname}</td>
                             <td className='text-center'>{user.username}</td>
                             <td className="text-center">
-                                <a href={"/admin/user/edit/" + user.id} className="btn btn-secondary mx-2">Edit</a>
+                                <a href={"/editUser/" + user.id} className="btn btn-secondary mx-2">Edit</a>
                                 <button className="btn btn-danger mx-2" onClick={()=>{deleteUser(user.id)}}>Delete</button>
                             </td>
                         </tr>

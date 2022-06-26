@@ -5,6 +5,7 @@ import Register from "./components/user/register";
 import MyProfile from "./components/user/myProfile";
 import EditProfile from "./components/user/editProfile";
 import AddUser from './components/user/addUser'
+import EditUser from './components/user/editUser'
 import AddArticle from "./components/post/add";
 import Upload from "./components/post/upload";
 import UpdatePost from "./components/post/update";
@@ -110,6 +111,7 @@ function App() {
             <Route exact path="/edit-image" element={<EditImage />} />
             <Route exact path="/update-post/:id" element={<UpdatePost />} />
             <Route exact path="/addUser" element={<AddUser />} />
+            <Route exact path="/editUser/:id" element={<EditUser />} />
             <Route exact path="/comments-of-post/:id" element={<Comment />} />
             <Route exact path="/userList" element={<UserList />} />
             <Route exact path="/statistics" element={<Statistics />} />

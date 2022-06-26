@@ -488,15 +488,30 @@ app.get('/api/users', verifyJWT, (req, res) => {
   })
 });
 
+app.get("/editUser/:id", verifyJWT, (req, res) => {
+  const id = req.params.id;
+  const sqlQuery = "SELECT * FROM Users WHERE id = ?";
+  db.query(sqlQuery, id, (err, result) => {
+    if (err) {
+      console.log(err)
+      res.sendStatus(500).send("Server error! Unable to get the user");
+    } else {
+      console.log(result)
+      res.send(result);
+    }
+  });
+});
+
 // Update user
-app.put('/api/user/:id', verifyJWT, (req, res) => {
+app.put('/editUser/:id', verifyJWT, (req, res) => {
   const id = req.params.id;
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const username = req.body.username;
+  const role = req.body.role;
 
-  const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=? where id=?"
-  db.query(sqlUpdate, [firstname, lastname, username, id], (err, result) => {
+  const sqlUpdate = "UPDATE Users SET firstname=?, lastname=?, username=?, role=? where id=?"
+  db.query(sqlUpdate, [firstname, lastname, username, role, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(400).send("Error updating the user. Please try again");
