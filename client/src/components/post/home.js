@@ -37,7 +37,7 @@ function Home() {
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/allposts", {
+    Axios.get("http://localhost:3001/api/allpostsUser", {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
