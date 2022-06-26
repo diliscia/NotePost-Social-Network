@@ -17,11 +17,21 @@ function Comment() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [commentList, setCommentList] = useState([]);
 
+  const closeSuccessAlert = () => {
+    var successMessage = document.getElementById('successAlert');
+    successMessage.style.display = 'none';
+  }
+  const closeFailAlert = () => {
+    var failMessage = document.getElementById('failAlert');
+    failMessage.style.display = 'none';
+  }
   const stylesimagepost = {
     width: 2000,
   };
 
   useEffect(() => {
+    closeFailAlert();
+    closeSuccessAlert();
     Axios.get(`http://localhost:3001/api/update-post/${id}`, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
@@ -83,6 +93,8 @@ function Comment() {
   }, [formErrors]);
 
   const addComment = (formValues) => {
+    closeFailAlert();
+    closeSuccessAlert();
     Axios.post(
       `http://localhost:3001/api/comment/addcomment/${id}`,
       { formValues },
@@ -94,15 +106,21 @@ function Comment() {
     )
       .then(() => {
         var failMessage = document.getElementById("success-added");
-        failMessage.innerHTML = "Successfully added";
+        var successMessage = document.getElementById('successAlert');
+        successMessage.style.display = 'block';
+        // failMessage.innerHTML = "Successfully added";
         setFormValues({"comment":""})
         console.log(formValues)
         getCommentList();
       
       })
       .catch((error) => {
-        var failMessage = document.getElementById("fail-added");
-        failMessage.innerHTML = error.response.data;
+        // var failMessage = document.getElementById("fail-added");
+        var fail = document.getElementById('failAlert');
+        var failMsg = document.getElementById('failAlertMsg');
+        failMsg.innerText = error.response.data;
+        fail.style.display = 'block';
+        // failMessage.innerHTML = error.response.data;
       });
   };
 
@@ -164,8 +182,16 @@ function Comment() {
 
   return (
     <div className="containerComm">
-      <div id="fail-added" className="text-danger"></div>
-      <div id="success-added" className="text-success"></div>
+      {/* <div id="fail-added" className="text-danger"></div>
+      <div id="success-added" className="text-success"></div> */}
+      <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+                <strong>Comment added successfully</strong>
+                <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
+            </div> 
+            <div className="alert alert-danger alert-dismissible fade show " role="alert" id="failAlert">
+                <strong id="failAlertMsg">Error while trying to add your comment. Please try again.</strong>
+                <button type="button" className="btn-close" onClick={closeFailAlert}></button>
+            </div>
       <div className="card mt-4">
         <div className="card-body">
           <div className="d-inline align-top">

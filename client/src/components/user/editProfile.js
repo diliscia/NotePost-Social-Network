@@ -120,7 +120,7 @@ function EditProfile(){
     return (
         <div className='container my-5'> 
             <div className="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
-                <strong>You Profile has been updated successfully</strong>
+                <strong>Your Profile has been updated successfully</strong>
                 <button type="button" className="btn-close" onClick={closeSuccessAlert}></button>
             </div> 
             <div className="alert alert-danger alert-dismissible fade show " role="alert" id="failAlert">
