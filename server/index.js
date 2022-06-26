@@ -314,7 +314,7 @@ app.put("/uploadProfilePicture", verifyJWT, (req, res) => {
 
 //================== Images ==============
 
-app.post("/images", upload.single("image"), async (req, res) => {
+app.post("/images", upload.single("image"), verifyJWT, async (req, res) => {
   const file = req.file;
   file.filename = "images/" + file.filename;
   //apply filter
@@ -324,15 +324,15 @@ app.post("/images", upload.single("image"), async (req, res) => {
   res.send({ imagePath: result.Key });
 });
 
-app.get("/images/:key", (req, res) => {
-  const key = req.params.key;
-  console.log(key)
-  const readStream = getFileStream(key);
-  readStream.pipe(res);
-});
+// app.get("/images/:key", (req, res) => {
+//   const key = req.params.key;
+//   const readStream = getFileStream(key);
+//   readStream.pipe(res);
+// });
 
-app.delete("/images/:key", async (req, res) => {
-  const key = req.params.key;
+app.delete("/images/images/:key", verifyJWT, async (req, res) => {
+  const key = 'images/'+req.params.key;
+  console.log(key)
   await deleteFile(key);
   res.send("File deleted successfully")
 })
