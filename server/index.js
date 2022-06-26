@@ -454,10 +454,9 @@ app.delete("/api/delete-post/:id", verifyJWT, (req, res) => {
 //================== Comments ==============
 app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   const id = req.params.id;
-  const sqlComments = "SELECT * FROM Comments JOIN Users On Comments.userId = Users.id WHERE Comments.postId =?"
+  const sqlComments = "SELECT c.id, c.userId, c.postId, c.commentText, c.createdAt, u.firstname, u.lastname, u.userImage FROM Comments c JOIN Users u On c.userId = u.id WHERE c.postId =? ORDER BY createdAt DESC"
   db.query(sqlComments, id, (err, result) => {
     if (err) {
-      console.log(err)
       res.sendStatus(500).send("Server error")
     } else {
       res.send(result)
@@ -465,11 +464,10 @@ app.get("/api/comment/listcomments/:id", verifyJWT, (req, res) => {
   })
 })
 
-app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) => {
-  console.log("Hello")
+app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) =>{
   const id = req.params.id
   const comment = req.body.formValues.comment
-  const sqlAddComment = "INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
+  const sqlAddComment ="INSERT INTO Comments (userId, postId, commentText) VALUES (?,?,?)"
   db.query(sqlAddComment, [req.userId, id, comment], (err, result) => {
     if (err) {
       res.sendStatus(500).send("Server error! Unable to post the article");
@@ -478,6 +476,19 @@ app.post("/api/comment/addcomment/:id", verifyJWT, (req, res) => {
     }
   })
 })
+
+app.delete("/api/comment/deletecomment/:id", verifyJWT, (req, res) => {
+  const id = req.params.id
+  const sqlDelete = "DELETE FROM Comments where id=?"
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      res.sendStatus(500).send("Server error")
+  }
+  else {
+      res.send("Successfully deleted!")
+  }
+})
+});
 
 //================= Admin ===============
 
