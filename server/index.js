@@ -373,7 +373,7 @@ app.get("/api/posts", verifyJWT, (req, res) => {
       if (err) {
         res.sendStatus(500).send("Server error!");
       } else {
-        res.send(results);
+        res.send(results); 
       }
     }
   );

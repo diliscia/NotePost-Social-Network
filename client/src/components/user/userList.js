@@ -12,25 +12,25 @@ import { useNavigate } from 'react-router-dom';
 function UserList() {
 
     const [userList, setUserList] = useState([]);
-    
+
     const deleteUser = (id) => {
         Axios.delete(`http://localhost:3001/api/delete/${id}`, {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
             },
-        }).then((response)=>{
-            getUserList() 
+        }).then((response) => {
+            getUserList()
         })
     }
 
-    const getUserList = ()=>{
+    const getUserList = () => {
         Axios.get('http://localhost:3001/api/users', {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
             },
         }).then((response) => {
             setUserList(response.data)
-        }).catch((error)=>{
+        }).catch((error) => {
             var fail = document.getElementById('failAlert');
             var failMsg = document.getElementById('failAlertMsg');
 
@@ -41,9 +41,9 @@ function UserList() {
 
 
     const closeFailAlert = () => {
-            var failMessage = document.getElementById('failAlert');
-            failMessage.style.display = 'none';
-        }
+        var failMessage = document.getElementById('failAlert');
+        failMessage.style.display = 'none';
+    }
 
     useEffect(() => {
         closeFailAlert();
@@ -53,7 +53,7 @@ function UserList() {
             },
         }).then((response) => {
             setUserList(response.data)
-        }).catch((error)=>{
+        }).catch((error) => {
             var fail = document.getElementById('failAlert');
             var failMsg = document.getElementById('failAlertMsg');
 
@@ -85,7 +85,8 @@ function UserList() {
                             <td className='text-center'>{user.username}</td>
                             <td className="text-center">
                                 <a href={"/editUser/" + user.id} className="btn btn-secondary mx-2">Edit</a>
-                                <button className="btn btn-danger mx-2" onClick={()=>{deleteUser(user.id)}}>Delete</button>
+                                {/* <button className="btn btn-danger mx-2" onClick={()=>{deleteUser(user.id)}}>Delete</button> */}
+                                <a className="btn btn-danger" href="#" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteUser(user.id) }} >Delete</a>
                             </td>
                         </tr>
                     ))}

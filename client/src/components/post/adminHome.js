@@ -6,12 +6,14 @@ import Axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 // import { AuthContext, UserContext } from "../components/UserContext";
 import { Link } from "react-router-dom";
+import Modal from '../modal/modal';
 
 function MyProfile() {
   let navigate = useNavigate();
-
+  var currVal=0;
   const [profile, setProfile] = useState([]);
   // const id = localStorage.getItem('id')
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/api/profile`, {
@@ -149,6 +151,15 @@ function MyProfile() {
                   <a className="btn btn-secondary" href={"/update-post/" + val.id}>Edit</a><span>  </span>
                   <a className="btn btn-danger" href="#" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deletePost(val.id) }} >Delete</a>
                   {/* <a className="btn btn-danger" href="#" onClick={() => { deletePost(val.id) }}>Delete</a> */}
+                  {/* {currVal=val.id}
+                  "currVal= "{currVal}
+                  <a className="btn btn-danger" href="#" onClick={() => setShow(true)}>Delete</a>
+                  <Modal title="Confirm Delete" show={show}
+                    onClose={() => setShow(false)}
+                    onSubmit={() => { deletePost(currVal);setShow(false); }} >
+                    <p>Are you sure you wish to delete this item?{currVal}</p>
+                  </Modal>
+                  "val.id=" {val.id} */}
                   {val.postImage === null ? "" : <img
                     className="img-fluid my-2"
                     style={stylesimagepost}

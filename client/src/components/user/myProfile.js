@@ -157,7 +157,8 @@ const getPostList = () => {
                   </p>
                   <h5 className="card-text">{val.postText}</h5>
                   <a className="btn btn-secondary" href={"/update-post/"+ val.id}>Edit</a><span>  </span>
-                  <a className="btn btn-danger" href="#" onClick={()=>{deletePost(val.id)}}>Delete</a>
+                  {/* <a className="btn btn-danger" href="#" onClick={()=>{deletePost(val.id)}}>Delete</a> */}
+                  <a className="btn btn-danger" href="#" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deletePost(val.id) }} >Delete</a>
                   {val.postImage === null ? "" : <img
                     className="img-fluid my-2"
                     style={stylesimagepost}
