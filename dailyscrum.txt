@@ -274,10 +274,8 @@
 2022/06/25 Ly
 1. Done / not done since last scrum:
 - Improve friends function (request/accept/deny) - done
-- Add delete/edit for the comments - not done
 - watch tutorials - done
 2. To do until next Scrum:
-- Add delete/edit for the comments
 - Configure Heroku
 - watch tutorials
 3. Need assistance / figure things out
