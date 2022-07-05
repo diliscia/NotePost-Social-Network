@@ -34,7 +34,7 @@ import {
 
 function App() {
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       setUser(localStorage.getItem('username'))

@@ -121,7 +121,7 @@ app.post("/login", (req, res) => {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           const id = result[0].id;
-          const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 600 });
+          const token = jwt.sign({ id }, "jwtSecret", { expiresIn: 60*60*60 });
           req.session.user = result;
           res.json({ auth: true, token: token, result: result });
         } else {
@@ -153,7 +153,7 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
-//================= Statistics
+//================= Statistics ===================
 app.get("/api/postsByDate", verifyJWT, (req, res) => {
   const sqlSelect = " SELECT count(*) c, date(createdAt) day FROM postnote.Posts "
     + " group by date(createdAt)";
@@ -161,13 +161,12 @@ app.get("/api/postsByDate", verifyJWT, (req, res) => {
     if (err) {
       res.status(500).send("Error while retrieving data");
     }
-    else {
-      if (result.length > 0) {
-        console.log(result)
-        res.send(result);
-      } else {
-        res.status(404).send("List has a problem");
-      }
+    if (result) {
+      // result = JSON.stringify(result)
+      console.log(result)
+      res.send(result)
+    } else {
+      res.status(404).send("List has a problem");
     }
   });
 });
