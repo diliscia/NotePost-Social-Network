@@ -38,14 +38,14 @@ app.use(
 );
 
 app.use(express.json());
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 const db = mysql.createConnection({
-  host: "carrental.cnammikteevs.us-east-1.rds.amazonaws.com",
+  host: "rds-db.c5rdpkk8hjdr.us-east-1.rds.amazonaws.com",
   port: "3306",
   user: "admin",
-  password: "y6mw6Gkf",
+  password: "password",
   database: "postnote",
 });
 
